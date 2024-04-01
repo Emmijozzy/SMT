@@ -1,0 +1,27 @@
+{
+  "name": "lerna-template",
+  "version": "1.0.0",
+  "main": "index.js",
+  "private": true,
+  "repository": "https://github.com/Emmijozzy/lerna-template.git",
+  "author": "Emmijozzy <josephogunsuyi360@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "lerna run start",
+    "dev": "lerna run dev",
+    "build": "lerna run build",
+    "lint" : "lerna run lint",
+    "format": "lerna run format"
+  },
+  "dependencies": {
+    "lerna": "^7.1.1"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint --no-verify"
+    }
+  }
+}
