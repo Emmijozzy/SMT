@@ -10,11 +10,11 @@
     "start": "lerna run start",
     "dev": "lerna run dev",
     "build": "lerna run build",
-    "lint" : "lerna run lint",
+    "lint": "lerna run lint",
     "format": "lerna run format"
   },
   "dependencies": {
-    "lerna": "^7.1.1"
+    "lerna": "^8.1.2"
   },
   "workspaces": [
     "packages/*"
