@@ -19,6 +19,12 @@
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true
   },
+  "paths": {
+    "@scr/*": ["./src/*"],
+    "@features/*": ["./src/features"],
+    "@utils": ["./src/utils"],
+    "@middleware": ["./src/middleware"]
+  },
   "include": ["./src/**/*.ts"],
   "exclude": ["node_modules", "test/**/*.ts"]
 }

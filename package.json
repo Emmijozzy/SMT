@@ -14,6 +14,7 @@
     "format": "lerna run format"
   },
   "dependencies": {
+    "dotenv": "^16.4.5",
     "lerna": "^8.1.2"
   },
   "workspaces": [
