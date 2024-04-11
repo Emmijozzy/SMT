@@ -22,7 +22,6 @@ const logLevel = environment === "development" ? "debug" : "info";
 
 const dailyRotateFile = new DailyRotateFile({
   level: logLevel,
-  // filename: `${dir}/${new Date().getDate()}.log`,
   filename: dir + "/%DATE%.log",
   datePattern: "YYYY-MM-DD",
   handleExceptions: true,
@@ -42,12 +41,3 @@ export default createLogger({
   exceptionHandlers: [dailyRotateFile],
   exitOnError: false
 });
-
-// export default createLogger({
-//   level: "info", // Minimum log level
-//   format: winston.format.json(), // JSON format output
-//   transports: [
-//     new winston.transports.Console(), // Console transport
-//     dailyRotateFile
-//   ]
-// });
