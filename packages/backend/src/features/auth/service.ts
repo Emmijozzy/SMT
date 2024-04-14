@@ -1,4 +1,3 @@
-import jwt from "jsonwebtoken";
 import { User, IUser } from "./model";
 import passwordUtils from "./utils/passwordUtils";
 import { InternalError, NotFoundError, BadRequestError, AuthFailureError } from "../../utils/ApiError";
@@ -33,6 +32,7 @@ export default class UserService {
 
   public static async login(userId: string, password: string): Promise<Token> {
     const foundUser: IUser | null = await userUtils.findByUserId(userId);
+    // console.log(foundUser);
     if (!foundUser) {
       throw new NotFoundError("User not found");
     } else if (foundUser.del_flg) {

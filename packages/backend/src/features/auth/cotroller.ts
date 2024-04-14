@@ -4,6 +4,9 @@ import asyncHandler from "../../utils/asyncHandler";
 import { AuthFailureError, BadRequestError } from "../../utils/ApiError";
 import { IUser } from "./model";
 import UserService from "./service";
+// import validationMiddleware from "../../middleware/validatMiddleware";
+import authSchema from "./validation";
+import validationMiddleware from "../../middleware/validationMiddleware";
 
 export default class Auth implements IController {
   public path = "/auth";
@@ -15,13 +18,14 @@ export default class Auth implements IController {
   }
 
   private initiatlizeRouter(): void {
-    this.router.post("/", this.register);
-    this.router.post("/login", this.login);
+    this.router.post("/", validationMiddleware(authSchema.registrationSchema), this.register);
+    this.router.post("/login", validationMiddleware(authSchema.loginSchema), this.login);
     this.router.get("/refresh", this.refresh);
   }
 
   private register = asyncHandler(async (req: Request, res: Response) => {
     const { firstName, lastName, email, password } = req.body;
+    // console.log(firstName, lastName, email, password);
     if (!firstName || !lastName || !email || !password) {
       throw new BadRequestError("Missing user data");
     }

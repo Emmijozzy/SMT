@@ -1,8 +1,6 @@
 import IApiError from "Interface/ApiError";
 import logger from "./logger";
 import { Request, Response } from "express";
-import { log } from "winston";
-
 /*
   Error must have
 

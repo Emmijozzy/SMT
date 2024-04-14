@@ -7,7 +7,6 @@ import IController from "./Interface/controller";
 import { corsOptions } from "./config/corsOptions";
 import errorMiddleware from "./middleware/errorMiddleware";
 import { connectDB } from "./database";
-import logger from "./utils/logger";
 
 class App {
   public express: Application = express();
