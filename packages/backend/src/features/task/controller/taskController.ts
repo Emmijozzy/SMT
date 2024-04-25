@@ -5,7 +5,7 @@ import { Router, Request, Response } from "express";
 import asyncHandler from "../../../utils/asyncHandler";
 import { BadRequestError, InternalError } from "../../../utils/ApiError";
 import { Task } from "../model/task";
-import TeamModel, { ITeam } from "../../team/model";
+import TeamModel, { ITeam } from "../../team/teamModel";
 import createTaskId from "../utils/createTaskId";
 import { User } from "../../auth/model";
 

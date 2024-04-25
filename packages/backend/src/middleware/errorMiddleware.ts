@@ -12,7 +12,7 @@ const errorMiddleware = (error: IApiError, req: Request, res: Response, next: Ne
 
     error.send(res);
   } else {
-    logger.error(`500 - ${error.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
+    logger.error(`500 - ${error.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`, error);
     if (environment === "development") {
       res.status(500).json({ status: 500, message: error.message });
     }

@@ -1,4 +1,4 @@
-import winston, { createLogger, transports, format } from "winston";
+import { createLogger, transports, format } from "winston";
 import fs from "fs";
 import path from "path";
 import DailyRotateFile from "winston-daily-rotate-file";
@@ -27,7 +27,20 @@ const dailyRotateFile = new DailyRotateFile({
   handleExceptions: true,
   maxSize: "20m",
   maxFiles: "14d",
-  format: format.combine(format.errors({ stack: true }), format.timestamp(), format.json())
+  format: format.combine(
+    format.colorize(), // Add color for better readability (optional)
+    format.timestamp(),
+    format.errors({ stack: true }), // Include stack trace for errors
+    format.printf((info) => {
+      if (info.level === "error") {
+        // Log detailed information only for errors
+        const { level, message, timestamp, stack } = info;
+        return `${timestamp} [${level}] ${message}\n${stack}`;
+      }
+      return info.message;
+      // Ensure the return value is always a string
+    })
+  )
 });
 
 export default createLogger({
@@ -38,6 +51,12 @@ export default createLogger({
     }),
     dailyRotateFile
   ],
-  exceptionHandlers: [dailyRotateFile],
+  exceptionHandlers: [
+    dailyRotateFile,
+    new transports.Console({
+      level: logLevel,
+      format: format.combine(format.errors({ stack: true }), format.prettyPrint())
+    })
+  ],
   exitOnError: false
 });

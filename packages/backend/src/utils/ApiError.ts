@@ -1,6 +1,7 @@
 import IApiError from "Interface/ApiError";
 import logger from "./logger";
 import { Request, Response } from "express";
+import { error } from "winston";
 /*
   Error must have
 
@@ -26,11 +27,11 @@ export abstract class ApiError extends Error implements IApiError {
   }
 
   public log(req: Request) {
-    logger.error(`${this.status} - ${this.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
+    logger.error(`${this.status} - ${this.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`, error);
   }
 
   public send(res: Response) {
-    res.status(this.status).json({ message: this.message });
+    res.status(this.status).json({ message: this.message, status: this.status });
   }
 }
 
@@ -70,7 +71,7 @@ export class BadTokenError extends ApiError {
   }
 }
 
-export class TokenExpiresErrro extends ApiError {
+export class TokenExpiresErro extends ApiError {
   constructor(message = "Token is expired") {
     super(Status.FORBIDDEN, message);
   }

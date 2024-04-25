@@ -7,6 +7,7 @@ import IController from "./Interface/controller";
 import { corsOptions } from "./config/corsOptions";
 import errorMiddleware from "./middleware/errorMiddleware";
 import { connectDB } from "./database";
+import logger from "./utils/logger";
 
 class App {
   public express: Application = express();
@@ -17,6 +18,11 @@ class App {
     this.initialiseMiddleWare();
     this.initialiseRouters();
     this.initialiseErrorHandling();
+
+    process.on("uncaughtException", (e) => {
+      logger.error(e);
+      console.log(e);
+    });
   }
 
   private initialiseMiddleWare(): void {

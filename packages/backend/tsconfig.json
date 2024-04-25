@@ -21,9 +21,9 @@
   },
   "paths": {
     "@scr/*": ["./src/*"],
-    "@features/*": ["./src/features"],
-    "@utils": ["./src/utils"],
-    "@middleware": ["./src/middleware"]
+    "@features/*": ["./src/features/*"],
+    "@utils/*": ["./src/utils/*"],
+    "@middleware/*": ["./src/middleware/*"]
   },
   "include": ["./src/**/*.ts", "src/features/auth/validation.tsn"],
   "exclude": ["node_modules", "test/**/*.ts"]

@@ -149,11 +149,11 @@ export const loginSchema = Joi.object({
   userId: Joi.string()
     .trim()
     .required()
-    .error((e) => new Error("User ID is required")),
+    .error(() => new Error("User ID is required")),
 
   password: Joi.string()
     .required()
-    .error((e) => new Error("Password is required"))
+    .error(() => new Error("Password is required"))
 });
 
 export default {

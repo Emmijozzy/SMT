@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { IUser } from "../model";
-import { InternalError } from "../../../utils/ApiError";
+import { BadTokenError, InternalError, TokenExpiresErro } from "../../../utils/ApiError";
 
 export const createAccessToken = (foundUser: IUser): string => {
   return jwt.sign({ user: foundUser }, process.env.ACCESS_TOKEN_SECRET as jwt.Secret, { expiresIn: "1d" });
@@ -21,13 +21,13 @@ export const verifyAccessToken = async (token: string): Promise<jwt.VerifyErrors
     if (typeof decoded !== "string") {
       return decoded.payload.user as IUser; // Access payload safely
     } else {
-      throw new Error("Invalid token type"); // Handle unexpected string case
+      throw new BadTokenError("Invalid token type"); // Handle unexpected string case
     }
   } catch (err) {
     if (err instanceof jwt.JsonWebTokenError) {
       throw err; // Re-throw JWT verification errors specifically
     } else {
-      throw new Error("Invalid token payload");
+      throw new TokenExpiresErro("Invalid token payload");
     }
   }
 };

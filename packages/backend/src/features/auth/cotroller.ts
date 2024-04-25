@@ -4,7 +4,6 @@ import asyncHandler from "../../utils/asyncHandler";
 import { AuthFailureError, BadRequestError } from "../../utils/ApiError";
 import { IUser } from "./model";
 import UserService from "./service";
-// import validationMiddleware from "../../middleware/validatMiddleware";
 import authSchema from "./validation";
 import validationMiddleware from "../../middleware/validationMiddleware";
 

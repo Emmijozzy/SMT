@@ -1,69 +1,54 @@
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+  --font-sora: "Sora", sans-serif;
+  box-sizing: border-box;
+  position: fixed;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+@layer base {
+  body {
+    @apply font-sans text-base
   }
-  a:hover {
-    color: #747bff;
+
+  .font-outline-2 {
+    -webkit-text-stroke: 0.5px rgb(254, 158, 14);
   }
-  button {
-    background-color: #f9f9f9;
+  .font-outline-4 {
+    -webkit-text-stroke: 4px black;
   }
+  /* .bg-pink-gradient {
+    @apply bg-gradient-to-r from-fuchsia-500 to-pink-500
+  } */
+}
+
+.gradient-text_orange {
+  background-image: linear-gradient(to top, #f3ec78, #af4261);
+  background-clip: text;
+  -webkit-background-clip: text;
+  /* Safari and older Chrome */
+  color: transparent;
+  font-size: 3em;
+  /* Adjust font size as needed */
+}
+
+.gradient-text_pink {
+  background-image: linear-gradient(to top, #ff0080, #7928ca);
+  background-clip: text;
+  -webkit-background-clip: text;
+  /* Safari and older Chrome */
+  color: transparent;
+  font-size: 3em;
+  /* Adjust font size as needed */
+}
+
+hr {
+  height: 0;
+  border-top-width: 0px;
+  background: #ff008d;
 }

@@ -1,11 +1,10 @@
 import { Router, Request, Response } from "express";
-import mongoose from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 import IController from "../../Interface/controller";
 import asyncHandler from "../../utils/asyncHandler";
 import { BadRequestError, InternalError } from "../../utils/ApiError";
-import { ICreateTeam } from "./interface";
-import TeamModel from "./model";
+import { ICreateTeam } from "./teamInterface";
+import TeamModel from "./teamModel";
 
 export default class TeamController implements IController {
   public path = "/team";
