@@ -15,7 +15,7 @@ interface Props {
 function NavItem({ title, path, Icon }: Props) {
   const location = useLocation();
 
-  const selectedColor = ((color: string) => `bg-${color}-gradient`)("red");
+  // const selectedColor = ((color: string) => `bg-${color}-gradient`)("red");
   const isNavActive = (): boolean => path === location.pathname;
 
   return (
@@ -25,7 +25,7 @@ function NavItem({ title, path, Icon }: Props) {
         fullWidth
       >
         <div
-          className={`${isNavActive() ? `bg-pink-gradient` : "bg-base-100"} flex items-center justify-center w-8 h-8 rounded-lg shadow-md  xl:p-2.5`}
+          className={`${isNavActive() ? "bg-pink-gradient" : "bg-base-100"} flex items-center justify-center w-8 h-8 rounded-lg shadow-md  xl:p-2.5`}
         >
           <Icon className={`${isNavActive() ? "text-base-100" : "text-base-content"} w-5 h-5 `} />
         </div>

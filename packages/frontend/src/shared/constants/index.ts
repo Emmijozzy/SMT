@@ -5,23 +5,23 @@ import Diversity1Icon from "@mui/icons-material/Diversity1";
 
 export const adminroutes = [
   {
-    path: "/",
+    path: "/dash",
     title: "Dashboard",
     icon: HomeIcon,
   },
   {
-    path: "/users",
+    path: "/dash/users",
     title: "Users",
     icon: PeopleIcon,
   },
   {
-    path: "/tasks",
-    title: "Task",
+    path: "/dash/tasks",
+    title: "Tasks",
     icon: TaskIcon,
   },
   {
-    path: "/team",
-    title: "Team",
+    path: "/dash/teams",
+    title: "Teams",
     icon: Diversity1Icon,
   },
 ];

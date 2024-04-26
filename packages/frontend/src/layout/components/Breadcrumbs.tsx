@@ -1,4 +1,4 @@
-import { Breadcrumbs as MUIBreadcrumbs, Typography, Link as MUILink } from "@mui/material";
+import { Breadcrumbs as MUIBreadcrumbs, Link as MUILink } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
@@ -14,20 +14,18 @@ function Breadcrumbs() {
 
   useEffect(() => {
     const { pathname } = location;
-    let pathSegments = pathname.split("/");
-
-    if (pathSegments.every((path) => path === "")) {
-      pathSegments = ["", "dashboard"];
-    }
+    const pathSegments = pathname.split("/");
 
     let link: string;
+    let label: string;
 
-    const newBreadcrumbs = pathSegments.reduce((acc: BreadcrumbItem[], segment, index) => {
-      const label = segment.charAt(0).toUpperCase() + segment.slice(1); // Capitalize first letter
-      if (segment === "dashboard") {
-        link = "";
+    const newBreadcrumbs = pathSegments.reduce((acc: BreadcrumbItem[], segment) => {
+      if (segment === "dashboard" || segment === "dash") {
+        link = "/dash";
+        label = "Dashboard";
       } else {
-        link = `${pathSegments.slice(0, index + 1).join("")}`; // Build link from segments
+        link = `${pathSegments.join("")}`; // Build link from segments
+        label = segment.charAt(0).toUpperCase() + segment.slice(1); // Capitalize first letter
       }
       acc.push({ label, link });
       return acc;
@@ -47,7 +45,7 @@ function Breadcrumbs() {
                   key={crumb.label}
                   underline="hover"
                   color="inherit"
-                  href="/"
+                  href="/dash"
                   className="text-base-content/40 hover:text-base-content text-lg"
                 >
                   Page
@@ -66,9 +64,14 @@ function Breadcrumbs() {
             );
           })}
 
-          <Typography variant="body1" className="text-base-content text-sm ">
+          <MUILink
+            underline="hover"
+            color="inherit"
+            href={`/dash${breadcrumbs[breadcrumbs.length - 1]?.label.toLowerCase() === "dashboard" ? "" : `/${breadcrumbs[breadcrumbs.length - 1]?.label.toLowerCase()}`}`}
+            className="text-base-content text-sm "
+          >
             {breadcrumbs[breadcrumbs.length - 1]?.label}
-          </Typography>
+          </MUILink>
         </MUIBreadcrumbs>
         <h2 className="h5 font-bold">{breadcrumbs[breadcrumbs.length - 1]?.label}</h2>
       </div>
