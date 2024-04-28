@@ -54,6 +54,7 @@ export default {
       backgroundImage: {
         "radial-gradient": "radial-gradient(var(--tw-gradient-stops))",
         "conic-gradient": "conic-gradient(from 225deg, #FFC876, #79FFF7, #9F53FF, #FF98E2, #FFC876)",
+        "hero-pattern": "url('./src/assets/images/curved14.jpg')",
       },
       fontFamily: {
         sans: ["var(--font-sora)", ...fontFamily.sans],
@@ -66,6 +67,9 @@ export default {
       },
       transitionTimingFunction: {
         DEFAULT: "linear",
+        "ease-soft-in-out": "cubic-bezier(0.42, 0, 0.58, 1)",
+        "in-expo": "cubic-bezier(0.95, 0.05, 0.795, 0.035)",
+        "out-expo": "cubic-bezier(0.19, 1, 0.22, 1)",
       },
       spacing: {
         0.25: "0.0625rem",
