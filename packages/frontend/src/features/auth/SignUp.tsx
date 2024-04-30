@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useFormik } from "formik";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import signUpSvg from "../../assets/images/SvG/Sign up-amico.svg";
 import { SignupData } from "./authInterface";
 import { registrationSchema } from "./validation";
@@ -18,6 +19,8 @@ const initialValues: SignupData = {
 function SignUp() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues,
     validationSchema: registrationSchema,
@@ -26,6 +29,7 @@ function SignUp() {
       try {
         console.log("Submitting registration:", values);
         await new Promise((resolve) => setTimeout(resolve, 1000));
+        navigate("/dash");
       } catch (error) {
         console.error("Registration failed:", error);
       } finally {

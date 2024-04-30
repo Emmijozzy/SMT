@@ -24,8 +24,8 @@ export const registrationSchema = Yup.object().shape({
 });
 
 export const loginSchema = Yup.object().shape({
-  userId: Yup.string().min(2, "Too Short!").trim().required("User ID is Required"),
-  password: Yup.string().min(2, "Too Short!").trim().required("Password Required"),
+  userId: Yup.string().min(9, "Invalid User ID").trim().required("User ID is Required"),
+  password: Yup.string().password().trim().required("Password Required"),
 });
 
 export default {

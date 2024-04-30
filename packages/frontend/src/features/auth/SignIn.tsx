@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useFormik } from "formik";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { loginSchema } from "./validation";
 import loginImage from "../../assets/images/SvG/Computer login-rafiki.svg";
 import { SinginData } from "./authInterface";
@@ -15,6 +16,8 @@ const initialValues: SinginData = {
 function SignIn() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues,
     validationSchema: loginSchema,
@@ -23,6 +26,7 @@ function SignIn() {
       try {
         console.log("Submitting registration:", values);
         await new Promise((resolve) => setTimeout(resolve, 1000));
+        navigate("/dash");
       } catch (error) {
         console.error("Registration failed:", error);
       } finally {
