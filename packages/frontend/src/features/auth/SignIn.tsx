@@ -1,9 +1,11 @@
+/* eslint-disable no-promise-executor-return */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { Formik, Form } from "formik";
-import FormixField from "./Components/FormixField";
+import { useFormik } from "formik";
+import { useState } from "react";
 import { loginSchema } from "./validation";
 import loginImage from "../../assets/images/SvG/Computer login-rafiki.svg";
-import { SinginData, FormikProps } from "./authInterface";
+import { SinginData } from "./authInterface";
+import FormInput from "./Components/FormInput";
 
 const initialValues: SinginData = {
   userId: "",
@@ -11,6 +13,26 @@ const initialValues: SinginData = {
 };
 
 function SignIn() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema: loginSchema,
+    onSubmit: async (values) => {
+      setIsSubmitting(true);
+      try {
+        console.log("Submitting registration:", values);
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      } catch (error) {
+        console.error("Registration failed:", error);
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+  });
+
+  const { handleSubmit, handleBlur, handleChange, errors, values } = formik;
+
   return (
     <main data-theme="dark" className="w-screen mt-0 transition-all duration-200 ease-soft-in-out bg-[#000]">
       <section className="h-screen min-h-screen">
@@ -33,53 +55,53 @@ function SignIn() {
                       <p className="text-xs">Enter your account details</p>
                     </div>
                     <div className="flex-auto">
-                      <Formik
-                        validationSchema={loginSchema}
-                        initialValues={initialValues}
-                        onSubmit={(values: SinginData) => {
-                          // Handle form submission here
-                          console.log("Submitted data:", values);
-                        }}
-                      >
-                        {(formixProps: FormikProps) => (
-                          <Form className="max-w-screen-lg mb-2 w-80 sm:w-96">
-                            <div className="flex flex-col gap-5 ">
-                              <FormixField name="userId" tagField="User Id" errors={formixProps.errors} />
-                              <FormixField
-                                name="password"
-                                tagField="Password"
-                                errors={formixProps.errors}
-                                fieldType="password"
-                              />
-                            </div>
-                            <p className="block mt-4 font-sans text-base antialiased font-normal leading-relaxed text-gray-700 text-start">
-                              <a
-                                className="text-xs font-semibold text-pink-500 transition-colors hover:text-blue-700"
-                                href="./"
-                              >
-                                Forget your password
-                              </a>
-                            </p>
-                            <button
-                              className="mt-16 block w-full h-14 select-none rounded-lg bg-[#e7469b] py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-400/20 transition-all hover:shadow-lg hover:shadow-[#e7469b66] focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                              type="submit"
-                              data-ripple-light="true"
-                              // disabled={formixProps.isSubmitting}
-                            >
-                              Sign In
-                            </button>
-                            <p className="block mt-4 font-sans text-xs text-base antialiased font-normal leading-relaxed text-center text-gray-700">
-                              Don't have an account?
-                              <a
-                                className="ml-1 font-semibold text-pink-500 transition-colors hover:text-blue-700"
-                                href="./signup"
-                              >
-                                Sign Up Now!
-                              </a>
-                            </p>
-                          </Form>
-                        )}
-                      </Formik>
+                      <form onSubmit={handleSubmit} className="max-w-screen-lg mb-2 w-80 sm:w-96">
+                        <div className="flex flex-col gap-5 ">
+                          <FormInput
+                            value={values.userId}
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            tagName="User ID"
+                            name="userId"
+                            type="text"
+                            error={errors.userId}
+                          />
+                          <FormInput
+                            value={values.password}
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            tagName="Password"
+                            name="password"
+                            type="password"
+                            error={errors.password}
+                          />
+                        </div>
+                        <p className="block mt-4 font-sans text-base antialiased font-normal leading-relaxed text-gray-700 text-start">
+                          <a
+                            className="text-xs font-semibold text-pink-500 transition-colors hover:text-blue-700"
+                            href="./"
+                          >
+                            Forget your password
+                          </a>
+                        </p>
+                        <button
+                          className="mt-16 block w-full h-14 select-none rounded-lg bg-[#e7469b] py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-400/20 transition-all hover:shadow-lg hover:shadow-[#e7469b66] focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                          type="submit"
+                          data-ripple-light="true"
+                          disabled={formik.isSubmitting}
+                        >
+                          {isSubmitting ? "Submitting..." : "Sign In"}
+                        </button>
+                        <p className="block mt-4 font-sans text-xs text-base antialiased font-normal leading-relaxed text-center text-gray-700">
+                          Don't have an account?
+                          <a
+                            className="ml-1 font-semibold text-pink-500 transition-colors hover:text-blue-700"
+                            href="./signup"
+                          >
+                            Sign Up Now!
+                          </a>
+                        </p>
+                      </form>
                     </div>
                   </div>
                 </div>

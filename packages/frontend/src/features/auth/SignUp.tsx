@@ -1,9 +1,11 @@
+/* eslint-disable no-promise-executor-return */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { Formik, Form } from "formik";
+import { useFormik } from "formik";
+import { useState } from "react";
 import signUpSvg from "../../assets/images/SvG/Sign up-amico.svg";
-import FormixField from "./Components/FormixField";
-import { SignupData, FormikProps } from "./authInterface";
+import { SignupData } from "./authInterface";
 import { registrationSchema } from "./validation";
+import FormInput from "./Components/FormInput";
 
 const initialValues: SignupData = {
   firstName: "",
@@ -14,6 +16,26 @@ const initialValues: SignupData = {
 };
 
 function SignUp() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema: registrationSchema,
+    onSubmit: async (values) => {
+      setIsSubmitting(true);
+      try {
+        console.log("Submitting registration:", values);
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      } catch (error) {
+        console.error("Registration failed:", error);
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+  });
+
+  const { handleSubmit, handleBlur, handleChange, errors, values } = formik;
+
   return (
     <main data-theme="dark" className="w-screen mt-0 transition-all duration-200 ease-soft-in-out bg-[#000]">
       <section className="h-screen min-h-screen">
@@ -36,57 +58,71 @@ function SignUp() {
                       <p className="text-xs">Enter your new Account details</p>
                     </div>
                     <div className="flex-auto">
-                      <Formik
-                        validationSchema={registrationSchema}
-                        initialValues={initialValues}
-                        onSubmit={(values: SignupData) => {
-                          // Handle form submission here
-                          console.log("Submitted data:", values);
-                        }}
-                      >
-                        {(formixProps: FormikProps) => (
-                          <Form className="max-w-screen-lg mb-2 w-80 sm:w-96">
-                            <div className="flex flex-col gap-5">
-                              <FormixField name="firstName" tagField="First Name" errors={formixProps.errors} />
-                              <FormixField name="lastName" tagField="Last Name" errors={formixProps.errors} />
-                              <FormixField
-                                name="email"
-                                tagField="Email"
-                                errors={formixProps.errors}
-                                fieldType="email"
-                              />
-                              <FormixField
-                                name="password"
-                                tagField="Password"
-                                errors={formixProps.errors}
-                                fieldType="password"
-                              />
-                              <FormixField
-                                name="confirmPassword"
-                                tagField="Confirm Password"
-                                errors={formixProps.errors}
-                                fieldType="password"
-                              />
-                            </div>
-                            <button
-                              className="mt-7 block w-full h-12 select-none rounded-lg bg-[#e7469b] py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-400/20 transition-all hover:shadow-lg hover:shadow-[#e7469b66] focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                              type="submit"
-                              data-ripple-light="true"
-                            >
-                              Register
-                            </button>
-                            <p className="block mt-4 font-sans text-xs text-base antialiased font-normal leading-relaxed text-center text-gray-700">
-                              Already have an account?
-                              <a
-                                className="ml-1 font-semibold text-pink-500 transition-colors hover:text-blue-700"
-                                href="/signin"
-                              >
-                                Sign In Now!
-                              </a>
-                            </p>
-                          </Form>
-                        )}
-                      </Formik>
+                      <form onSubmit={handleSubmit} className="max-w-screen-lg mb-2 w-80 sm:w-96">
+                        <div className="flex flex-col gap-5">
+                          <FormInput
+                            name="firstName"
+                            tagName="First Name"
+                            error={errors.firstName}
+                            type="text"
+                            value={values.firstName}
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                          />
+                          <FormInput
+                            name="lastName"
+                            tagName="Last Name"
+                            error={errors.lastName}
+                            type="text"
+                            value={values.lastName}
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                          />
+                          <FormInput
+                            name="email"
+                            tagName="Email"
+                            error={errors.email}
+                            type="text"
+                            value={values.email}
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                          />
+                          <FormInput
+                            name="password"
+                            tagName="Password"
+                            error={errors.password}
+                            type="password"
+                            value={values.password}
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                          />
+                          <FormInput
+                            name="confirmPassword"
+                            tagName="Confirm Password"
+                            error={errors.confirmPassword}
+                            type="password"
+                            value={values.confirmPassword}
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                          />
+                        </div>
+                        <button
+                          className="mt-7 block w-full h-12 select-none rounded-lg bg-[#e7469b] py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-400/20 transition-all hover:shadow-lg hover:shadow-[#e7469b66] focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                          type="submit"
+                          data-ripple-light="true"
+                        >
+                          {isSubmitting ? "Submitting..." : "Sign up"}
+                        </button>
+                        <p className="block mt-4 font-sans text-xs text-base antialiased font-normal leading-relaxed text-center text-gray-700">
+                          Already have an account?
+                          <a
+                            className="ml-1 font-semibold text-pink-500 transition-colors hover:text-blue-700"
+                            href="/signin"
+                          >
+                            Sign In Now!
+                          </a>
+                        </p>
+                      </form>
                     </div>
                   </div>
                 </div>
