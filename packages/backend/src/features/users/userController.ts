@@ -1,7 +1,7 @@
 import { Router, Request, Response } from "express";
 import IController from "../../Interface/controller";
 import asyncHandler from "../../utils/asyncHandler";
-import { User } from "../auth/model";
+import { IUser, User } from "../auth/model";
 import { AuthFailureError, BadRequestError, InternalError } from "../../utils/ApiError";
 import SuccessResponse from "../../utils/successResponse";
 import userUtils from "./userUtils";
@@ -9,7 +9,8 @@ import { ExtendedRequest } from "./userInterface";
 import validationMiddleware from "../../middleware/validationMiddleware";
 import userUpdateSchema from "./userValidation";
 import UserService from "./userService";
-import authenticationMiddleware from "../../middleware/authenticationMiddleware";
+import authMiddleware from "../../middleware/authMiddleware";
+import { USER_ROLES } from "../../enums/userRoles";
 
 export default class UserController implements IController {
   public path = "/user";
@@ -20,19 +21,22 @@ export default class UserController implements IController {
   }
 
   private initializeRouter(): void {
-    this.router.get("/", authenticationMiddleware, this.getUsers);
-    this.router.patch("/delete", authenticationMiddleware, this.deleteUser);
-    this.router.patch("/update", validationMiddleware(userUpdateSchema), authenticationMiddleware, this.updateUser);
+    this.router.get("/", authMiddleware(USER_ROLES.ADMIN), this.getUsers);
+    this.router.patch("/delete", authMiddleware(USER_ROLES.ADMIN), this.deleteUser);
+    this.router.patch("/update", authMiddleware(USER_ROLES.ADMIN), this.updateUser);
   }
+
 
   private getUsers = asyncHandler(async (req: ExtendedRequest, res: Response) => {
     const requestUserRole = req.user?.userRole;
     console.log(req.user);
     if (requestUserRole != "admin") throw new AuthFailureError("Unauthorized");
 
-    const users = await User.find().select("-password").lean().exec();
+    const users = await User.find().select("-password").lean();
 
-    if (!users) throw new InternalError("Fatal Error fetching users");
+    console.log(users.length);
+
+    if (!users || !users?.length) throw new InternalError("Fatal Error fetching users");
 
     new SuccessResponse(users).send(res);
   });

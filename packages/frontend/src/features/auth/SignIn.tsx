@@ -1,7 +1,6 @@
 /* eslint-disable no-promise-executor-return */
-/* eslint-disable jsx-a11y/label-has-associated-control */
+import React, { useState } from "react";
 import { useFormik } from "formik";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginSchema } from "./validation";
 import loginImage from "../../assets/images/SvG/Computer login-rafiki.svg";
@@ -15,7 +14,6 @@ const initialValues: SinginData = {
 
 function SignIn() {
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -38,19 +36,18 @@ function SignIn() {
   const { handleSubmit, handleBlur, handleChange, errors, values } = formik;
 
   return (
-    <main data-theme="dark" className="w-screen mt-0 transition-all duration-200 ease-soft-in-out bg-[#000]">
+    <main className="w-screen mt-0 transition-all duration-200 ease-soft-in-out bg-[#000]" data-theme="dark">
       <section className="h-screen min-h-screen">
         <div className="relative flex w-full h-full">
           <span className="absolute top-0 right-0 w-full lg:w-[60%] h-[100%] bg-blueover-gradient" />
-          {/* <span className="w-full h-full bg-black-gradient" /> */}
           <span className="absolute bottom-0 left-0 w-full lg:w-[60%] h-[100%] bg-purple-gradient" />
           <div className="container z-10">
             <div className="flex flex-wrap items-center justify-center w-full h-full">
-              <div className="h-[40rem] w-[70rem] flex bg-black rounded-lg ">
+              <div className="h-[40rem] w-[70rem] flex bg-black rounded-lg">
                 <div className="h-full w-[54%] hidden lg:flex bg-[#8260ca] bg-pink-gradient rounded-l-lg items-center justify-center">
                   <img src={loginImage} alt="Login" className="w-[95%]" />
                 </div>
-                <div className="h-full w-full lg:w-[46%] rounded-lg lg:rounded-r-lg bg-[#1c1d21] p-14 flex items-center justify-center ">
+                <div className="h-full w-full lg:w-[46%] rounded-lg lg:rounded-r-lg bg-[#1c1d21] p-14 flex items-center justify-center">
                   <div className="flex flex-col h-full">
                     <div className="mb-10">
                       <h4 className="h4">
@@ -60,7 +57,7 @@ function SignIn() {
                     </div>
                     <div className="flex-auto">
                       <form onSubmit={handleSubmit} className="max-w-screen-lg mb-2 w-80 sm:w-96">
-                        <div className="flex flex-col gap-5 ">
+                        <div className="flex flex-col gap-5">
                           <FormInput
                             value={values.userId}
                             onBlur={handleBlur}
@@ -117,4 +114,5 @@ function SignIn() {
     </main>
   );
 }
+
 export default SignIn;

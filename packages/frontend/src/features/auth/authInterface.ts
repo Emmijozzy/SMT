@@ -10,15 +10,3 @@ export interface SignupData {
   password: string;
   confirmPassword: string;
 }
-
-export interface FormikProps {
-  isSubmitting: boolean;
-  errors: { [key: string]: string }; // Define errors object structure
-}
-
-export interface IField {
-  name: string;
-  tagField: string;
-  errors: { [key: string]: string };
-  fieldType?: string;
-}

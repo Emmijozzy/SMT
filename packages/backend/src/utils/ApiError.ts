@@ -76,6 +76,11 @@ export class TokenExpiresErro extends ApiError {
     super(Status.FORBIDDEN, message);
   }
 }
+export class AccessError extends ApiError {
+  constructor(message = "Forbidden") {
+    super(Status.FORBIDDEN, message);
+  }
+}
 
 export class NoDataError extends ApiError {
   constructor(message = "No data available") {
