@@ -1,6 +1,6 @@
 /* eslint-disable indent */
-import { BadRequestError, InternalError } from "../../utils/ApiError";
-import { IUser, User } from "../auth/model";
+import { BadRequestError, InternalError, NotFoundError } from "../../utils/ApiError";
+import { IUser, User } from "../auth/authModel";
 
 export const findByEmail = async (email: string): Promise<IUser | null> => {
   return User.findOne({ email: email }).select("-password").lean().exec();
@@ -8,6 +8,18 @@ export const findByEmail = async (email: string): Promise<IUser | null> => {
 
 export const findByUserId = async (userId: string): Promise<IUser | null> => {
   return User.findOne({ userId: userId }).select("").lean().exec();
+};
+
+export const updateUserById = async (userId: string, data: Record<string, string>) => {
+  //conftrim userId
+  const user = await findByUserId(userId);
+  if (!user) throw new NotFoundError("User does not exist");
+
+  const updateduser = await User.findOneAndUpdate({ userId }, data, {
+    new: true
+  }).select("-password");
+
+  return updateduser;
 };
 
 export const deleteByuserId = async (userId: string): Promise<IUser | null> => {
@@ -45,6 +57,7 @@ export const sanitizeData = (data: Partial<IUser>): Partial<IUser> => {
 export default {
   findByEmail,
   findByUserId,
+  updateUserById,
   deleteByuserId,
   sanitizeData
 };

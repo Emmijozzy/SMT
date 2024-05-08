@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/indent */
 import { NextFunction, Response } from "express";
 import tokenUtils from "../features/auth/utils/tokenUtils";
-import { IUser } from "features/auth/model";
+import { IUser } from "features/auth/authModel";
 import { ExtendedRequest } from "../features/users/userInterface";
 import logger from "../utils/logger";
 import { AccessError, AuthFailureError, BadTokenError, InternalError } from "../utils/ApiError";
@@ -14,7 +14,7 @@ const authMiddleware =
     try {
       const authHeader = (req.headers.authorization || req.headers.Authorization) as string;
 
-      console.log("token", authHeader);
+      // console.log("token", authHeader);
 
       if (!authHeader || !authHeader.startsWith("Bearer ")) {
         throw new AuthFailureError("You are not authorized");

@@ -1,16 +1,20 @@
 import { Router, Request, Response } from "express";
 import IController from "../../Interface/controller";
 import asyncHandler from "../../utils/asyncHandler";
-import { IUser, User } from "../auth/model";
+import { IUser, User } from "../auth/authModel";
 import { AuthFailureError, BadRequestError, InternalError } from "../../utils/ApiError";
-import SuccessResponse from "../../utils/successResponse";
+import successResponse from "../../utils/successResponse";
 import userUtils from "./userUtils";
 import { ExtendedRequest } from "./userInterface";
 import validationMiddleware from "../../middleware/validationMiddleware";
-import userUpdateSchema from "./userValidation";
+import userValidation from "./userValidation";
 import UserService from "./userService";
 import authMiddleware from "../../middleware/authMiddleware";
-import { USER_ROLES } from "../../enums/userRoles";
+import { ENUM_USER_ROLES } from "./enumUserRoles";
+import getPaginationOptions from "../../utils/getPaginationOptions";
+import filtersToMongooseQuery from "../../utils/filtersToMongooseQuery";
+
+const { userUpdateSchema } = userValidation;
 
 export default class UserController implements IController {
   public path = "/user";
@@ -20,25 +24,78 @@ export default class UserController implements IController {
     this.initializeRouter();
   }
 
+  //TODO - Do not forget to add the auth validation to each respective route
+
   private initializeRouter(): void {
-    this.router.get("/", authMiddleware(USER_ROLES.ADMIN), this.getUsers);
-    this.router.patch("/delete", authMiddleware(USER_ROLES.ADMIN), this.deleteUser);
-    this.router.patch("/update", authMiddleware(USER_ROLES.ADMIN), this.updateUser);
+    this.router.get(
+      "/profile",
+      authMiddleware(ENUM_USER_ROLES.ADMIN, ENUM_USER_ROLES.MANAGER, ENUM_USER_ROLES.TEAM_MEMBER),
+      this.getUserProfile
+    );
+    this.router.get("/get_all", this.getAll);
+    this.router.get("/get_by_userId/:userId", this.getUserById);
+    this.router.patch(
+      "/update_profile",
+      authMiddleware(ENUM_USER_ROLES.ADMIN, ENUM_USER_ROLES.MANAGER, ENUM_USER_ROLES.TEAM_MEMBER),
+      this.updateProfile
+    );
+    this.router.patch("/update", authMiddleware(ENUM_USER_ROLES.ADMIN), this.updateUser);
+    this.router.patch("/delete", authMiddleware(ENUM_USER_ROLES.ADMIN), this.deleteUser);
   }
 
+  private getUserProfile = asyncHandler(async (req: ExtendedRequest, res: Response) => {
+    const user = req.user;
+    if (!user) throw new InternalError("Internal server error");
 
-  private getUsers = asyncHandler(async (req: ExtendedRequest, res: Response) => {
-    const requestUserRole = req.user?.userRole;
-    console.log(req.user);
-    if (requestUserRole != "admin") throw new AuthFailureError("Unauthorized");
+    const result = await UserService.getProfile(user);
+    successResponse(res, {
+      data: result,
+      message: "Profile retrieved successfully!"
+    });
+  });
 
-    const users = await User.find().select("-password").lean();
+  private getAll = asyncHandler(async (req: ExtendedRequest, res: Response) => {
+    let queryFilter = req.query.filters;
+    if (!queryFilter) {
+      queryFilter = "{}";
+    }
 
-    console.log(users.length);
+    const filters = filtersToMongooseQuery(JSON.parse(String(queryFilter)) as Record<string, string>);
 
-    if (!users || !users?.length) throw new InternalError("Fatal Error fetching users");
+    if (!filters) throw new BadRequestError("Invalid filter");
 
-    new SuccessResponse(users).send(res);
+    const result = await UserService.getAll(
+      filters,
+      getPaginationOptions(req.query.pagination as Record<string, string>)
+    );
+
+    if (!result || !result.users?.length) throw new InternalError("Fatal Error fetching users");
+
+    successResponse(res, {
+      data: result,
+      message: "User list retrieved successfully."
+    });
+  });
+
+  private getUserById = asyncHandler(async (req: ExtendedRequest, res: Response) => {
+    const result = await UserService.getUserById(req.params.userId);
+
+    successResponse(res, {
+      data: result,
+      message: "User data retrieved successfully"
+    });
+  });
+
+  private updateProfile = asyncHandler(async (req: ExtendedRequest, res: Response) => {
+    const userId = req.user?.userId;
+    if (!userId) throw new InternalError("Internal server error");
+
+    const result = await UserService.updateProfile(userId, req.body);
+
+    successResponse(res, {
+      data: result,
+      message: "User profile updated successfully"
+    });
   });
 
   private updateUser = asyncHandler(async (req: ExtendedRequest, res: Response) => {
@@ -61,7 +118,10 @@ export default class UserController implements IController {
 
     const updatedUser = await UserService.editUser(sanitizedData);
     if (!updatedUser) throw new InternalError("Failed to update user");
-    new SuccessResponse(updatedUser).send(res);
+    successResponse(res, {
+      data: updatedUser,
+      message: "User data modified successfully"
+    });
   });
 
   private deleteUser = asyncHandler(async (req: ExtendedRequest, res: Response) => {
@@ -73,6 +133,12 @@ export default class UserController implements IController {
 
     const deleteUserData = await userUtils.deleteByuserId(deleteUserId);
 
-    new SuccessResponse({ userId: deleteUserData?.userId, deleteUserData }).send(res);
+    successResponse(res, {
+      data: {
+        userId: deleteUserData?.userId,
+        deleteUserData
+      },
+      message: "User deleted successfully."
+    });
   });
 }

@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { IUser } from "../model";
+import { IUser } from "../authModel";
 import { BadTokenError, InternalError, TokenExpiresErro } from "../../../utils/ApiError";
 
 export const createAccessToken = (foundUser: IUser): string => {

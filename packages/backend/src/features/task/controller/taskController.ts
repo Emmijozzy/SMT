@@ -7,7 +7,7 @@ import { BadRequestError, InternalError } from "../../../utils/ApiError";
 import { Task } from "../model/task";
 import TeamModel, { ITeam } from "../../team/teamModel";
 import createTaskId from "../utils/createTaskId";
-import { User } from "../../auth/model";
+import { User } from "../../auth/authModel";
 
 export default class TaskController implements IController {
   public path = "/task";

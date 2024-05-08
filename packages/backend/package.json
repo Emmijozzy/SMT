@@ -48,12 +48,15 @@
     "module-alias": "^2.2.3",
     "mongoose": "^8.3.1",
     "mongoose-cron": "^0.5.7",
+    "mongoose-paginate-v2": "^1.8.0",
     "node-cron": "^3.0.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.4",
     "uuid": "^9.0.1",
     "winston": "^3.13.0",
-    "winston-daily-rotate-file": "^5.0.0"
+    "winston-daily-rotate-file": "^5.0.0",
+    "yup": "^1.4.0",
+    "yup-password": "^0.4.0"
   },
   "lint-staged": {
     "src/**/*.ts": [

@@ -31,7 +31,7 @@ export abstract class ApiError extends Error implements IApiError {
   }
 
   public send(res: Response) {
-    res.status(this.status).json({ message: this.message, status: this.status });
+    res.status(this.status).json({ message: this.message, status: this.status, success: false });
   }
 }
 

@@ -2,9 +2,9 @@ import IController from "Interface/controller";
 import { Router, Request, Response } from "express";
 import asyncHandler from "../../utils/asyncHandler";
 import { AuthFailureError, BadRequestError } from "../../utils/ApiError";
-import { IUser } from "./model";
-import UserService from "./service";
-import authSchema from "./validation";
+import { IUser } from "./authModel";
+import UserService from "./authService";
+import authSchema from "./authValidation";
 import validationMiddleware from "../../middleware/validationMiddleware";
 
 export default class Auth implements IController {
@@ -41,6 +41,7 @@ export default class Auth implements IController {
 
   private login = asyncHandler(async (req: Request, res: Response) => {
     const { userId, password } = req.body;
+    console.log(userId, password);
     if (!userId || !password) {
       throw new BadRequestError("Missing user data");
     }

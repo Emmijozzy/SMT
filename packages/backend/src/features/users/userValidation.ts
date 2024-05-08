@@ -1,4 +1,14 @@
 import Joi from "joi";
+import * as Yup from "yup";
+import YupPassword from "yup-password";
+
+YupPassword(Yup);
+
+const userProfileUpdateSchema = Yup.object().shape({
+  email: Yup.string().email().trim().optional(),
+  password: Yup.string().trim().optional().password(),
+  profilePicUrl: Yup.string().url("Please enter a valid profile picture URL").optional()
+});
 
 const userUpdateSchema = Joi.object({
   userId: Joi.string().trim().required().error(new Error("UserId is required")),
@@ -31,4 +41,7 @@ const userUpdateSchema = Joi.object({
   // No validation needed for del_flg, createdAt, updatedAt, and fullName as they are handled by Mongoose
 });
 
-export default userUpdateSchema;
+export default {
+  userUpdateSchema,
+  userProfileUpdateSchema
+};

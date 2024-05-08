@@ -1,9 +1,9 @@
-import { User, IUser } from "./model";
-import passwordUtils from "./utils/passwordUtils";
+import { User, IUser } from "./authModel";
+import passwordUtils from "../../utils/passwordUtils";
 import { InternalError, NotFoundError, BadRequestError, AuthFailureError } from "../../utils/ApiError";
 import userUtils from "../users/userUtils";
 import tokenUtils from "./utils/tokenUtils";
-import { Token } from "./interface";
+import { Token } from "./authInterface";
 
 export default class UserService {
   public static async register(
@@ -41,7 +41,7 @@ export default class UserService {
 
     const matchPassword = await passwordUtils.compare(password, foundUser);
     if (!matchPassword) {
-      throw new AuthFailureError();
+      throw new AuthFailureError("Wrong password");
     }
 
     foundUser.password = "";
