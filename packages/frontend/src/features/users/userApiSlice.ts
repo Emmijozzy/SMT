@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { createSelector, createEntityAdapter } from "@reduxjs/toolkit";
+import { createEntityAdapter } from "@reduxjs/toolkit";
 import { apiSlice } from "../../app/api/apislice";
 import { IUser } from "./userInterface";
 
@@ -28,6 +28,5 @@ export const userApiSlice = apiSlice.injectEndpoints({
           ? [{ type: "User" as const, id: "LIST" as const }, ...result.ids.map((id) => ({ type: "User" as const, id }))]
           : [{ type: "User" as const, id: "LIST" as const }],
     }),
-    
   }),
 });
