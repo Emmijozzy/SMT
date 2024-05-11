@@ -26,7 +26,7 @@ export default class UserService {
       });
       return user;
     } catch (error) {
-      throw new InternalError(`User registration error: ${error}`);
+      throw new InternalError(`${error}`);
     }
   }
 

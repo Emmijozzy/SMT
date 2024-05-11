@@ -52,6 +52,7 @@
     "@typescript-eslint/no-non-null-asserted-optional-chain": "warn",
     "@typescript-eslint/ban-ts-comment": "warn",
     "@typescript-eslint/ban-types": "warn",
+    "react-hooks/exhaustive-deps": "warn",
     "indent": ["error", 2],
     "quotes": ["error", "double"],
     "semi": ["error", "always"]

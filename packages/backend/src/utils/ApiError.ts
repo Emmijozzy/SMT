@@ -2,6 +2,7 @@ import IApiError from "Interface/ApiError";
 import logger from "./logger";
 import { Request, Response } from "express";
 import { error } from "winston";
+import { isError } from "joi";
 /*
   Error must have
 
@@ -31,7 +32,7 @@ export abstract class ApiError extends Error implements IApiError {
   }
 
   public send(res: Response) {
-    res.status(this.status).json({ message: this.message, status: this.status, success: false });
+    res.status(this.status).json({ message: this.message, status: this.status, isError: true, isSuccess: false });
   }
 }
 

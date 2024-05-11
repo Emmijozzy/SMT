@@ -14,7 +14,7 @@ const successResponse = <T>(res: Response, data: ApiResponse<T>) => {
   }
   res.status(data.statusCode).json({
     ...data,
-    success: true
+    isSuccess: true
   });
 };
 

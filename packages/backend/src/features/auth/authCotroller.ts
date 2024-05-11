@@ -6,6 +6,7 @@ import { IUser } from "./authModel";
 import UserService from "./authService";
 import authSchema from "./authValidation";
 import validationMiddleware from "../../middleware/validationMiddleware";
+import successResponse from "../../utils/successResponse";
 
 export default class Auth implements IController {
   public path = "/auth";
@@ -17,7 +18,7 @@ export default class Auth implements IController {
   }
 
   private initiatlizeRouter(): void {
-    this.router.post("/", validationMiddleware(authSchema.registrationSchema), this.register);
+    this.router.post("/register", validationMiddleware(authSchema.registrationSchema), this.register);
     this.router.post("/login", validationMiddleware(authSchema.loginSchema), this.login);
     this.router.get("/refresh", this.refresh);
   }
@@ -35,7 +36,10 @@ export default class Auth implements IController {
       throw new Error(`Error registering user:${userResponse.message}`);
     } else {
       const user: IUser = userResponse;
-      res.status(200).json({ userId: user.userId });
+      successResponse(res, {
+        message: "User registered successfully!",
+        data: { userId: user.userId }
+      });
     }
   });
 
@@ -55,7 +59,10 @@ export default class Auth implements IController {
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
 
-    res.json({ accessToken });
+    successResponse(res, {
+      message: "You're logged in!",
+      data: { accessToken }
+    });
   });
 
   private refresh = asyncHandler(async (req: Request, res: Response) => {

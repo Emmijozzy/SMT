@@ -1,9 +1,9 @@
-export interface SinginData {
+export interface LoginData {
   userId: string;
   password: string;
 }
 
-export interface SignupData {
+export interface RegisterData {
   firstName: string;
   lastName: string;
   email: string;

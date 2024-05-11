@@ -1,8 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "./features/General/Home";
 import Layout from "./layout/Layout";
-import SignIn from "./features/auth/SignIn";
-import SignUp from "./features/auth/SignUp";
+import Login from "./features/auth/Login";
+import Register from "./features/auth/Register";
 import Dashboard from "./features/Dashboard/Dashboard";
 import Tasks from "./features/tasks/Tasks";
 import Teams from "./features/teams/Teams";
@@ -12,8 +12,8 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/signin" element={<SignIn />} />
-      <Route path="/signup" element={<SignUp />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
       <Route path="/dash" element={<Layout />}>
         <Route index element={<Dashboard />} />
         <Route path="tasks" element={<Tasks />} />
