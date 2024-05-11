@@ -1,7 +1,5 @@
-type Props = {}
-const Teams = (props: Props) => {
-  return (
-    <div>Teams</div>
-  )
+// type Props = {};
+function Teams() {
+  return <div>Teams</div>;
 }
-export default Teams
+export default Teams;

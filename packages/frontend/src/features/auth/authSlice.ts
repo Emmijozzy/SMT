@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { createSlice } from "@reduxjs/toolkit";
@@ -12,7 +10,7 @@ const authSlice = createSlice({
       const { accessToken } = action.payload;
       state.token = accessToken;
     },
-    logOut: (state, action) => {
+    logOut: (state) => {
       state.token = null;
     },
   },

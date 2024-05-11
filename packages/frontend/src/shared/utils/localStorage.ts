@@ -1,3 +1,5 @@
+import log from "./log";
+
 function saveToLocalStorage(key: string, data: string | Record<string, string>): void {
   localStorage.setItem(key, JSON.stringify(data));
 }
@@ -9,8 +11,9 @@ function getDataFromLocalStorage(key: string): RetrievedData {
   if (dataString) {
     try {
       return JSON.parse(dataString) as RetrievedData;
-    } catch (error) {
-      console.error("Error parsing data:", error);
+    } catch (e: unknown) {
+      const error = e as Error;
+      log("error", "Error parsing data at local storage:", error.message, error.stack as string);
       return null;
     }
   }

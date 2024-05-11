@@ -1,7 +1,5 @@
-type Props = {}
-const Users = (props: Props) => {
-  return (
-    <div>Users</div>
-  )
+// type Props = {};
+function Users() {
+  return <div>Users</div>;
 }
-export default Users
+export default Users;

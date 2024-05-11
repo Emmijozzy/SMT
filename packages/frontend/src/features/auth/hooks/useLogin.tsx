@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { useFormik } from "formik";
@@ -8,9 +8,10 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addAlert } from "../../alerts/AlertSlice";
 import { useLoginMutation } from "../authApiSlice";
-import { loginSchema } from "../validation";
+import { loginSchema } from "../authValidation";
 import localStorage from "../../../shared/utils/localStorage";
 import { LoginData } from "../authInterface";
+import log from "../../../shared/utils/log";
 
 const { getDataFromLocalStorage } = localStorage;
 
@@ -35,10 +36,10 @@ const useLogin = () => {
       setIsSubmitting(true);
       try {
         const data = await login({ ...values });
-        console.log(data);
         setResData(data);
-      } catch (error) {
-        console.error("Registration failed:", error);
+      } catch (e) {
+        const error = e as Error;
+        log("error", "Login Error", error.message, error.stack as string);
       } finally {
         setIsSubmitting(false);
       }

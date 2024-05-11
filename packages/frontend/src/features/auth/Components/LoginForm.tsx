@@ -6,8 +6,8 @@ import { LoginData } from "../authInterface";
 
 type Props = {
   handleSubmit: (e?: React.FormEvent<HTMLFormElement> | undefined) => void;
-  handleBlur: (e: React.FocusEvent<any, Element>) => void;
-  handleChange: (e: React.ChangeEvent<any>) => void;
+  handleBlur: (e: React.FocusEvent<unknown, Element>) => void;
+  handleChange: (e: React.ChangeEvent<unknown>) => void;
   errors: FormikErrors<LoginData>;
   values: LoginData;
   isSubmitting: boolean;

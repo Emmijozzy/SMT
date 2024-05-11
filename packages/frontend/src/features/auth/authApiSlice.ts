@@ -2,6 +2,7 @@
 import { apiSlice } from "../../app/api/apislice";
 import { setCredentials } from "./authSlice";
 import { LoginData, RegisterData } from "./authInterface";
+import log from "../../shared/utils/log";
 
 export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (build) => ({
@@ -24,13 +25,15 @@ export const authApiSlice = apiSlice.injectEndpoints({
         url: "/auth/refresh",
         method: "GET",
       }),
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
-          const { data } = await queryFulfilled;
-          const { accessToken } = data;
+          const {
+            data: { accessToken },
+          } = await queryFulfilled;
           dispatch(setCredentials(accessToken));
-        } catch (e) {
-          console.log(e);
+        } catch (e: unknown) {
+          const error = e as Error;
+          log("error", "AuthApi Error Refresh", error.message, error.stack as string);
         }
       },
     }),

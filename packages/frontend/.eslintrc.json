@@ -31,7 +31,10 @@
     "react": {
       "version": "18.x"
     },
-    "import/core-modules": ["Colors"]
+    "import/core-modules": ["Colors"],
+    "languageOptions": {
+      "sourceType": "module"
+  }
   },
   "rules": {
     "prettier/prettier": "error",

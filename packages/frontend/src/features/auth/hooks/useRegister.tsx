@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { useFormik } from "formik";
@@ -8,9 +8,10 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addAlert } from "../../alerts/AlertSlice";
 import { useRegisterMutation } from "../authApiSlice";
-import { registrationSchema } from "../validation";
+import { registrationSchema } from "../authValidation";
 import { RegisterData } from "../authInterface";
 import localStorage from "../../../shared/utils/localStorage";
+import log from "../../../shared/utils/log";
 
 const { saveToLocalStorage } = localStorage;
 
@@ -41,7 +42,8 @@ const useRegister = () => {
         const data = await register({ ...values });
         setResData(data);
       } catch (e) {
-        console.error("Registration failed:", e);
+        const error = e as Error;
+        log("error", "Registration failed:", error.message, error.stack as string);
       } finally {
         setIsSubmitting(false);
       }
@@ -56,7 +58,7 @@ const useRegister = () => {
         const { userId } = resData.data.data;
         dispatch(
           addAlert({
-            message: `Kindly keep your ID as it will be used for every login "${userId as string}"`,
+            message: `Kindly keep your ID as it will be used for every login: ${userId as string}`,
             type: "info",
             duration: 60000,
           }),

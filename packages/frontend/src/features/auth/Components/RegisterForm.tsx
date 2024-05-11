@@ -6,8 +6,8 @@ import FormInput from "./FormInput";
 
 type Props = {
   handleSubmit: (e?: React.FormEvent<HTMLFormElement> | undefined) => void;
-  handleBlur: (e: React.FocusEvent<any, Element>) => void;
-  handleChange: (e: React.ChangeEvent<any>) => void;
+  handleBlur: (e: React.FocusEvent<unknown, Element>) => void;
+  handleChange: (e: React.ChangeEvent<unknown>) => void;
   errors: FormikErrors<RegisterData>;
   values: RegisterData;
   isSubmitting: boolean;

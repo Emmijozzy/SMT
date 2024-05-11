@@ -1,5 +1,5 @@
-type Props = {};
-function Home(props: Props) {
+// type Props = {};
+function Home() {
   return <div>Home</div>;
 }
 export default Home;

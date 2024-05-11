@@ -4,6 +4,7 @@
 import { BaseQueryApi, FetchArgs, createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { RootState } from "../store";
 import { setCredentials } from "../../features/auth/authSlice";
+import log from "../../shared/utils/log";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: "http://localhost:3003",
@@ -19,11 +20,11 @@ const baseQuery = fetchBaseQuery({
   credentials: "include",
 });
 
-const baseQueryWithReactAuth = async (args: string | FetchArgs, api: BaseQueryApi, extraOptions: {}) => {
+const baseQueryWithReactAuth = async (args: string | FetchArgs, api: BaseQueryApi, extraOptions: object) => {
   let result = await baseQuery(args, api, extraOptions);
 
   if (result?.error?.status === 403) {
-    console.log("requesting new access token with refresh token ");
+    log("error", "requesting new access token with refresh token");
 
     const refreshResult = await baseQuery("/auth/refresh", api, extraOptions);
 
@@ -45,5 +46,5 @@ const baseQueryWithReactAuth = async (args: string | FetchArgs, api: BaseQueryAp
 export const apiSlice = createApi({
   baseQuery: baseQueryWithReactAuth,
   tagTypes: ["User"],
-  endpoints: (builder) => ({}),
+  endpoints: (_builder) => ({}),
 });

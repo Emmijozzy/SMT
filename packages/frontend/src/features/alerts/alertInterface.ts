@@ -1,7 +1,7 @@
 export type IAlert = {
   display?: boolean;
   message: string;
-  type: "success" | "warning" | "error" | "info" | boolean;
+  type: "success" | "warning" | "error" | "info";
   id: string;
 };
 

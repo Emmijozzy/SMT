@@ -2,7 +2,7 @@ import { Button, Typography, SvgIconTypeMap } from "@mui/material";
 import { NavLink, useLocation } from "react-router-dom";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 
-type MuiIcon = OverridableComponent<SvgIconTypeMap<{}, "svg">> & {
+type MuiIcon = OverridableComponent<SvgIconTypeMap<object, "svg">> & {
   muiName: string;
 };
 
