@@ -21,7 +21,7 @@ function HeadNavbar() {
 
   const userProfile = useSelector((state: RootState) => state.userProfile.userProfile) as IUser;
 
-  console.log(userProfile);
+  // console.log(userProfile);
 
   const handleAddNav = () => {
     setAddNav((pre) => !pre);

@@ -8,12 +8,6 @@ const fsPromises = fs.promises;
 
 const dir = path.join(__dirname, "..", logdirectory);
 
-// export const logIniit = () => {
-//   if (!fs.existsSync(dir)) {
-//     fsPromises.mkdir(dir);
-//   }
-// };
-
 if (!fs.existsSync(dir)) {
   fsPromises.mkdir(dir);
 }

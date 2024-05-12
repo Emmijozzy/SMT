@@ -21,7 +21,6 @@ class App {
 
     process.on("uncaughtException", (e) => {
       logger.error(e);
-      console.log(e);
     });
   }
 

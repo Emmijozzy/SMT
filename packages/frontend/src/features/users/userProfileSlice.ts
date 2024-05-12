@@ -1,8 +1,13 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable no-param-reassign */
 import { createSlice } from "@reduxjs/toolkit";
 import { IUser } from "./userInterface";
 
-const initialState = {
+interface UserProfile {
+  userProfile: Partial<IUser>;
+}
+
+const initialState: UserProfile = {
   userProfile: {},
 };
 

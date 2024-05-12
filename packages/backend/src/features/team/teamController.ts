@@ -12,7 +12,7 @@ export default class TeamController implements IController {
 
   constructor() {
     this.initializeRouter();
-    console.log(this.path);
+    //console.log(this.path);
   }
 
   private initializeRouter(): void {
@@ -27,7 +27,7 @@ export default class TeamController implements IController {
     let teamId = "";
     if (!teamId) {
       teamId = uuidv4().substring(0, 5);
-      console.log(teamId);
+      //console.log(teamId);
     }
 
     const teamPaylaod = {

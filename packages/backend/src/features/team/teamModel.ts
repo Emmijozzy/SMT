@@ -54,7 +54,7 @@ const teamSchema = new Schema<ITeam>({
 teamSchema.pre<ITeam>("save", async function (next) {
   if (!this.teamId) {
     this.teamId = uuidv4().substring(0, 5);
-    console.log(this.teamId);
+    //console.log(this.teamId);
   }
   next();
 });

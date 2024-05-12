@@ -25,7 +25,7 @@ export default class Auth implements IController {
 
   private register = asyncHandler(async (req: Request, res: Response) => {
     const { firstName, lastName, email, password } = req.body;
-    // console.log(firstName, lastName, email, password);
+    // //console.log(firstName, lastName, email, password);
     if (!firstName || !lastName || !email || !password) {
       throw new BadRequestError("Missing user data");
     }
@@ -45,7 +45,7 @@ export default class Auth implements IController {
 
   private login = asyncHandler(async (req: Request, res: Response) => {
     const { userId, password } = req.body;
-    // console.log(userId, password);
+    // //console.log(userId, password);
     if (!userId || !password) {
       throw new BadRequestError("Missing user data");
     }

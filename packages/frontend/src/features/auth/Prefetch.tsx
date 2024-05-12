@@ -5,9 +5,7 @@ import { userApiSlice } from "../users/userApiSlice";
 
 function Prefetch() {
   useEffect(() => {
-    const user = store.dispatch(userApiSlice.util.prefetch("getUserProfile", "user", { force: true }));
-
-    console.log(user);
+    store.dispatch(userApiSlice.util.prefetch("getUserProfile", "user", { force: true }));
   });
 
   return <Outlet />;

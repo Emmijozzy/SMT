@@ -1,4 +1,4 @@
-import { Router, Request, Response } from "express";
+import { Router, Response } from "express";
 import IController from "../../Interface/controller";
 import asyncHandler from "../../utils/asyncHandler";
 import { IUser, User } from "../auth/authModel";
@@ -48,7 +48,7 @@ export default class UserController implements IController {
     if (!user) throw new InternalError("Internal server error");
 
     const result = await UserService.getProfile(user);
-    // console.log(result);
+    // //console.log(result);
     successResponse(res, {
       data: { ...result },
       message: "Profile retrieved successfully!"

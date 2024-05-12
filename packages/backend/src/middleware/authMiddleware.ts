@@ -14,7 +14,7 @@ const authMiddleware =
     try {
       const authHeader = (req.headers.authorization || req.headers.Authorization) as string;
 
-      // console.log("token", authHeader);
+      // //console.log("token", authHeader);
 
       if (!authHeader || !authHeader.startsWith("Bearer ")) {
         throw new AccessError("You are not authorized");
@@ -42,7 +42,6 @@ const authMiddleware =
     } catch (e: unknown) {
       const error = e as ApiError;
       if (error instanceof ApiError) {
-        console.log(error.message);
         errResponse(res, {
           status: error.status,
           message: error.message
@@ -51,7 +50,7 @@ const authMiddleware =
         throw new AccessError("Error authorizing user");
       }
 
-      logger.error(`Authentication Middleware Error (IP: ${req.ip})\n`, error);
+      logger.error(`Authentication Middleware Error (IP: ${req.ip})\n ${error.message}`);
     }
   };
 

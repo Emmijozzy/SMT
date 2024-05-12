@@ -1,12 +1,6 @@
-import { useSelector } from "react-redux";
 import HeadNavbar from "./HeadNavbar";
-import { RootState } from "../../app/store";
 
 function Main() {
-  const userProfile = useSelector((state: RootState) => state.userProfile.userProfile);
-
-  console.log(userProfile);
-
   return (
     <main className="p-4 xl:ml-[17rem] transition w-full">
       <HeadNavbar />

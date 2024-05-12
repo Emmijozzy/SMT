@@ -7,11 +7,11 @@ export default async () => {
   // Check if counter exists for today's date
   const counter = (await taskCounter.findOne({ taskDate: dayMonth })) as ITaskCounter;
 
-  console.log(counter, "find counter", typeof counter);
+  //console.log(counter, "find counter", typeof counter);
 
   if (!counter || counter.date < date) {
     // Counter doesn't exist, create a new one with counter set to 0
-    console.log("taskId recreated");
+    //console.log("taskId recreated");
     await taskCounter.create({ date, taskDate: dayMonth, counter: 0 });
   }
 
@@ -22,7 +22,7 @@ export default async () => {
     { new: true }
   );
 
-  console.log(updatedCounter, "Task counter");
+  //console.log(updatedCounter, "Task counter");
 
   return `${dayMonth}${updatedCounter?.counter.toString().padStart(3, "0")}`;
 };

@@ -24,7 +24,7 @@ export const updateUserById = async (userId: string, data: Record<string, string
 
 export const deleteByuserId = async (userId: string): Promise<IUser | null> => {
   const user: IUser | null = await findByUserId(userId);
-  console.log(user);
+  // //console.log(user);
   if (!user) throw new BadRequestError("Invalid User / User does exist");
 
   const deletedUser = await User.findOneAndUpdate({ userId: user.userId }, { del_flg: true }, { new: true }).select(

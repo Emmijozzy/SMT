@@ -7,7 +7,7 @@ import Alerts from "../features/alerts/Alerts";
 function Layout() {
   // const { isLoading, error, isError } = useGetUserProfileQuery("user");
 
-  // console.log(data, error, isError);
+  // //console.log(data, error, isError);
 
   // if (isLoading) {
   //   return <h3>Loading</h3>;

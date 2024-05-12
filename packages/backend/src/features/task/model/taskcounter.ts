@@ -29,7 +29,7 @@ export const taskCounter = mongoose.model<ITaskCounter>("TaskCounter", TaskCount
 const task = cron.schedule("* 0 * * *", async () => {
   try {
     await taskCounter.deleteMany({ date: { $lt: new Date() } });
-    console.log("Task counter reset for new day");
+    //console.log("Task counter reset for new day");
   } catch (error) {
     console.error("Error resetting task counter:", error);
   }

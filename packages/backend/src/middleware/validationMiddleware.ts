@@ -27,9 +27,9 @@ const validationMiddleware = (schema: Joi.Schema, replacementMap?: ReplacementMa
 
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      // console.log(req.body);
+      // //console.log(req.body);
       const value = await schema.validateAsync(req.body, validationOptions);
-      // console.log(await schema.validateAsync(req.body, validationOptions));
+      // //console.log(await schema.validateAsync(req.body, validationOptions));
       req.body = value; // Assign the validated body to the request
       next();
     } catch (error) {
