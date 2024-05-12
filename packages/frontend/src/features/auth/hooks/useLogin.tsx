@@ -12,6 +12,7 @@ import { loginSchema } from "../authValidation";
 import localStorage from "../../../shared/utils/localStorage";
 import { LoginData } from "../authInterface";
 import log from "../../../shared/utils/log";
+import { setCredentials } from "../authSlice";
 
 const { getDataFromLocalStorage } = localStorage;
 
@@ -51,6 +52,10 @@ const useLogin = () => {
       if (isSuccess && resData) {
         const alertMessage = resData.data.message as string;
         dispatch(addAlert({ message: alertMessage, type: "success" }));
+        const { accessToken } = resData.data.data;
+        if (accessToken) {
+          dispatch(setCredentials(accessToken));
+        }
         navigate("/dash");
       }
       if (isError && resData && resData.error && resData.error.data && resData.error.data.message) {

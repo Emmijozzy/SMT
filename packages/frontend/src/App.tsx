@@ -7,6 +7,7 @@ import Dashboard from "./features/Dashboard/Dashboard";
 import Tasks from "./features/tasks/Tasks";
 import Teams from "./features/teams/Teams";
 import Users from "./features/users/Users";
+import Prefetch from "./features/auth/Prefetch";
 
 function App() {
   return (
@@ -14,11 +15,13 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/dash" element={<Layout />}>
-        <Route index element={<Dashboard />} />
-        <Route path="tasks" element={<Tasks />} />
-        <Route path="teams" element={<Teams />} />
-        <Route path="users" element={<Users />} />
+      <Route element={<Prefetch />}>
+        <Route path="/dash" element={<Layout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="tasks" element={<Tasks />} />
+          <Route path="teams" element={<Teams />} />
+          <Route path="users" element={<Users />} />
+        </Route>
       </Route>
     </Routes>
   );

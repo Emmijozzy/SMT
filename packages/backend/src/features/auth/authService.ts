@@ -2,7 +2,7 @@ import { User, IUser } from "./authModel";
 import passwordUtils from "../../utils/passwordUtils";
 import { InternalError, NotFoundError, BadRequestError, AuthFailureError } from "../../utils/ApiError";
 import userUtils from "../users/userUtils";
-import tokenUtils from "./utils/tokenUtils";
+import tokenUtils from "../../utils/tokenUtils";
 import { Token } from "./authInterface";
 
 export default class UserService {

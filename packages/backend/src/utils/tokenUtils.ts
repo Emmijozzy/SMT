@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
-import { IUser } from "../authModel";
-import { BadTokenError, InternalError, TokenExpiresErro } from "../../../utils/ApiError";
+import { IUser } from "../features/auth/authModel";
+import { BadTokenError, InternalError, TokenExpiresErro } from "./ApiError";
 
 export const createAccessToken = (foundUser: IUser): string => {
   return jwt.sign({ user: foundUser }, process.env.ACCESS_TOKEN_SECRET as jwt.Secret, { expiresIn: "1d" });
@@ -12,7 +12,6 @@ export const createRefreshToken = (userId: string) => {
 
 export const verifyAccessToken = async (token: string): Promise<jwt.VerifyErrors | IUser> => {
   try {
-    // Use jwt.VerifyOptions for explicit type checking:
     const decoded = await jwt.verify(
       token,
       process.env.ACCESS_TOKEN_SECRET as jwt.Secret,
@@ -23,11 +22,14 @@ export const verifyAccessToken = async (token: string): Promise<jwt.VerifyErrors
     } else {
       throw new BadTokenError("Invalid token type"); // Handle unexpected string case
     }
-  } catch (err) {
+  } catch (err: unknown) {
     if (err instanceof jwt.JsonWebTokenError) {
-      throw err; // Re-throw JWT verification errors specifically
+      if (err.message == "jwt expired") {
+        throw new TokenExpiresErro();
+      }
+      throw new BadTokenError(err.message);
     } else {
-      throw new TokenExpiresErro("Invalid token payload");
+      throw new InternalError("Invalid token payload");
     }
   }
 };
@@ -46,7 +48,10 @@ export const verifyRefreshToken = async (token: string): Promise<jwt.VerifyError
     return decoded.payload.id as string;
   } catch (err) {
     if (err instanceof jwt.JsonWebTokenError) {
-      throw err; // Re-throw JWT verification errors specifically
+      if (err.message == "jwt expired") {
+        throw new TokenExpiresErro();
+      }
+      throw new BadTokenError(err.message);
     } else {
       throw new InternalError("Invalid token payload");
     }

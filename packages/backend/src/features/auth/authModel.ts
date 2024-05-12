@@ -105,10 +105,8 @@ const userSchema = new Schema<IUser>(
       description: "The user ID or username of the person who last updated the user data."
     },
     fullName: {
-      type: String,
-      get() {
-        return (this as IUser).firstName + " " + (this as IUser).lastName;
-      }
+      type: String
+      // required: true
     }
   },
   { toJSON: { virtuals: true } }
@@ -128,6 +126,8 @@ userSchema.pre<IUser>("save", async function (next) {
     const lastNameFirstLetters = this.lastName.slice(0, 2).toUpperCase();
     const userId = `${firstNameFirstLetters}${lastNameFirstLetters}${counter.currentId.toString().padStart(5, "0")}`;
     this.userId = userId;
+
+    this.fullName = `${this.firstName} ${this.lastName}`;
     // Increment the currentId for the next user
     counter.currentId += 1;
     await counter.save();

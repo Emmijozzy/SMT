@@ -45,7 +45,7 @@ export default class Auth implements IController {
 
   private login = asyncHandler(async (req: Request, res: Response) => {
     const { userId, password } = req.body;
-    console.log(userId, password);
+    // console.log(userId, password);
     if (!userId || !password) {
       throw new BadRequestError("Missing user data");
     }

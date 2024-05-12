@@ -67,13 +67,13 @@ export class NoEntryError extends ApiError {
 }
 
 export class BadTokenError extends ApiError {
-  constructor(message = "Token is invalid") {
+  constructor(message = "Invalid Token ") {
     super(Status.FORBIDDEN, message);
   }
 }
 
 export class TokenExpiresErro extends ApiError {
-  constructor(message = "Token is expired") {
+  constructor(message = "Token expired") {
     super(Status.FORBIDDEN, message);
   }
 }

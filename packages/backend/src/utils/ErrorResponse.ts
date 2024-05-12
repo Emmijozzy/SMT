@@ -1,9 +1,18 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export default class ErrorResponse {
-  constructor(
-    public status: number, // HTTP status code (e.g., 401, 404, 500)
-    public message: string, // User-friendly error message
-    public code?: string, // Optional internal error code for debugging
-    public details?: any // Optional additional details for specific errors (e.g., validation errors)
-  ) {}
+import { Response } from "express";
+
+interface ApiErrorResponse {
+  status?: number;
+  message: string;
 }
+
+const errResponse = (res: Response, data: ApiErrorResponse) => {
+  if (!data.status) {
+    data.status = 500;
+  }
+  res.status(data.status).json({
+    ...data,
+    isError: true
+  });
+};
+
+export default errResponse;

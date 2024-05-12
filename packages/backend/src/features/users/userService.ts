@@ -20,8 +20,11 @@ interface IProfileToUpdate {
 
 export default class UserService {
   static async getProfile(user: Partial<IUser>) {
-    const profileData = User.find({ userId: user.userId }).select("-password").lean().exec();
-    if (!profileData) throw new InternalError("Error while fetching profile");
+    const data = (await User.find({ userId: user.userId }).select("-password").lean().exec()) as unknown as IUser[];
+
+    const profileData = data[0];
+
+    if (!profileData.userId) throw new InternalError("Error while fetching profile");
 
     return profileData;
   }

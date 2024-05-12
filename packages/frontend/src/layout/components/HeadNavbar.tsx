@@ -8,13 +8,20 @@ import SearchIcon from "@mui/icons-material/Search";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import { Typography } from "@mui/material";
+import { useSelector } from "react-redux";
 import Avartar from "./Avartar";
 import Breadcrumbs from "./Breadcrumbs";
+import { RootState } from "../../app/store";
+import { IUser } from "../../features/users/userInterface";
 
 // type Props = {};
 
 function HeadNavbar() {
   const [showAddNav, setAddNav] = useState(false);
+
+  const userProfile = useSelector((state: RootState) => state.userProfile.userProfile) as IUser;
+
+  console.log(userProfile);
 
   const handleAddNav = () => {
     setAddNav((pre) => !pre);
@@ -47,9 +54,13 @@ function HeadNavbar() {
           <Avartar name="Ogunsui J" />
         </div>
         <div className=" ml-5 flex flex-col">
-          <h6 className="h6">Ogunsuyi Joseph</h6>
-          <p className="text-[0.65rem] leading-3 text-base-content/40 uppercase font-bold">Web Developer</p>
-          <p className="text-[0.6rem] leading-3 text-base-content/40 uppercase">ogjo00001</p>
+          {userProfile.fullName && <h6 className="h6">{userProfile.fullName}</h6>}
+          {userProfile.teamId && (
+            <p className="text-[0.65rem] leading-3 text-base-content/40 uppercase font-bold">Web Developer</p>
+          )}
+          {userProfile.userId && (
+            <p className="text-[0.6rem] leading-3 text-base-content/40 uppercase">{userProfile.userId}</p>
+          )}
         </div>
         <span className="flex flex-col ml-5 gap-1 justify-end" onClick={() => handleAddNav()}>
           <KeyboardArrowDownIcon className="text-base-content" />

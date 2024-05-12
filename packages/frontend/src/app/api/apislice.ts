@@ -6,6 +6,19 @@ import type { RootState } from "../store";
 import { setCredentials } from "../../features/auth/authSlice";
 import log from "../../shared/utils/log";
 
+interface SuccessData {
+  accessToken: string;
+}
+
+interface ErrorData {
+  error: {
+    data: {
+      message: string;
+    };
+    status: number;
+  };
+}
+
 const baseQuery = fetchBaseQuery({
   baseUrl: "http://localhost:3003",
   prepareHeaders: (headers, { getState }) => {
@@ -29,12 +42,15 @@ const baseQueryWithReactAuth = async (args: string | FetchArgs, api: BaseQueryAp
     const refreshResult = await baseQuery("/auth/refresh", api, extraOptions);
 
     if (refreshResult.data) {
-      api.dispatch(setCredentials({ ...refreshResult.data }));
+      const { accessToken } = refreshResult.data as SuccessData;
+      api.dispatch(setCredentials(accessToken));
 
       result = await baseQuery(args, api, extraOptions);
     } else {
-      if (refreshResult?.error?.status === 403) {
-        // refreshResult.error.data.message = "Your login has expired";
+      const refreshError = { ...refreshResult } as ErrorData;
+      if (refreshError?.error?.status === 403) {
+        refreshError.error.data.message = "Your login has expired";
+        return refreshError;
       }
       return refreshResult;
     }

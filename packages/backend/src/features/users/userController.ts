@@ -48,8 +48,9 @@ export default class UserController implements IController {
     if (!user) throw new InternalError("Internal server error");
 
     const result = await UserService.getProfile(user);
+    // console.log(result);
     successResponse(res, {
-      data: result,
+      data: { ...result },
       message: "Profile retrieved successfully!"
     });
   });
