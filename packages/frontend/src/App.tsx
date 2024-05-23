@@ -10,6 +10,7 @@ import Users from "./features/users/Users";
 import Prefetch from "./features/auth/Prefetch";
 import RequireAuth from "./features/auth/RequireAuth";
 import RequireAdminRoute from "./features/auth/RequireAdminRoute";
+import RequireData from "./features/auth/RequireData";
 
 function App() {
   return (
@@ -18,13 +19,15 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route element={<Prefetch />}>
-        <Route element={<RequireAuth />}>
-          <Route element={<RequireAdminRoute />}>
-            <Route path="/dash" element={<Layout />}>
-              <Route index element={<Dashboard />} />
-              <Route path="tasks" element={<Tasks />} />
-              <Route path="teams" element={<Teams />} />
-              <Route path="users" element={<Users />} />
+        <Route element={<RequireData />}>
+          <Route element={<RequireAuth />}>
+            <Route element={<RequireAdminRoute />}>
+              <Route path="/dash" element={<Layout />}>
+                <Route index element={<Dashboard />} />
+                <Route path="tasks" element={<Tasks />} />
+                <Route path="teams" element={<Teams />} />
+                <Route path="users" element={<Users />} />
+              </Route>
             </Route>
           </Route>
         </Route>

@@ -32,7 +32,6 @@ export default class UserService {
 
   public static async login(userId: string, password: string): Promise<Token> {
     const foundUser: IUser | null = await userUtils.findByUserId(userId);
-    // //console.log(foundUser);
     if (!foundUser) {
       throw new NotFoundError("User not found");
     } else if (foundUser.del_flg) {
@@ -44,7 +43,12 @@ export default class UserService {
       throw new AuthFailureError("Wrong password");
     }
 
-    foundUser.password = "";
+    // const foundUserdata = {
+    //   userId: foundUser.userId,
+    //   role: foundUser.role
+    // };
+    const foundUserdata: Partial<IUser> = foundUser;
+    delete foundUserdata?.password;
 
     const accessToken = tokenUtils.createAccessToken(foundUser);
     const refreshToken = tokenUtils.createRefreshToken(foundUser.userId);
@@ -64,8 +68,11 @@ export default class UserService {
       throw new NotFoundError("User not found");
     }
 
-    foundUser.password = "";
+    const foundUserdata = {
+      userId: foundUser.userId,
+      role: foundUser.role
+    };
 
-    return await tokenUtils.createAccessToken(foundUser);
+    return await tokenUtils.createAccessToken(foundUserdata);
   }
 }

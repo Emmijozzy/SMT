@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { createSlice } from "@reduxjs/toolkit";
 import { AlertState, IAlert } from "./alertInterface";
 import generateAlertId from "../../shared/utils/generateId";
@@ -34,10 +35,12 @@ const AlertSlice = createSlice({
     removeAlert: (state) => {
       state.alerts.shift();
     },
-    // cancelAlert: (state, action) => {},
+    clearAlert: (state) => {
+      state.alerts.length = 0;
+    },
   },
 });
 
-export const { addAlert, removeAlert } = AlertSlice.actions;
+export const { addAlert, removeAlert, clearAlert } = AlertSlice.actions;
 
 export default AlertSlice.reducer;

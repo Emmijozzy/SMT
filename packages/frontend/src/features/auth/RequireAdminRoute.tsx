@@ -4,16 +4,15 @@ import useRole from "../users/hooks/useRole";
 import { addAlert } from "../alerts/AlertSlice";
 
 function RequireAdminRoute() {
-  const isAdmin = useRole();
+  const isAdmin = useRole() === "admin";
   const dispatch = useDispatch();
   const location = useLocation();
 
   let content;
-  if (isAdmin === "admin") {
+  if (isAdmin) {
     content = <Outlet />;
   } else {
-    console.log("access denied");
-    dispatch(addAlert({ message: "Access denied", type: "error" }));
+    dispatch(addAlert({ message: "Admin page access denied", type: "error" }));
     content = <Navigate to="/login" state={{ from: location }} replace />;
   }
 

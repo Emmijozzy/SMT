@@ -24,3 +24,13 @@ export interface IUser {
   updated_by: string;
   fullName?: string; // Optional property for pre-computed fullName
 }
+
+export interface ReqError {
+  error: {
+    data: {
+      message: string;
+      status: string;
+      stack: string;
+    };
+  };
+}

@@ -1,20 +1,20 @@
 import { Router, Response } from "express";
 import IController from "../../Interface/controller";
 import asyncHandler from "../../utils/asyncHandler";
-import { IUser, User } from "../auth/authModel";
+// import { IUser, User } from "../auth/authModel";
 import { AuthFailureError, BadRequestError, InternalError } from "../../utils/ApiError";
 import successResponse from "../../utils/successResponse";
 import userUtils from "./userUtils";
 import { ExtendedRequest } from "./userInterface";
-import validationMiddleware from "../../middleware/validationMiddleware";
-import userValidation from "./userValidation";
+// import validationMiddleware from "../../middleware/validationMiddleware";
+// import userValidation from "./userValidation";
 import UserService from "./userService";
 import authMiddleware from "../../middleware/authMiddleware";
 import { ENUM_USER_ROLES } from "./enumUserRoles";
 import getPaginationOptions from "../../utils/getPaginationOptions";
 import filtersToMongooseQuery from "../../utils/filtersToMongooseQuery";
 
-const { userUpdateSchema } = userValidation;
+// const { userUpdateSchema } = userValidation;
 
 export default class UserController implements IController {
   public path = "/user";
@@ -48,7 +48,7 @@ export default class UserController implements IController {
     if (!user) throw new InternalError("Internal server error");
 
     const result = await UserService.getProfile(user);
-    // //console.log(result);
+    //console.log(result);
     successResponse(res, {
       data: { ...result },
       message: "Profile retrieved successfully!"

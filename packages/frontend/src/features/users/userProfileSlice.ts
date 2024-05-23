@@ -2,6 +2,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from "@reduxjs/toolkit";
 import { IUser } from "./userInterface";
+import { RootState } from "../../app/store";
 
 interface UserProfile {
   userProfile: Partial<IUser>;
@@ -25,3 +26,5 @@ const userProfileSlice = createSlice({
 export const { saveProfile } = userProfileSlice.actions;
 
 export default userProfileSlice.reducer;
+
+export const getPresentUser = (state: RootState) => state.userProfile.userProfile;

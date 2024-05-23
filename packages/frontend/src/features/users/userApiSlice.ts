@@ -2,9 +2,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { createEntityAdapter } from "@reduxjs/toolkit";
 import { apiSlice } from "../../app/api/apislice";
-import { IUser } from "./userInterface";
+import { IUser, ReqError } from "./userInterface";
 import { saveProfile } from "./userProfileSlice";
 import log from "../../shared/utils/log";
+import { changeStatus } from "../../shared/Slice/statusSlice";
+import { addAlert } from "../alerts/AlertSlice";
 
 const usersAdapter = createEntityAdapter({
   selectId: (user: IUser) => user.userId,
@@ -18,16 +20,22 @@ export const userApiSlice = apiSlice.injectEndpoints({
       query: () => ({
         url: "/user/profile",
         validateStatus: (response, result) => response.status === 200 || !result.isError,
+        timeout: 1000,
       }),
       providesTags: (_result, _error, id) => [{ type: "User", id }],
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
+          dispatch(changeStatus("loading"));
           const { data } = await queryFulfilled;
+          // console.log(data);
           const userProfile = data.data as Partial<IUser>;
           dispatch(saveProfile(userProfile));
-        } catch (e: unknown) {
-          const error = e as Error;
-          log("error", "Error getting user profile", error.message, error.stack as string);
+          dispatch(changeStatus("success"));
+        } catch (e) {
+          const { error } = e as ReqError;
+          dispatch(addAlert({ message: error.data.message, type: "error" }));
+          log("error", "Error getting user profile", error.data.message, error.data.stack);
+          dispatch(changeStatus("error"));
         }
       },
     }),
