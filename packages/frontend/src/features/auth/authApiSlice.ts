@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { apiSlice } from "../../app/api/apislice";
-import { setCredentials } from "./authSlice";
+import { logOut, setCredentials } from "./authSlice";
 import { LoginData, RegisterData } from "./authInterface";
 import log from "../../shared/utils/log";
 
@@ -33,11 +33,25 @@ export const authApiSlice = apiSlice.injectEndpoints({
           dispatch(setCredentials(accessToken));
         } catch (e: unknown) {
           const error = e as Error;
-          log("error", "AuthApi Error Refresh", error.message, error.stack as string);
+          log("error", "AuthApi refresh error", error.message, error.stack as string);
+        }
+      },
+    }),
+    logout: build.mutation({
+      query: () => ({
+        url: "/auth/logout",
+        method: "GET",
+      }),
+      async onQueryStarted(_arg, { dispatch }) {
+        try {
+          dispatch(logOut());
+        } catch (e: unknown) {
+          const error = e as Error;
+          log("error", "AuthApi logout error ", error.message, error.stack as string);
         }
       },
     }),
   }),
 });
 
-export const { useRegisterMutation, useLoginMutation, useRefreshMutation } = authApiSlice;
+export const { useRegisterMutation, useLoginMutation, useRefreshMutation, useLogoutMutation } = authApiSlice;

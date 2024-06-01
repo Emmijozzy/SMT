@@ -78,3 +78,31 @@ hr {
     0px 0px;
   background-image: linear-gradient(260deg, rgba(0, 0, 0, 0) 87%, rgb(209 130 238 / 49%) 100%);
 }
+
+.loader_container {
+  width: 80px;
+  height: 100px;
+  margin: 100px auto;
+  /* margin-top: calc(100vh / 2 - 50px); */
+}
+
+.loader_block {
+  position: relative;
+  box-sizing: border-box;
+  float: left;
+  margin: 0 10px 10px 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.loader_block:nth-child(4n+1) { animation: wave 2s ease .0s infinite; }
+.loader_block:nth-child(4n+2) { animation: wave 2s ease .2s infinite; }
+.loader_block:nth-child(4n+3) { animation: wave 2s ease .4s infinite; }
+.loader_block:nth-child(4n+4) { animation: wave 2s ease .6s infinite; margin-right: 0; }
+
+@keyframes wave {
+  0%   { top: 0;     opacity: 1; }
+  50%  { top: 30px;  opacity: .2; }
+  100% { top: 0;     opacity: 1; }
+}

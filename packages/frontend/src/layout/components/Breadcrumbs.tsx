@@ -73,7 +73,7 @@ function Breadcrumbs() {
             {breadcrumbs[breadcrumbs.length - 1]?.label}
           </MUILink>
         </MUIBreadcrumbs>
-        <h2 className="h5 font-bold">{breadcrumbs[breadcrumbs.length - 1]?.label}</h2>
+        <h5 className="h5 font-bold">{breadcrumbs[breadcrumbs.length - 1]?.label}</h5>
       </div>
     </div>
   );

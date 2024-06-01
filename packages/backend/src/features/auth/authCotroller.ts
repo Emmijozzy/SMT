@@ -21,6 +21,7 @@ export default class Auth implements IController {
     this.router.post("/register", validationMiddleware(authSchema.registrationSchema), this.register);
     this.router.post("/login", validationMiddleware(authSchema.loginSchema), this.login);
     this.router.get("/refresh", this.refresh);
+    this.router.get("logout", this.logout);
   }
 
   private register = asyncHandler(async (req: Request, res: Response) => {
@@ -75,5 +76,12 @@ export default class Auth implements IController {
     const accessToken = await this.service.refresh(refreshToken);
 
     res.json({ accessToken });
+  });
+
+  private logout = asyncHandler(async (req: Request, res: Response) => {
+    res.clearCookie("jwt");
+    successResponse(res, {
+      message: "Logged out successfully"
+    });
   });
 }

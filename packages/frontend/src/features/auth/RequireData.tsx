@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { getPresentStatus } from "../../shared/Slice/statusSlice";
+import Loader from "../../shared/components/Loader";
 
 function RequireData() {
   const status = useSelector(getPresentStatus);
@@ -9,7 +10,7 @@ function RequireData() {
 
   let content;
   if (status === "loading" || status === "") {
-    content = <h1>Data Loading</h1>;
+    content = <Loader />;
   } else if (status === "success") {
     console.log("Success dtat");
     content = <Outlet />;

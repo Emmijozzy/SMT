@@ -1,22 +1,28 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 import Sidebar from "./components/Sidebar";
 import Main from "./components/Main";
 import Alerts from "../features/alerts/Alerts";
-// import { useGetUserProfileQuery } from "../features/users/userApiSlice";
+import SettingBar from "./components/SettingBar";
+import { RootState } from "../app/store";
 
 function Layout() {
-  // const { isLoading, error, isError } = useGetUserProfileQuery("user");
+  const theme = useSelector((state: RootState) => state.layout.themes);
 
-  // //console.log(data, error, isError);
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
 
-  // if (isLoading) {
-  //   return <h3>Loading</h3>;
-  // }
+    return () => {
+      document.documentElement.removeAttribute("data-theme");
+    };
+  }, [theme]);
 
   return (
     <div className="relative overflow-hidden left-0 top-0 flex min-h-screen min-w-[100vw] bg-base-200">
       <Alerts />
       <Sidebar />
+      <SettingBar />
       <Main />
     </div>
   );

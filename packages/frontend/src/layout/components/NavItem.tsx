@@ -1,6 +1,8 @@
 import { Button, Typography, SvgIconTypeMap } from "@mui/material";
 import { NavLink, useLocation } from "react-router-dom";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/store";
 
 type MuiIcon = OverridableComponent<SvgIconTypeMap<object, "svg">> & {
   muiName: string;
@@ -14,6 +16,7 @@ interface Props {
 
 function NavItem({ title, path, Icon }: Props) {
   const location = useLocation();
+  const selectColor = useSelector((state: RootState) => state.layout.selectColor);
 
   // const selectedColor = ((color: string) => `bg-${color}-gradient`)("red");
   const isNavActive = (): boolean => path === location.pathname;
@@ -25,7 +28,7 @@ function NavItem({ title, path, Icon }: Props) {
         fullWidth
       >
         <div
-          className={`${isNavActive() ? "bg-pink-gradient" : "bg-base-100"} flex items-center justify-center w-8 h-8 rounded-lg shadow-md  xl:p-2.5`}
+          className={`${isNavActive() ? selectColor : "bg-base-100"} flex items-center justify-center w-8 h-8 rounded-lg shadow-md  xl:p-2.5`}
         >
           <Icon className={`${isNavActive() ? "text-base-100" : "text-base-content"} w-5 h-5 `} />
         </div>

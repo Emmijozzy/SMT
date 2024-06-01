@@ -11,6 +11,7 @@ import Prefetch from "./features/auth/Prefetch";
 import RequireAuth from "./features/auth/RequireAuth";
 import RequireAdminRoute from "./features/auth/RequireAdminRoute";
 import RequireData from "./features/auth/RequireData";
+import Profile from "./features/users/Profile";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
                 <Route path="tasks" element={<Tasks />} />
                 <Route path="teams" element={<Teams />} />
                 <Route path="users" element={<Users />} />
+                <Route path="profile" element={<Profile />} />
               </Route>
             </Route>
           </Route>

@@ -51,6 +51,15 @@ const baseQueryWithReactAuth = async (args: string | FetchArgs, api: BaseQueryAp
         api.dispatch(setCredentials(accessToken));
 
         result = await baseQuery(args, api, extraOptions);
+      } else if (refreshResult?.error?.status === "FETCH_ERROR") {
+        api.dispatch(changeStatus("error"));
+        api.dispatch(addAlert({ message: "Server Error", type: "error" }));
+      } else if (refreshResult?.error?.status === "TIMEOUT_ERROR") {
+        api.dispatch(changeStatus("error"));
+        api.dispatch(addAlert({ message: "Timeout Error", type: "error" }));
+      } else if (refreshResult?.error?.status === "PARSING_ERROR") {
+        api.dispatch(changeStatus("error"));
+        api.dispatch(addAlert({ message: "parsing Error", type: "error" }));
       } else {
         const refreshError = { ...refreshResult } as ErrorData;
         if (refreshError?.error?.status === 403) {
@@ -67,7 +76,7 @@ const baseQueryWithReactAuth = async (args: string | FetchArgs, api: BaseQueryAp
       api.dispatch(addAlert({ message: "Timeout Error", type: "error" }));
     } else if (result?.error.status === "PARSING_ERROR") {
       api.dispatch(changeStatus("error"));
-      api.dispatch(addAlert({ message: "Timeout Error", type: "error" }));
+      api.dispatch(addAlert({ message: "parsing Error", type: "error" }));
     }
   }
 

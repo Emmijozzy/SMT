@@ -1,22 +1,40 @@
-// type Props = {}
-
 import { Typography } from "@mui/material";
-import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useClickOutside } from "@mantine/hooks";
+import CloseIcon from "@mui/icons-material/Close";
 import NavItem from "./NavItem";
 import { adminroutes } from "../../shared/constants";
+import { RootState } from "../../app/store";
+import { setSidebar } from "../layoutSlice";
 
 function Sidebar() {
-  const [openSidenav] = useState(false);
+  // const [openSidenav] = useState(false);
+  const dispatch = useDispatch();
+  const openSidenav = useSelector((state: RootState) => state.layout.slideBar);
+  const ref = useClickOutside(() => dispatch(setSidebar(false)));
+
+  const handleSidebar = () => {
+    dispatch(setSidebar(false));
+  };
 
   return (
     <aside
+      ref={ref}
       className={`${openSidenav ? "translate-x-0" : "-translate-x-80"} fixed inset-0 z-50 my-4 ml-4 h-[calc(100vh-32px)] w-60 rounded-xl transition-transform duration-300 xl:translate-x-0 border border-base-100 bg-base-200`}
     >
       <div className="relative flex items-center justify-center py-4 mb-2 overflow-hidden">
+        <button
+          type="button"
+          aria-label="Close Sidebar"
+          onClick={() => handleSidebar()}
+          className="absolute right-0 top-0 p-2 lg:hidden"
+        >
+          <CloseIcon className="h-8 w-8 text-base-content" />
+        </button>
         <Link to="/" className="w-full text-center">
-          <Typography variant="h4" className="text-base-content font-bold text-shadow">
-            SMT
+          <Typography variant="h4" className="text-base-content font-bold text-shadow ">
+            S<span className="text-[3rem]">T</span>M
           </Typography>
         </Link>
       </div>
