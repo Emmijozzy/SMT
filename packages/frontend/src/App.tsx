@@ -11,7 +11,7 @@ import Prefetch from "./features/auth/Prefetch";
 import RequireAuth from "./features/auth/RequireAuth";
 import RequireAdminRoute from "./features/auth/RequireAdminRoute";
 import RequireData from "./features/auth/RequireData";
-import Profile from "./features/users/Profile";
+import Profile from "./features/users/profile/Profile";
 
 function App() {
   return (

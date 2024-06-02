@@ -111,9 +111,11 @@ function HeadNavbar() {
               <hr className="h-px bg-transparent bg-base-content/40" />
             </div>
             <ul className="">
-              <li className="flex items-center justify-between hover:text-base-content/40">
-                <p className="mr-3">Profile</p>
-                <AccountBoxIcon />
+              <li className="">
+                <Link to="/dash/profile" className="flex items-center justify-between hover:text-base-content/40">
+                  <p className="mr-3">Profile</p>
+                  <AccountBoxIcon />
+                </Link>
               </li>
               <li className="hover:text-base-content/40">
                 <button
