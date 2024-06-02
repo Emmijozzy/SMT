@@ -8,7 +8,9 @@ export interface IUser extends Document {
   profilePicUrl: string;
   password: string;
   role: "team_member" | "manager" | "admin";
+  phone: number;
   teamId: string;
+  location: string;
   permissions: {
     can_create_tasks: boolean;
     can_edit_tasks: boolean;
@@ -19,6 +21,11 @@ export interface IUser extends Document {
     can_delete_users: boolean;
     can_edit_users: boolean;
     can_assign_roles: boolean;
+  };
+  socialLinks: {
+    whatsappLink: string;
+    facebookLink: string;
+    linkedInLink: string;
   };
   del_flg: boolean;
   createdAt: Date;
@@ -59,6 +66,28 @@ const userSchema = new Schema<IUser>(
       type: String,
       required: true,
       description: "The hashed password of the user."
+    },
+    phone: {
+      type: Number,
+      description: "The phone number of the user"
+    },
+    location: {
+      type: String,
+      description: "Location/address of the user"
+    },
+    socialLinks: {
+      whatsappLink: {
+        type: String,
+        description: "The Whatapp Link of the user"
+      },
+      facebookLink: {
+        type: String,
+        description: "The whatapp Link of the user"
+      },
+      linkedInLink: {
+        type: String,
+        description: "The LinkedIn Link of the user"
+      }
     },
     role: {
       type: String,
