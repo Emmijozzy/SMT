@@ -10,7 +10,7 @@ export const findByUserId = async (userId: string): Promise<IUser | null> => {
   return User.findOne({ userId: userId }).select("").lean().exec();
 };
 
-export const updateUserById = async (userId: string, data: Record<string, string>) => {
+export const updateUserById = async (userId: string, data: Record<string, string | object>) => {
   //conftrim userId
   const user = await findByUserId(userId);
   if (!user) throw new NotFoundError("User does not exist");

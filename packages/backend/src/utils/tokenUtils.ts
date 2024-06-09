@@ -3,11 +3,11 @@ import { IUser } from "../features/auth/authModel";
 import { BadTokenError, InternalError, TokenExpiresErro } from "./ApiError";
 
 export const createAccessToken = (foundUser: Partial<IUser>): string => {
-  return jwt.sign({ user: foundUser }, process.env.ACCESS_TOKEN_SECRET as jwt.Secret, { expiresIn: "2m" });
+  return jwt.sign({ user: foundUser }, process.env.ACCESS_TOKEN_SECRET as jwt.Secret, { expiresIn: "5m" });
 };
 
 export const createRefreshToken = (userId: string) => {
-  return jwt.sign({ id: userId }, process.env.REFRESH_TOKEN_SECRET as jwt.Secret, { expiresIn: "5m" });
+  return jwt.sign({ id: userId }, process.env.REFRESH_TOKEN_SECRET as jwt.Secret, { expiresIn: "10m" });
 };
 
 export const verifyAccessToken = async (token: string): Promise<jwt.VerifyErrors | IUser> => {

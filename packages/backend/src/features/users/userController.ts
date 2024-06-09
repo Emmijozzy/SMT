@@ -13,6 +13,8 @@ import authMiddleware from "../../middleware/authMiddleware";
 import { ENUM_USER_ROLES } from "./enumUserRoles";
 import getPaginationOptions from "../../utils/getPaginationOptions";
 import filtersToMongooseQuery from "../../utils/filtersToMongooseQuery";
+import validationMiddleware from "../../middleware/validationMiddleware";
+import userValidation from "./userValidation";
 
 // const { userUpdateSchema } = userValidation;
 
@@ -36,10 +38,15 @@ export default class UserController implements IController {
     this.router.get("/get_by_userId/:userId", this.getUserById);
     this.router.patch(
       "/update_profile",
+      validationMiddleware(userValidation.userProfileUpdateSchema),
       authMiddleware(ENUM_USER_ROLES.ADMIN, ENUM_USER_ROLES.MANAGER, ENUM_USER_ROLES.TEAM_MEMBER),
       this.updateProfile
     );
-    this.router.patch("/update", authMiddleware(ENUM_USER_ROLES.ADMIN), this.updateUser); // * update : Email, phone, location, Social Link(Whatsapp, facebook, linkedIn)
+    this.router.patch(
+      "/update",
+      authMiddleware(ENUM_USER_ROLES.ADMIN, ENUM_USER_ROLES.MANAGER, ENUM_USER_ROLES.TEAM_MEMBER),
+      this.updateUser
+    ); // * update : Email, phone, location, Social Link(Whatsapp, facebook, linkedIn)
     this.router.patch("/delete", authMiddleware(ENUM_USER_ROLES.ADMIN), this.deleteUser);
   }
 

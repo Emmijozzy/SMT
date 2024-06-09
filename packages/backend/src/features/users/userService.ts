@@ -13,9 +13,12 @@ const { userProfileUpdateSchema } = userValidation;
 //Todo: validation of the various data each role should provided before update is allowed
 
 interface IProfileToUpdate {
-  profilePicUrl: string;
   email: string;
-  password: string;
+  phone_no: string;
+  location: string;
+  whatsappLink: string;
+  facebookLink: string;
+  linkedInLink: string;
 }
 
 export default class UserService {
@@ -63,23 +66,27 @@ export default class UserService {
   }
 
   static async updateProfile(userId: string, profileToUpdate: IProfileToUpdate) {
-    const canUpdate = ["profilePicUrl", "emial", "password"];
-    if (Object.keys(profileToUpdate).every((data) => canUpdate.includes(data)))
+    const canUpdate = ["email", "phone_no", "location", "whatsappLink", "facebookLink", "linkedInLink"];
+
+    if (!Object.keys(profileToUpdate).every((data) => canUpdate.includes(data)))
       throw new BadRequestError("Unathorized data Update request");
 
     await userProfileUpdateSchema.validate(profileToUpdate);
 
-    const { password, profilePicUrl, email } = profileToUpdate;
+    const { phone_no, email, location, whatsappLink, facebookLink, linkedInLink } = profileToUpdate;
 
-    let hashedPassword;
-    let updatedProfile;
-    if (!!profileToUpdate.password) {
-      hashedPassword = await passwordUtils.hash(password);
-      updatedProfile = userUtils.updateUserById(userId, { profilePicUrl, email, password: hashedPassword });
-    } else {
-      console.warn("no password provided");
-      updatedProfile = userUtils.updateUserById(userId, { profilePicUrl, email });
-    }
+    const payload = {
+      email,
+      phone_no,
+      location,
+      socialLinks: {
+        whatsappLink,
+        facebookLink,
+        linkedInLink
+      }
+    };
+
+    const updatedProfile = userUtils.updateUserById(userId, payload);
 
     if (!updatedProfile) throw new InternalError("Error updating profile");
     return updatedProfile;
