@@ -16,8 +16,6 @@ import filtersToMongooseQuery from "../../utils/filtersToMongooseQuery";
 import validationMiddleware from "../../middleware/validationMiddleware";
 import userValidation from "./userValidation";
 
-// const { userUpdateSchema } = userValidation;
-
 export default class UserController implements IController {
   public path = "/user";
   public router = Router();
@@ -47,6 +45,12 @@ export default class UserController implements IController {
       authMiddleware(ENUM_USER_ROLES.ADMIN, ENUM_USER_ROLES.MANAGER, ENUM_USER_ROLES.TEAM_MEMBER),
       this.updateUser
     ); // * update : Email, phone, location, Social Link(Whatsapp, facebook, linkedIn)
+    this.router.patch(
+      "/change_password",
+      validationMiddleware(userValidation.changedPasswordSchema),
+      authMiddleware(ENUM_USER_ROLES.ADMIN, ENUM_USER_ROLES.MANAGER, ENUM_USER_ROLES.TEAM_MEMBER),
+      this.changePassword
+    );
     this.router.patch("/delete", authMiddleware(ENUM_USER_ROLES.ADMIN), this.deleteUser);
   }
 
@@ -129,6 +133,18 @@ export default class UserController implements IController {
     successResponse(res, {
       data: updatedUser,
       message: "User data modified successfully"
+    });
+  });
+
+  private changePassword = asyncHandler(async (req: ExtendedRequest, res: Response) => {
+    const userId = req.user?.userId;
+    if (!userId) throw new InternalError("Internal server error");
+
+    await UserService.changePassword(userId, req.body);
+
+    successResponse(res, {
+      data: null,
+      message: "Password changed successfully"
     });
   });
 

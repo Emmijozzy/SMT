@@ -7,7 +7,13 @@ export const findByEmail = async (email: string): Promise<IUser | null> => {
 };
 
 export const findByUserId = async (userId: string): Promise<IUser | null> => {
-  return User.findOne({ userId: userId }).select("").lean().exec();
+  if (!userId || !Number.parseInt(userId.slice(4))) throw new BadRequestError("Invalid User ID");
+
+  const user = (await User.findOne({ userId: userId }).select("").lean().exec()) as IUser;
+
+  if (!user.userId) throw new NotFoundError(` User with id : ${userId} not found`);
+
+  return user;
 };
 
 export const updateUserById = async (userId: string, data: Record<string, string | object>) => {

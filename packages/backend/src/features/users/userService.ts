@@ -7,19 +7,11 @@ import { IPaginationOptions } from "../../utils/getPaginationOptions";
 import userUtils from "./userUtils";
 import passwordUtils from "../../utils/passwordUtils";
 import userValidation from "./userValidation";
+import { IProfileToUpdate } from "./userInterface";
 
 const { userProfileUpdateSchema } = userValidation;
 
 //Todo: validation of the various data each role should provided before update is allowed
-
-interface IProfileToUpdate {
-  email: string;
-  phone_no: string;
-  location: string;
-  whatsappLink: string;
-  facebookLink: string;
-  linkedInLink: string;
-}
 
 export default class UserService {
   static async getProfile(user: Partial<IUser>) {
@@ -54,11 +46,7 @@ export default class UserService {
   }
 
   static async getUserById(userId: string) {
-    if (!userId || !Number.parseInt(userId.slice(4))) throw new BadRequestError("Invalid User ID");
-
     const user = (await userUtils.findByUserId(userId)) as Partial<IUser>;
-
-    if (!user.userId) throw new NotFoundError(` User with id : ${userId} not found`);
 
     delete user.password;
 
@@ -66,18 +54,19 @@ export default class UserService {
   }
 
   static async updateProfile(userId: string, profileToUpdate: IProfileToUpdate) {
-    const canUpdate = ["email", "phone_no", "location", "whatsappLink", "facebookLink", "linkedInLink"];
+    const canUpdate = ["email", "phoneNo", "location", "whatsappLink", "facebookLink", "linkedInLink"];
+
+    const user = (await userUtils.findByUserId(userId)) as IUser;
+    if (!user.userId) throw new NotFoundError(` User with id : ${userId} not found`);
 
     if (!Object.keys(profileToUpdate).every((data) => canUpdate.includes(data)))
       throw new BadRequestError("Unathorized data Update request");
 
-    await userProfileUpdateSchema.validate(profileToUpdate);
-
-    const { phone_no, email, location, whatsappLink, facebookLink, linkedInLink } = profileToUpdate;
+    const { phoneNo, email, location, whatsappLink, facebookLink, linkedInLink } = profileToUpdate;
 
     const payload = {
       email,
-      phone_no,
+      phone_no: phoneNo,
       location,
       socialLinks: {
         whatsappLink,
@@ -90,6 +79,22 @@ export default class UserService {
 
     if (!updatedProfile) throw new InternalError("Error updating profile");
     return updatedProfile;
+  }
+
+  static async changePassword(userId: string, { oldPassword, newPassword }: Record<string, string>) {
+    const user = (await userUtils.findByUserId(userId)) as IUser;
+
+    const match = await passwordUtils.compare(oldPassword, user);
+
+    if (!match) throw new BadRequestError("Invalid old password");
+
+    const hashedPassword = await passwordUtils.hash(newPassword);
+
+    const updatedUser = await userUtils.updateUserById(userId, { password: hashedPassword });
+
+    if (!updatedUser) throw new InternalError("Error in changing password");
+
+    return updatedUser;
   }
 
   static async canEditUser(userId: string, userRole: string, editedData: Partial<IUser>): Promise<boolean> {
