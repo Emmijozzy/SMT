@@ -39,7 +39,7 @@ export default class UserController implements IController {
       authMiddleware(ENUM_USER_ROLES.ADMIN, ENUM_USER_ROLES.MANAGER, ENUM_USER_ROLES.TEAM_MEMBER),
       this.updateProfile
     );
-    this.router.patch("/update", authMiddleware(ENUM_USER_ROLES.ADMIN), this.updateUser);
+    this.router.patch("/update", authMiddleware(ENUM_USER_ROLES.ADMIN), this.updateUser); // * update : Email, phone, location, Social Link(Whatsapp, facebook, linkedIn)
     this.router.patch("/delete", authMiddleware(ENUM_USER_ROLES.ADMIN), this.deleteUser);
   }
 

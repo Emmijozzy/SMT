@@ -5179,6 +5179,11 @@ libnpmpublish@7.3.0:
     sigstore "^1.4.0"
     ssri "^10.0.1"
 
+libphonenumber-js@^1.10.18:
+  version "1.11.3"
+  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.11.3.tgz#18126a2eec754eacd36f1f0d58590077fa5539ff"
+  integrity sha512-RU0CTsLCu2v6VEzdP+W6UU2n5+jEpMDRkGxUeBgsAJgre3vKgm17eApISH9OQY4G0jZYJVIc8qXmz6CJFueAFg==
+
 lilconfig@2.1.0, lilconfig@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/lilconfig/-/lilconfig-2.1.0.tgz#78e23ac89ebb7e1bfbf25b18043de756548e7f52"
@@ -8697,6 +8702,13 @@ yup-password@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/yup-password/-/yup-password-0.4.0.tgz#83880301b8e593849ce71c226350d9cd8644dd64"
   integrity sha512-9/OoQ/fXQOzLrCIn5TYd72WoBLadJ9ZwaZXWuGYwyPRxvrJQC3TIOb/i5OY4gIstKSojebCzAf7XDEiqyUuaow==
+
+yup-phone-lite@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/yup-phone-lite/-/yup-phone-lite-2.0.1.tgz#bb6d9c44bb8d2f921afda94a3662f220d14b8658"
+  integrity sha512-IV8q5VSq3MqVDm58ZyPSrtKfVtl+Z5N8UxWdEP573Nk09MLrF6drReOjUX6OggL0ByTMLO+z8r/L8taftUCGyw==
+  dependencies:
+    libphonenumber-js "^1.10.18"
 
 yup@^1.4.0:
   version "1.4.0"

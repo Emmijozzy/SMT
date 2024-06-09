@@ -8,7 +8,7 @@ export interface IUser extends Document {
   profilePicUrl: string;
   password: string;
   role: "team_member" | "manager" | "admin";
-  phone: number;
+  phone_no: number;
   teamId: string;
   location: string;
   permissions: {
@@ -67,7 +67,7 @@ const userSchema = new Schema<IUser>(
       required: true,
       description: "The hashed password of the user."
     },
-    phone: {
+    phone_no: {
       type: Number,
       description: "The phone number of the user"
     },

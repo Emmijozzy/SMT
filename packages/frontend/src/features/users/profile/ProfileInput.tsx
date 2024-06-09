@@ -8,9 +8,10 @@ type Props = {
   error?: string;
   disabled?: boolean;
   type?: string;
+  className?: string;
 };
 
-function ProfileInput({ label, placeholder, value, onChange, error, disabled, type }: Props) {
+function ProfileInput({ label, placeholder, value, onChange, error, disabled, type, className }: Props) {
   return (
     <div className="grid w-full h-16 items-center border-b-2 border-base-content">
       <label htmlFor="firstname" className="relative flex items-center gap-4">
@@ -20,7 +21,7 @@ function ProfileInput({ label, placeholder, value, onChange, error, disabled, ty
           id="firstname"
           type={type}
           placeholder={placeholder}
-          className="input mt-3 body-1 outline-none rounded-b-none rounded-t-md border-none border-2 input-primary w-full  border-t-none"
+          className={`input mt-3 body-1 outline-none rounded-b-none rounded-t-md border-none border-2 input-primary w-full  border-t-none ${className || ""}`}
           value={value}
           onChange={onChange}
           disabled={disabled}
@@ -37,4 +38,5 @@ ProfileInput.defaultProps = {
   error: "",
   disabled: false,
   type: "text",
+  className: "",
 };

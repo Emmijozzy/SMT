@@ -17,9 +17,9 @@ function ChangePassword({ onchangeePassword }: Props) {
       </div>
       <div className="flex flex-col flex-nowrap text-base-content">
         <form className="flex flex-col flex-nowrap text-base-content">
-          <ProfileInput label="Old Password" placeholder="********" type="password" value="" />
-          <ProfileInput label="New Password" placeholder="********" type="password" value="" />
-          <ProfileInput label="Confirm Password" placeholder="********" type="Password" value="" />
+          <ProfileInput className="ml-12" label="Old Password" placeholder="********" type="password" value="" />
+          <ProfileInput className="ml-10" label="New Password" placeholder="********" type="password" value="" />
+          <ProfileInput className="ml-2" label="Confirm Password" placeholder="********" type="Password" value="" />
         </form>
       </div>
     </div>

@@ -72,6 +72,12 @@ export class BadTokenError extends ApiError {
   }
 }
 
+export class ValidationError extends ApiError {
+  constructor(message = "Invalid Token ") {
+    super(Status.BAD_REQUEST, message);
+  }
+}
+
 export class TokenExpiresErro extends ApiError {
   constructor(message = "Token expired") {
     super(Status.FORBIDDEN, message);
