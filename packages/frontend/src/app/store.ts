@@ -9,6 +9,7 @@ import userProfileReducer from "../features/users/userProfileSlice";
 import statusReducer from "../shared/Slice/statusSlice";
 import layoutReducer from "../layout/layoutSlice";
 import localStorageMiddleware from "./api/middleware";
+import loaderReducer from "../features/loading/loaderSlice";
 
 // Define RootState interface
 export interface RootState {
@@ -17,6 +18,7 @@ export interface RootState {
   userProfile: ReturnType<typeof userProfileReducer>;
   status: ReturnType<typeof statusReducer>;
   layout: ReturnType<typeof layoutReducer>;
+  loader: ReturnType<typeof loaderReducer>;
 }
 export const store = configureStore({
   reducer: {
@@ -26,6 +28,7 @@ export const store = configureStore({
     userProfile: userProfileReducer,
     status: statusReducer,
     layout: layoutReducer,
+    loader: loaderReducer,
   },
   middleware: (GetDefaultMiddleware) =>
     GetDefaultMiddleware().concat(apiSlice.middleware).concat(localStorageMiddleware),

@@ -6,7 +6,7 @@ YupPassword(Yup);
 
 const userProfileUpdateSchema = Yup.object().shape({
   email: Yup.string().email().trim().optional(),
-  phone_no: Yup.string().trim().required("Phone number is required").phone([], "phone number be valid"),
+  phoneNo: Yup.string().trim().required("Phone number is required").phone([], "phone number be valid"),
   location: Yup.string().trim().required().min(2, "Location can not be less than 2"),
   whatsappLink: Yup.string().trim().url().optional(),
   facebookLink: Yup.string().trim().url().optional(),

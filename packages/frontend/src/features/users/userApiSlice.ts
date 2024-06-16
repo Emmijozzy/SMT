@@ -56,7 +56,14 @@ export const userApiSlice = apiSlice.injectEndpoints({
           ? [{ type: "User" as const, id: "LIST" as const }, ...result.ids.map((id) => ({ type: "User" as const, id }))]
           : [{ type: "User" as const, id: "LIST" as const }],
     }),
+    updateUserProfile: build.mutation({
+      query: (credentials) => ({
+        url: "/user/update_profile",
+        method: "PATCH",
+        body: { ...credentials },
+      }),
+    }),
   }),
 });
 
-export const { useGetUserProfileQuery } = userApiSlice;
+export const { useGetUserProfileQuery, useUpdateUserProfileMutation } = userApiSlice;

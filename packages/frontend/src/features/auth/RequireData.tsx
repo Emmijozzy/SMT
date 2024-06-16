@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { getPresentStatus } from "../../shared/Slice/statusSlice";
-import Loader from "../../shared/components/Loader";
+import Loader from "../loading/Loader";
 
 function RequireData() {
   const status = useSelector(getPresentStatus);

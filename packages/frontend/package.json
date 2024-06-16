@@ -30,7 +30,8 @@
     "react-router-dom": "^6.22.3",
     "uuid": "^9.0.1",
     "yup": "^1.4.0",
-    "yup-password": "^0.4.0"
+    "yup-password": "^0.4.0",
+    "yup-phone-lite": "^2.0.1"
   },
   "devDependencies": {
     "-": "^0.0.1",

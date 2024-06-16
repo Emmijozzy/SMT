@@ -13,7 +13,6 @@ function Profile() {
   const [showChangpassword, setShowChangePassword] = useState(true);
 
   const handleShowEdit = () => {
-    console.log("show");
     setToEdit((pre) => !pre);
   };
 

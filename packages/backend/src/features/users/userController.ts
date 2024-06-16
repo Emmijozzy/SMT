@@ -106,7 +106,7 @@ export default class UserController implements IController {
 
     successResponse(res, {
       data: result,
-      message: "User profile updated successfully"
+      message: "Profile updated successfully"
     });
   });
 

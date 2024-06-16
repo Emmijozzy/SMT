@@ -63,6 +63,8 @@ const baseQueryWithReactAuth = async (args: string | FetchArgs, api: BaseQueryAp
       } else {
         const refreshError = { ...refreshResult } as ErrorData;
         if (refreshError?.error?.status === 403) {
+          api.dispatch(changeStatus("error"));
+          api.dispatch(addAlert({ message: "Your login has expired", type: "error" }));
           refreshError.error.data.message = "Your login has expired";
           return refreshError;
         }

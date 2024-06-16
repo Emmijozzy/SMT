@@ -17,7 +17,7 @@ import { setCredentials } from "../authSlice";
 const { getDataFromLocalStorage } = localStorage;
 
 const initialValues: LoginData = {
-  userId: getDataFromLocalStorage("userId") as string,
+  userId: (getDataFromLocalStorage("userId") as string) || " ",
   password: "",
 };
 

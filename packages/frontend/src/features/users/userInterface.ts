@@ -5,8 +5,11 @@ export interface IUser {
   lastName: string;
   email: string;
   profilePicUrl: string;
+  password: string;
   role: "team_member" | "manager" | "admin";
+  phone_no: number;
   teamId: string;
+  location: string;
   permissions: {
     can_create_tasks: boolean;
     can_edit_tasks: boolean;
@@ -17,6 +20,11 @@ export interface IUser {
     can_delete_users: boolean;
     can_edit_users: boolean;
     can_assign_roles: boolean;
+  };
+  socialLinks: {
+    whatsappLink: string;
+    facebookLink: string;
+    linkedInLink: string;
   };
   del_flg: boolean;
   createdAt: string;
