@@ -50,7 +50,7 @@ function HeadNavbar() {
         type="button"
         aria-label="Open Sidebar"
         onClick={() => handleSidebar()}
-        className="h-full flex items-center mr-3 lg:hidden"
+        className="h-full flex items-center mr-3 xl:hidden"
       >
         <MenuIcon className="h-14 w-14" />
       </button>

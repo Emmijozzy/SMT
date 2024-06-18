@@ -10,7 +10,7 @@ function RequireData() {
 
   let content;
   if (status === "loading" || status === "") {
-    content = <Loader />;
+    content = <Loader isLoading transparent={false} />;
   } else if (status === "success") {
     console.log("Success dtat");
     content = <Outlet />;

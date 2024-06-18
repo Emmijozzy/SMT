@@ -36,3 +36,12 @@ export const userProfileUpdateSchema = Yup.object().shape({
   facebookLink: Yup.string().trim().url().optional(),
   linkedInLink: Yup.string().trim().url().optional(),
 });
+
+export const changedPasswordSchema = Yup.object().shape({
+  oldPassword: Yup.string().trim().required("Old password is required"),
+  newPassword: Yup.string().trim().required("New password is required").password(),
+  confirmPassword: Yup.string()
+    .trim()
+    .required("Confirm password is required")
+    .oneOf([Yup.ref("newPassword")], "Passwords must match"),
+});

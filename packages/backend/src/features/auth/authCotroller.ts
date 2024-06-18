@@ -21,7 +21,7 @@ export default class Auth implements IController {
     this.router.post("/register", validationMiddleware(authSchema.registrationSchema), this.register);
     this.router.post("/login", validationMiddleware(authSchema.loginSchema), this.login);
     this.router.get("/refresh", this.refresh);
-    this.router.get("logout", this.logout);
+    this.router.get("/logout", this.logout);
   }
 
   private register = asyncHandler(async (req: Request, res: Response) => {

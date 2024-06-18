@@ -1,3 +1,4 @@
+// import { MouseEvent } from "react";
 import { Button, Typography, SvgIconTypeMap } from "@mui/material";
 import { NavLink, useLocation } from "react-router-dom";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
@@ -10,11 +11,13 @@ type MuiIcon = OverridableComponent<SvgIconTypeMap<object, "svg">> & {
 
 interface Props {
   title: string;
-  path: string;
+  path?: string;
   Icon: MuiIcon;
+  className?: string;
+  onClick?: () => Promise<void>;
 }
 
-function NavItem({ title, path, Icon }: Props) {
+function NavItem({ title, path, Icon, className, onClick }: Props) {
   const location = useLocation();
   const selectColor = useSelector((state: RootState) => state.layout.selectColor);
 
@@ -22,10 +25,11 @@ function NavItem({ title, path, Icon }: Props) {
   const isNavActive = (): boolean => path === location.pathname;
 
   return (
-    <NavLink to={path}>
+    <NavLink to={path || ""} className={`${className || ""}`}>
       <Button
         className={`${isNavActive() ? "bg-base-100 shadow-md font-semibold" : "font-medium"} flex items-center justify-start whitespace-nowrap shadow-soft-xl gap-2.7 px-4 text-left rounded-lg my-0 py-2.7 capitlalize  `}
         fullWidth
+        onClick={onClick}
       >
         <div
           className={`${isNavActive() ? selectColor : "bg-base-100"} flex items-center justify-center w-8 h-8 rounded-lg shadow-md  xl:p-2.5`}
@@ -37,4 +41,10 @@ function NavItem({ title, path, Icon }: Props) {
     </NavLink>
   );
 }
+
+NavItem.defaultProps = {
+  className: "",
+  path: "",
+  onClick: () => "",
+};
 export default NavItem;

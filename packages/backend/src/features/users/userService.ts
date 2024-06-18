@@ -82,6 +82,8 @@ export default class UserService {
   }
 
   static async changePassword(userId: string, { oldPassword, newPassword }: Record<string, string>) {
+    if (oldPassword == newPassword) throw new BadRequestError("Old and new password can not be the same");
+
     const user = (await userUtils.findByUserId(userId)) as IUser;
 
     const match = await passwordUtils.compare(oldPassword, user);

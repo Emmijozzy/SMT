@@ -63,7 +63,14 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: { ...credentials },
       }),
     }),
+    changePassword: build.mutation({
+      query: (credentials) => ({
+        url: "/user/change_password",
+        method: "PATCH",
+        body: { ...credentials },
+      }),
+    }),
   }),
 });
 
-export const { useGetUserProfileQuery, useUpdateUserProfileMutation } = userApiSlice;
+export const { useGetUserProfileQuery, useUpdateUserProfileMutation, useChangePasswordMutation } = userApiSlice;

@@ -11,6 +11,7 @@ import { IUser } from "../userInterface";
 import { setLoader } from "../../loading/loaderSlice";
 import { saveProfile } from "../userProfileSlice";
 import { addAlert } from "../../alerts/AlertSlice";
+import ResData from "../../../shared/interface/resdata";
 
 const defaultValue = {
   firstName: "",
@@ -24,13 +25,6 @@ const defaultValue = {
     linkedInLink: "",
   },
 };
-
-interface ResData {
-  data: {
-    message: string;
-    data: IUser;
-  };
-}
 
 const useUpdateProfileInfo = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
