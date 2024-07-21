@@ -8,7 +8,7 @@ function Register() {
   const { isSubmitting, handleSubmit, handleBlur, handleChange, errors, values } = useRegister();
 
   return (
-    <main data-theme="dark" className="w-screen mt-0 transition-all duration-200 ease-soft-in-out bg-[#000]">
+    <main data-theme="dark" className="w-screen mt-0 transition-all duration-200 ease-in-out bg-[#000]">
       <section className="h-screen min-h-screen">
         <div className="relative flex w-full h-full">
           <Alerts />

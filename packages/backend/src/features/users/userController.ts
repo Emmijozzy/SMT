@@ -72,16 +72,25 @@ export default class UserController implements IController {
       queryFilter = "{}";
     }
 
+    const stringObject = req.query.pagination as string;
+
+    console.log(stringObject);
+    let pagination;
+    if (!stringObject) {
+      pagination = {};
+    } else {
+      pagination = JSON.parse(stringObject);
+    }
+
+    if (typeof pagination !== "object") throw new BadRequestError("Error parsing pagination");
+
     const filters = filtersToMongooseQuery(JSON.parse(String(queryFilter)) as Record<string, string>);
 
     if (!filters) throw new BadRequestError("Invalid filter");
 
-    const result = await UserService.getAll(
-      filters,
-      getPaginationOptions(req.query.pagination as Record<string, string>)
-    );
+    const result = await UserService.getAll(filters, getPaginationOptions(pagination as Record<string, string>));
 
-    if (!result || !result.users?.length) throw new InternalError("Fatal Error fetching users");
+    if (!result || !result.length) throw new InternalError("Fatal Error fetching users");
 
     successResponse(res, {
       data: result,

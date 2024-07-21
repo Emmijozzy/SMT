@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { createEntityAdapter } from "@reduxjs/toolkit";
@@ -8,11 +9,15 @@ import log from "../../shared/utils/log";
 import { changeStatus } from "../../shared/Slice/statusSlice";
 import { addAlert } from "../alerts/AlertSlice";
 
-const usersAdapter = createEntityAdapter({
+interface ResData {
+  data: IUser[];
+}
+
+export const usersAdapter = createEntityAdapter({
   selectId: (user: IUser) => user.userId,
 });
 
-const initialState = usersAdapter.getInitialState({});
+export const initialState = usersAdapter.getInitialState({});
 
 export const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (build) => ({
@@ -39,29 +44,36 @@ export const userApiSlice = apiSlice.injectEndpoints({
         }
       },
     }),
+
     getUsers: build.query({
       query: () => ({
-        url: "/users",
+        url: "/user/get_all",
         validateStatus: (response, result) => response.status === 200 || !result.isError,
       }),
-      transformResponse: (responseData: IUser[]) => {
-        const loadedUsers: IUser[] = responseData.map((user: IUser) => ({
+      transformResponse: (responseData: ResData) => {
+        let users = responseData?.data;
+
+        users = users.map((user: IUser) => ({
           ...user,
-          id: user.userId,
+          _id: user.userId,
         }));
-        return usersAdapter.setAll(initialState, loadedUsers);
+
+        return usersAdapter.setAll(initialState, users);
+        // return users;
       },
       providesTags: (result) =>
         result?.ids
           ? [{ type: "User" as const, id: "LIST" as const }, ...result.ids.map((id) => ({ type: "User" as const, id }))]
           : [{ type: "User" as const, id: "LIST" as const }],
     }),
+
     updateUserProfile: build.mutation({
       query: (credentials) => ({
         url: "/user/update_profile",
         method: "PATCH",
         body: { ...credentials },
       }),
+      invalidatesTags: [{ type: "User" as const, id: "LIST" as const }],
     }),
     changePassword: build.mutation({
       query: (credentials) => ({
@@ -73,4 +85,5 @@ export const userApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetUserProfileQuery, useUpdateUserProfileMutation, useChangePasswordMutation } = userApiSlice;
+export const { useGetUsersQuery, useGetUserProfileQuery, useUpdateUserProfileMutation, useChangePasswordMutation } =
+  userApiSlice;

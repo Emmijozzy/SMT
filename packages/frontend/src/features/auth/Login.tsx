@@ -8,7 +8,7 @@ function Login() {
   const { isSubmitting, handleSubmit, handleBlur, handleChange, errors, values } = useLogin();
 
   return (
-    <main className="w-screen mt-0 transition-all duration-200 ease-soft-in-out bg-[#000]" data-theme="dark">
+    <main className="w-screen mt-0 transition-all duration-200 ease-in-out bg-[#000]" data-theme="dark">
       <section className="h-screen min-h-screen">
         <div className="relative flex w-full h-full">
           <Alerts />

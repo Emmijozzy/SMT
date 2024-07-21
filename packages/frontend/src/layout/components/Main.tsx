@@ -7,8 +7,8 @@ function Main() {
       <HeadNavbar />
       <div className="w-full h-calc-half-vh bg-base-100 overflow-auto rounded-lg px-4 bg-base-200">
         <Outlet />
-        <div className="w-full h-full bg-[blue]" />
-        <div className="w-full h-full bg-[blue]" />
+        <div className="w-full h-full bg-base-200" />
+        <div className="w-full h-full bg-base-200" />
         <div className="w-full h-full bg-[blue]" />
       </div>
     </main>

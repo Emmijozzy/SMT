@@ -10,6 +10,8 @@ import statusReducer from "../shared/Slice/statusSlice";
 import layoutReducer from "../layout/layoutSlice";
 import localStorageMiddleware from "./api/middleware";
 import loaderReducer from "../features/loading/loaderSlice";
+import userTableReducer from "../features/users/userTableSlice";
+import usersReducer from "../features/users/userSlice";
 
 // Define RootState interface
 export interface RootState {
@@ -19,6 +21,8 @@ export interface RootState {
   status: ReturnType<typeof statusReducer>;
   layout: ReturnType<typeof layoutReducer>;
   loader: ReturnType<typeof loaderReducer>;
+  userTable: ReturnType<typeof userTableReducer>;
+  users: ReturnType<typeof usersReducer>;
 }
 export const store = configureStore({
   reducer: {
@@ -29,6 +33,8 @@ export const store = configureStore({
     status: statusReducer,
     layout: layoutReducer,
     loader: loaderReducer,
+    userTable: userTableReducer,
+    users: usersReducer,
   },
   middleware: (GetDefaultMiddleware) =>
     GetDefaultMiddleware().concat(apiSlice.middleware).concat(localStorageMiddleware),

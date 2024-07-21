@@ -10,6 +10,7 @@ export interface IUser extends Document {
   role: "team_member" | "manager" | "admin";
   phone_no: string;
   teamId: string;
+  team: string;
   location: string;
   permissions: {
     can_create_tasks: boolean;
@@ -98,6 +99,10 @@ const userSchema = new Schema<IUser>(
     teamId: {
       type: String,
       description: "The id of team the user belong to"
+    },
+    team: {
+      type: String,
+      description: "The team the user belong to"
     },
     permissions: {
       type: Object,

@@ -29,20 +29,21 @@ export default class UserService {
 
     const sort = { [sortField]: sortOrder };
 
-    const users = await User.find(filter).limit(limit).skip(skip).sort(sort).lean().exec();
+    const users = await User.find(filter).limit(limit).skip(skip).sort(sort).select("-password").lean().exec();
 
-    const total = await User.countDocuments(filter);
-    return {
-      users,
-      total,
-      totalPage: Math.ceil(+total / limit) * 1,
-      currentPage: page,
-      hasNextPage: users.length === limit * 1,
-      hasPreviousPage: page > 1,
-      nextPage: page + 1,
-      previousPage: page - 1,
-      lastPage: Math.ceil(+total / limit)
-    };
+    // const total = await User.countDocuments(filter);
+    // return {
+    //   users,
+    //   total,
+    //   totalPage: Math.ceil(+total / limit) * 1,
+    //   currentPage: page,
+    //   hasNextPage: users.length === limit * 1,
+    //   hasPreviousPage: page > 1,
+    //   nextPage: page + 1,
+    //   previousPage: page - 1,
+    //   lastPage: Math.ceil(+total / limit)
+    // };
+    return users;
   }
 
   static async getUserById(userId: string) {

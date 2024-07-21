@@ -7,8 +7,9 @@ export interface IUser {
   profilePicUrl: string;
   password: string;
   role: "team_member" | "manager" | "admin";
-  phone_no: number;
+  phoneNo: number;
   teamId: string;
+  team: string;
   location: string;
   permissions: {
     can_create_tasks: boolean;

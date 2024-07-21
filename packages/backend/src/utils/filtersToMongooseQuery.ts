@@ -13,7 +13,7 @@ function filtersToMongooseQuery(filters: Record<string, string>): any {
       } else if (key.endsWith("_lt")) {
         mongooseQuery[key.slice(0, -3)] = { $lt: parseFloat(value) } as mongoose.FilterQuery<any>;
       } else if (key.endsWith("_like")) {
-        mongooseQuery[key] = new RegExp(value, "i"); // Case-insensitive search
+        mongooseQuery[key.slice(0, -5)] = new RegExp(value, "i"); // Case-insensitive search
       } else {
         mongooseQuery[key] = value; // Default assignment
       }

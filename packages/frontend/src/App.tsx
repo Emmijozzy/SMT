@@ -12,6 +12,8 @@ import RequireAuth from "./features/auth/RequireAuth";
 import RequireAdminRoute from "./features/auth/RequireAdminRoute";
 import RequireData from "./features/auth/RequireData";
 import Profile from "./features/users/profile/Profile";
+import UserTable from "./features/users/UserTable/UserTable";
+import AddUser from "./features/users/AddUser/AddUser";
 
 function App() {
   return (
@@ -27,7 +29,10 @@ function App() {
                 <Route index element={<Dashboard />} />
                 <Route path="tasks" element={<Tasks />} />
                 <Route path="teams" element={<Teams />} />
-                <Route path="users" element={<Users />} />
+                <Route path="users" element={<Users />}>
+                  <Route index element={<UserTable />} />
+                  <Route path="add-new-user" element={<AddUser />} />
+                </Route>
                 <Route path="profile" element={<Profile />} />
               </Route>
             </Route>

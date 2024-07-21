@@ -67,7 +67,8 @@ export default {
       },
       transitionTimingFunction: {
         DEFAULT: "linear",
-        "ease-soft-in-out": "cubic-bezier(0.42, 0, 0.58, 1)",
+        "ease-in-out": "cubic-bezier(0.42, 0, 0.58, 1)",
+        "ease-in": "cubic-bezier(0.42, 0, 1, 1)",
         "in-expo": "cubic-bezier(0.95, 0.05, 0.795, 0.035)",
         "out-expo": "cubic-bezier(0.19, 1, 0.22, 1)",
       },
@@ -92,7 +93,7 @@ export default {
       addBase({});
       addComponents({
         ".container": {
-          "@apply max-w-[77.5rem] mx-auto px-5 md:px-10 lg:px-15 xl:max-w-[87.5rem]": {},
+          "@apply relative w-full max-w-[77.5rem] mx-auto p-4 md:p-6 xl:max-w-[87.5rem] rounded-lg bg-base-100": {},
         },
         ".h1": {
           "@apply font-semibold text-[2.5rem] leading-[3.25rem] md:text-[2.75rem] md:leading-[3.75rem] lg:text-[3.25rem] lg:leading-[4.0625rem] xl:text-[3.75rem] xl:leading-[4.5rem]":
@@ -120,6 +121,9 @@ export default {
         },
         ".body-2": {
           "@apply font-light text-[0.875rem] leading-6 md:text-xs": {},
+        },
+        ".body-3": {
+          "@apply font-bold text-xs leading-snug md:text-xs": {},
         },
         ".caption": {
           "@apply text-sm": {},
@@ -150,6 +154,9 @@ export default {
         },
         ".bg-red-gradient": {
           "@apply bg-gradient-to-tl from-red-600 to-rose-400": {},
+        },
+        ".MuiDataGrid-root": {
+          "@apply border-none body-1 text-base-content": {},
         },
       });
       addUtilities({

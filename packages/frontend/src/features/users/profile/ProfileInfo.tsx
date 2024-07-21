@@ -17,7 +17,7 @@ function ProfileInfo({ handleShowEdit }: Props) {
     fullName,
     email,
     teamId,
-    phone_no: PhoneNo,
+    phoneNo: PhoneNo,
     location,
     socialLinks: { whatsappLink, facebookLink, linkedInLink },
   } = useSelector((state: RootState) => state.userProfile.userProfile) as IUser;

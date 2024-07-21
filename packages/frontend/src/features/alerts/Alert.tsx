@@ -8,7 +8,7 @@ function Alert({ display, message, type }: IAlert) {
 
   return (
     <div
-      className={`flex flex-col w-full zdisplay: boolean | undefined, type: string, { display, type }: Propsined, type: string, { display, type }: Propsined, type: string, { display, type }: Propsined, type: string, { display, type }: Propsined, type: string, { display, type }: Props400 ease-soft-in-out ${isDisPlay ? "block" : "hidden"}`}
+      className={`flex flex-col w-full zdisplay: boolean | undefined, type: string, { display, type }: Propsined, type: string, { display, type }: Propsined, type: string, { display, type }: Propsined, type: string, { display, type }: Propsined, type: string, { display, type }: Props400 ease-in-out ${isDisPlay ? "block" : "hidden"}`}
     >
       {typeof type == "string" && (
         <Alart severity={type} className="flex items-center px-4 text-lg bold bg-base-300 text-wrap">

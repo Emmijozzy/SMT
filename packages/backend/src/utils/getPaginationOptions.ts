@@ -8,7 +8,7 @@ export interface IPaginationOptions {
 
 const getPaginationOptions = (pagination: Record<string, string>): IPaginationOptions => {
   // Use destructuring and optional chaining for cleaner syntax
-  const { page = "1", limit = "10", sortField = "userId", sortOrder = "asc" } = pagination || {};
+  const { page = "1", limit = "0", sortField = "userId", sortOrder = "asc" } = pagination || {};
 
   // Type assertions for clarity (optional)
   const parsedPage = parseInt(page, 10);
@@ -19,7 +19,7 @@ const getPaginationOptions = (pagination: Record<string, string>): IPaginationOp
     throw new Error("Invalid page number");
   }
 
-  if (isNaN(parsedLimit) || parsedLimit <= 0) {
+  if (isNaN(parsedLimit) || parsedLimit <= -1) {
     throw new Error("Invalid limit value");
   }
 

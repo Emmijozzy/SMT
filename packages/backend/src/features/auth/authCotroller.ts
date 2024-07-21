@@ -1,4 +1,4 @@
-import IController from "Interface/controller";
+import IController from "../../Interface/controller";
 import { Router, Request, Response } from "express";
 import asyncHandler from "../../utils/asyncHandler";
 import { AuthFailureError, BadRequestError } from "../../utils/ApiError";

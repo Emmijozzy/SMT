@@ -22,7 +22,7 @@ function ChangePassword({ onchangeePassword }: Props) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full p-4 bg-base-100 rounded-lg bg-base-100 border border-error cursor-pointer transition-all hover:border-[red]"
+      className="w-full p-4 bg-base-100 rounded-lg border border-error cursor-pointer transition-all hover:border-[red]"
     >
       <div className="w-full flex items-center justify-between">
         <h6 className="h6 capitalize font-bold">Change Password</h6>

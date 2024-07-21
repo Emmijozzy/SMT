@@ -57,38 +57,38 @@ function SettingBar() {
             <div className="my-2 text-left w-full" /* sidenav-colors="" */>
               <button
                 type="button"
-                className={`rounded-full h-5.75 mr-1.25 w-5.75 ease-soft-in-out bg-gradient-to-tl from-purple-700 to-pink-500 relative inline-block cursor-pointer whitespace-nowrap border border-solid text-center align-baseline font-bold uppercase leading-none text-white transition-all duration-200 hover:border-slate-700 border-white border-xl ${selectColor === "bg-pink-gradient" ? "scale-75" : "scale-100"} `}
+                className={`rounded-full h-5.75 mr-1.25 w-5.75 ease-in-out bg-gradient-to-tl from-purple-700 to-pink-500 relative inline-block cursor-pointer whitespace-nowrap border border-solid text-center align-baseline font-bold uppercase leading-none text-white transition-all duration-200 hover:border-slate-700 border-white border-xl ${selectColor === "bg-pink-gradient" ? "scale-75" : "scale-100"} `}
                 aria-label="Pink gradient"
                 onClick={() => dispatch(setSelectColor("bg-pink-gradient"))}
               />
               <button
                 type="button"
-                className={`rounded-full h-5.75 mr-1.25 w-5.75 ease-soft-in-out bg-gradient-to-tl from-gray-900 to-slate-800 relative inline-block cursor-pointer whitespace-nowrap border border-solid border-white text-center align-baseline font-bold uppercase leading-none text-white transition-all duration-200 hover:border-slate-700  ${selectColor === "bg-gray-gradient" ? "scale-75" : "scale-100"}`}
+                className={`rounded-full h-5.75 mr-1.25 w-5.75 ease-in-out bg-gradient-to-tl from-gray-900 to-slate-800 relative inline-block cursor-pointer whitespace-nowrap border border-solid border-white text-center align-baseline font-bold uppercase leading-none text-white transition-all duration-200 hover:border-slate-700  ${selectColor === "bg-gray-gradient" ? "scale-75" : "scale-100"}`}
                 aria-label="Gray gradient"
                 onClick={() => dispatch(setSelectColor("bg-gray-gradient"))}
               />
               <button
                 type="button"
-                className={`rounded-full h-5.75 mr-1.25 w-5.75 ease-soft-in-out bg-gradient-to-tl from-blue-600 to-cyan-400 relative inline-block cursor-pointer whitespace-nowrap border border-solid border-white text-center align-baseline font-bold uppercase leading-none text-white transition-all duration-200 hover:border-slate-700 ${selectColor === "bg-blue-gradient" ? "scale-75" : "scale-100"}`}
+                className={`rounded-full h-5.75 mr-1.25 w-5.75 ease-in-out bg-gradient-to-tl from-blue-600 to-cyan-400 relative inline-block cursor-pointer whitespace-nowrap border border-solid border-white text-center align-baseline font-bold uppercase leading-none text-white transition-all duration-200 hover:border-slate-700 ${selectColor === "bg-blue-gradient" ? "scale-75" : "scale-100"}`}
                 aria-label="Blue gradient"
                 onClick={() => dispatch(setSelectColor("bg-blue-gradient"))}
               />
               <button
                 type="button"
-                className={`rounded-full h-5.75 mr-1.25 w-5.75 ease-soft-in-out bg-gradient-to-tl from-green-600 to-lime-400 relative inline-block cursor-pointer whitespace-nowrap border border-solid text-center align-baseline font-bold uppercase leading-none text-white transition-all duration-200 hover:border-slate-700 border-white  ${selectColor === "bg-green-gradient" ? "scale-75" : "scale-100"}`}
+                className={`rounded-full h-5.75 mr-1.25 w-5.75 ease-in-out bg-gradient-to-tl from-green-600 to-lime-400 relative inline-block cursor-pointer whitespace-nowrap border border-solid text-center align-baseline font-bold uppercase leading-none text-white transition-all duration-200 hover:border-slate-700 border-white  ${selectColor === "bg-green-gradient" ? "scale-75" : "scale-100"}`}
                 aria-label="Lime gradient"
                 onClick={() => dispatch(setSelectColor("bg-green-gradient"))}
               />
               <button
                 type="button"
-                className={` rounded-full h-5.75 mr-1.25 w-5.75 ease-soft-in-out bg-gradient-to-tl from-red-500 to-yellow-400 relative inline-block cursor-pointer whitespace-nowrap border border-solid text-center align-baseline font-bold uppercase leading-none text-white transition-all duration-200 hover:border-slate-700 border-slate-700 nter whitespace-nowrap border border-solid text-center align-baseline font-bold uppercase leading-none text-white transition-all duration-200 hover:border-slate-700 border-white  ${selectColor === "bg-orange-gradient" ? "scale-75" : "scale-100"}`}
+                className={` rounded-full h-5.75 mr-1.25 w-5.75 ease-in-out bg-gradient-to-tl from-red-500 to-yellow-400 relative inline-block cursor-pointer whitespace-nowrap border border-solid text-center align-baseline font-bold uppercase leading-none text-white transition-all duration-200 hover:border-slate-700 border-slate-700 nter whitespace-nowrap border border-solid text-center align-baseline font-bold uppercase leading-none text-white transition-all duration-200 hover:border-slate-700 border-white  ${selectColor === "bg-orange-gradient" ? "scale-75" : "scale-100"}`}
                 aria-label="yellow gradient"
                 onClick={() => dispatch(setSelectColor("bg-orange-gradient"))}
                 // active-color=""
               />
               <button
                 type="button"
-                className={`rounded-full h-5.75 mr-1.25 w-5.75 ease-soft-in-out bg-gradient-to-tl from-red-600 to-rose-400 relative inline-block cursor-pointer whitespace-nowrap border border-solid text-center align-baseline font-bold uppercase leading-none text-white transition-all duration-200 hover:border-slate-700 border-white ${selectColor === "bg-red-gradient" ? "scale-75" : "scale-100"}`}
+                className={`rounded-full h-5.75 mr-1.25 w-5.75 ease-in-out bg-gradient-to-tl from-red-600 to-rose-400 relative inline-block cursor-pointer whitespace-nowrap border border-solid text-center align-baseline font-bold uppercase leading-none text-white transition-all duration-200 hover:border-slate-700 border-white ${selectColor === "bg-red-gradient" ? "scale-75" : "scale-100"}`}
                 aria-label="red gradient"
                 onClick={() => dispatch(setSelectColor("bg-red-gradient"))}
               />

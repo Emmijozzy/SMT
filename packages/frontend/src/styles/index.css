@@ -27,6 +27,26 @@
     -webkit-text-stroke: 4px black;
   }
 
+
+  /* .MuiTablePagination-root {
+    @body body-1 text-base-content;
+    font-family: var(--font-sora) !important;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.43;
+    letter-spacing: 0.01071em;
+    vertical-align: inherit;
+    border-bottom: 1px solid rgba(224, 224, 224, 1);
+    border-bottom: none !important;
+    text-align: left;
+    padding: 16px;
+    overflow: auto;
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 0.875rem;
+  } */
+  
+
+
   /* .bg-pink-gradient {
     @apply bg-gradient-to-r from-fuchsia-500 to-pink-500
   } */
@@ -105,4 +125,45 @@ hr {
   0%   { top: 0;     opacity: 1; }
   50%  { top: 30px;  opacity: .2; }
   100% { top: 0;     opacity: 1; }
+}
+
+/* .MuiDataGrid-root {
+  background-color: @apply base;
+} */
+
+.MuiDataGrid-columnHeaders {
+  background-color: #7928ca !important;
+}
+
+/* inpu */
+
+.input-field {
+  width: 100%;
+  border: 1px solid #ccc; /* Default border color */
+  border-radius: 4px;
+  padding: 10px 15px;
+  font-size: 16px;
+  outline: none; /* Remove default outline on focus */
+}
+
+.input-field:focus {
+  border-color: #3f577f; /* Border color on focus */
+}
+
+.input-field:valid ~ .label,  /* Style label when input is filled */
+.input-field:not(:empty) ~ .label  {
+  opacity: 0.5; /* Reduce label opacity */
+  transform: translateY(-10px); /* Move label up on focus or input */
+  border-color: #3f577f; /* Border color on focus */
+}
+
+.label {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%); /* Center label vertically */
+  transition: opacity 0.2s ease-in-out;
+  color: #999;
+  font-size: 14px;
+  pointer-events: none; /* Disable interaction with label */
 }

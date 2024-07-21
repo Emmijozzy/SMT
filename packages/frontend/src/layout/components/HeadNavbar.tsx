@@ -11,7 +11,7 @@ import { Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useClickOutside } from "@mantine/hooks";
-import Avartar from "./Avartar";
+import Avartar from "../../shared/components/Avartar";
 import Breadcrumbs from "./Breadcrumbs";
 import { RootState } from "../../app/store";
 import { IUser } from "../../features/users/userInterface";

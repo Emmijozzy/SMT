@@ -11,7 +11,7 @@ export const findByUserId = async (userId: string): Promise<IUser | null> => {
 
   const user = (await User.findOne({ userId: userId }).select("").lean().exec()) as IUser;
 
-  if (!user.userId) throw new NotFoundError(` User with id : ${userId} not found`);
+  if (!user) throw new NotFoundError(` User with id : ${userId} not found`);
 
   return user;
 };
