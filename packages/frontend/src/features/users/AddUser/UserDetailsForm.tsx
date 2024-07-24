@@ -121,8 +121,11 @@ function UserDetailsForm({ handleBlur, handleChange, values, errors }: Props) {
           id="team"
           onChange={handleChange}
           onBlur={handleBlur}
+          defaultValue="select"
         >
-          <option disabled>Select user Department</option>
+          <option disabled value="select">
+            Select user Department
+          </option>
           <option>Developer</option>
           <option>UI/UX</option>
           <option>Data Analysit</option>

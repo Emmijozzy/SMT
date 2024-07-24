@@ -21,7 +21,7 @@ export default class UserAdminController implements IController {
   private initializeRouter(): void {
     this.router.post(
       "/create",
-      // authMiddleware(ENUM_USER_ROLES.ADMIN),
+      authMiddleware(ENUM_USER_ROLES.ADMIN),
       validationMiddleware(userAdminSchema),
       this.createUser
     );

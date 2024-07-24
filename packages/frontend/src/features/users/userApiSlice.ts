@@ -46,10 +46,22 @@ export const userApiSlice = apiSlice.injectEndpoints({
     }),
 
     getUsers: build.query({
-      query: () => ({
-        url: "/user/get_all",
-        validateStatus: (response, result) => response.status === 200 || !result.isError,
-      }),
+      query: (query) => {
+        const filteredQuery = query as Record<string, string>;
+
+        if (typeof filteredQuery == "object") {
+          const stringifyQuery = JSON.stringify(filteredQuery);
+          // console.log(stringifyQuery);
+          return {
+            url: `/user/get_all?filters=${stringifyQuery}`,
+            validateStatus: (response, result) => response.status === 200 || !result.isError,
+          };
+        }
+        return {
+          url: "/user/get_all",
+          validateStatus: (response, result) => response.status === 200 || !result.isError,
+        };
+      },
       transformResponse: (responseData: ResData) => {
         let users = responseData?.data;
 

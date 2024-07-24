@@ -3,6 +3,7 @@ import { useState, useEffect, ChangeEvent } from "react";
 import { useDispatch } from "react-redux";
 import { useGetUsersQuery } from "../userApiSlice";
 import { usersReceived } from "../userSlice";
+import useFilteredQuery from "./useFilteredQuery";
 
 const useUserTable = () => {
   const [rowPerPage, setRowPerPage] = useState(5);
@@ -20,20 +21,25 @@ const useUserTable = () => {
     isSuccess,
     isError,
     error,
-  } = useGetUsersQuery("usersList", {
+  } = useGetUsersQuery("", {
     pollingInterval: 60000,
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
 
+  const { handleSubmit, handleBlur, handleChange, errors, values, isSubmitting, searchedUserId } = useFilteredQuery();
+
   useEffect(() => {
-    if (ResUsers) {
+    if (searchedUserId) {
+      setUserIds(searchedUserId);
+    } else if (ResUsers) {
       dispatch(usersReceived(ResUsers?.entities));
       setUserIds(ResUsers?.ids);
     }
-  }, [ResUsers]);
+  }, [ResUsers, searchedUserId]);
 
   useEffect(() => {
+    // console.log("paginate");
     if (userIds) {
       let totalPage = Math.ceil((userIds.length + 1) / rowPerPage);
       totalPage = Math.max(totalPage, 1); // Ensure totalPage is at least 1
@@ -122,6 +128,13 @@ const useUserTable = () => {
     isSuccess,
     isError,
     error,
+    handleSubmit, // filteredquery
+    handleBlur,
+    handleChange,
+    errors,
+    values,
+    isSubmitting,
+    searchedUserId,
   };
 };
 export default useUserTable;

@@ -1,7 +1,7 @@
 import SaveAsIcon from "@mui/icons-material/SaveAs";
 import ArrowBackSharpIcon from "@mui/icons-material/ArrowBackSharp";
 import { useEffect } from "react";
-import ProfileInput from "./ProfileInput";
+import InputField2 from "../../../shared/components/InputField2";
 import useUpdateProfileInfo from "./useUpdateProfileInfo";
 
 type Props = {
@@ -44,21 +44,21 @@ function ProfileEditForm({ handleShowEdit }: Props) {
       </div>
 
       <div className="flex flex-col flex-nowrap text-base-content">
-        <ProfileInput
+        <InputField2
           label="FirstName"
           placeholder="Enter your firstname"
           value={values.firstName || ""}
           name="firstName"
           disabled
         />
-        <ProfileInput
+        <InputField2
           label="LastName"
           placeholder="Enter your lastname"
           value={values.LastName || ""}
           name="lastName"
           disabled
         />
-        <ProfileInput
+        <InputField2
           label="Email"
           placeholder="Enter your email"
           value={values.email || ""}
@@ -67,8 +67,8 @@ function ProfileEditForm({ handleShowEdit }: Props) {
           name="email"
           type="email"
         />
-        <ProfileInput label="Dept." placeholder="Enter your department" value="Web Development" name="team" disabled />
-        <ProfileInput
+        <InputField2 label="Dept." placeholder="Enter your department" value="Web Development" name="team" disabled />
+        <InputField2
           label="Phone"
           placeholder="Enter your phone"
           value={values.phone || ""}
@@ -77,7 +77,7 @@ function ProfileEditForm({ handleShowEdit }: Props) {
           name="phone"
           type="tel"
         />
-        <ProfileInput
+        <InputField2
           label="Location"
           placeholder="Enter your location"
           value={values.location || ""}
@@ -85,7 +85,7 @@ function ProfileEditForm({ handleShowEdit }: Props) {
           error={errors.location}
           name="location"
         />
-        <ProfileInput
+        <InputField2
           label="Whatsapps Link"
           placeholder="Enter your Whatsapp link"
           value={values.whatsappLink || ""}
@@ -95,7 +95,7 @@ function ProfileEditForm({ handleShowEdit }: Props) {
           type="url"
           className="lg:ml-4"
         />
-        <ProfileInput
+        <InputField2
           label="Facebook Link"
           placeholder="Enter your Facebook link"
           value={values.facebookLink || ""}
@@ -105,7 +105,7 @@ function ProfileEditForm({ handleShowEdit }: Props) {
           type="url"
           className="lg:ml-7"
         />
-        <ProfileInput
+        <InputField2
           label="LinkedIn Link"
           placeholder="Enter your LinkedIn link"
           value={values.linkedInLink || ""}

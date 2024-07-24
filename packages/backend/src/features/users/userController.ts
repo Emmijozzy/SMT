@@ -32,7 +32,7 @@ export default class UserController implements IController {
       authMiddleware(ENUM_USER_ROLES.ADMIN, ENUM_USER_ROLES.MANAGER, ENUM_USER_ROLES.TEAM_MEMBER),
       this.getUserProfile
     );
-    this.router.get("/get_all", this.getAll);
+    this.router.get("/get_all", authMiddleware(ENUM_USER_ROLES.ADMIN), this.getAll);
     this.router.get("/get_by_userId/:userId", this.getUserById);
     this.router.patch(
       "/update_profile",

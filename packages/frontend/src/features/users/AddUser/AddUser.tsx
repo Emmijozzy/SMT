@@ -2,6 +2,7 @@
 // import { Link } from "react-router-dom";
 import ArrowBackSharpIcon from "@mui/icons-material/ArrowBackSharp";
 // import Button2 from "../../../shared/components/Button2";
+import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import UserDetailsForm from "./UserDetailsForm";
 import UserPermissionForm from "./UserPermissionForm";
@@ -32,7 +33,9 @@ function AddUser() {
             // onClick={() => handleShowEdit()}
             className="cursor-pointe ml-auto hover:text-base-content/40"
           >
-            <ArrowBackSharpIcon className="w-8 h-8" />
+            <Link to="/dash/users">
+              <ArrowBackSharpIcon className="w-8 h-8" />
+            </Link>
           </button>
         </div>
       </div>

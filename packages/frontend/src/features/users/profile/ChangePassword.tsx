@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import SaveAsIcon from "@mui/icons-material/SaveAs";
 import ArrowBackSharpIcon from "@mui/icons-material/ArrowBackSharp";
-import ProfileInput from "./ProfileInput";
+import InputField2 from "../../../shared/components/InputField2";
 import useChangePassword from "./useChangePassword";
 
 type Props = {
@@ -47,7 +47,7 @@ function ChangePassword({ onchangeePassword }: Props) {
       </div>
       <div className="flex flex-col flex-nowrap text-base-content">
         <div className="flex flex-col flex-nowrap text-base-content">
-          <ProfileInput
+          <InputField2
             name="oldPassword"
             className="ml-12"
             label="Old Password"
@@ -57,7 +57,7 @@ function ChangePassword({ onchangeePassword }: Props) {
             error={errors.oldPassword}
             onChange={handleChange}
           />
-          <ProfileInput
+          <InputField2
             name="newPassword"
             className="ml-10"
             label="New Password"
@@ -67,7 +67,7 @@ function ChangePassword({ onchangeePassword }: Props) {
             error={errors.newPassword}
             onChange={handleChange}
           />
-          <ProfileInput
+          <InputField2
             name="confirmPassword"
             className="ml-2"
             label="Confirm Password"

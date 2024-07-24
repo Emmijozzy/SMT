@@ -9,17 +9,30 @@ type Props = {
   disabled?: boolean;
   type?: string;
   className?: string;
+  bodyClassName?: string;
   name: string;
 };
 
-function ProfileInput({ label, placeholder, value, onChange, error, disabled, type, className, name }: Props) {
+function InputField2({
+  label,
+  placeholder,
+  value,
+  onChange,
+  error,
+  disabled,
+  type,
+  className,
+  name,
+  bodyClassName,
+}: Props) {
   return (
-    <div className="grid w-full h-16 items-center border-b-2 border-base-content">
-      <label htmlFor="firstname" className="relative flex items-center gap-4">
+    <div className={`grid w-full h-16 items-center border-b-2 border-base-content ${bodyClassName || ""}`}>
+      <label htmlFor={name} className="relative flex items-center gap-4">
         <p className="w-fit md:w-fit md:min-w-24 body-1 mt-3 whitespace-nowrap font-bold capitalize">{label}: </p>
         {error && <span className="absolute top-0 right-0 mt-2 label-text-alt text-error">{error}</span>}
         <input
           name={name}
+          id={name}
           type={type}
           placeholder={placeholder}
           className={`input mt-3 px-2 body-1 outline-none rounded-b-none rounded-t-md border-none border-2 input-primary w-full  border-t-none ${className || ""}`}
@@ -42,13 +55,14 @@ function ProfileInput({ label, placeholder, value, onChange, error, disabled, ty
     </div>
   );
 }
-export default ProfileInput;
+export default InputField2;
 
-ProfileInput.defaultProps = {
+InputField2.defaultProps = {
   placeholder: "",
   onChange: () => {},
   error: "",
   disabled: false,
   type: "text",
   className: "",
+  bodyClassName: "",
 };
