@@ -24,7 +24,7 @@ function NavItem({ title, path, Icon, className, onClick }: Props) {
   // const selectedColor = ((color: string) => `bg-${color}-gradient`)("red");
   const isNavActive = (): boolean =>
     title.toLowerCase() === "dashboard"
-      ? path == location.pathname
+      ? path === location.pathname
       : location.pathname.toLowerCase().includes(title.toLowerCase());
 
   return (
