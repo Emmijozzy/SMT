@@ -6,11 +6,11 @@ import ResData from "../../../shared/interface/resdata";
 import log from "../../../shared/utils/log";
 import { addAlert } from "../../alerts/AlertSlice";
 import { setLoader } from "../../loading/loaderSlice";
-import { addUserSchema } from "./addUserValidation";
-import AddUser from "./AddUserInterface";
-import { useCreateUserMutation } from "./AddUserApiSlice";
+import { userSchema } from "../userValidation";
+import User from "../userInterface";
+import { useCreateUserMutation } from "../userApiSlice";
 
-const initialValues: AddUser = {
+const initialValues: User = {
   firstName: "",
   lastName: "",
   email: "",
@@ -34,7 +34,7 @@ const initialValues: AddUser = {
   confirmPassword: "",
 };
 
-function UseAddUser() {
+function useAddUser() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [createUser, { isSuccess, isError }] = useCreateUserMutation();
@@ -44,8 +44,8 @@ function UseAddUser() {
 
   const formik = useFormik({
     initialValues,
-    validationSchema: addUserSchema,
-    onSubmit: async (values: AddUser) => {
+    validationSchema: userSchema,
+    onSubmit: async (values: User) => {
       setIsSubmitting(true);
       dispatch(setLoader(true));
       try {
@@ -81,4 +81,4 @@ function UseAddUser() {
     isSuccess,
   };
 }
-export default UseAddUser;
+export default useAddUser;

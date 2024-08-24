@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import profilePices from "../../../assets/images/joseph _pics.png";
+import profilePices from "../../assets/images/joseph _pics.png";
 
 type Props = {};
 function ProfilePics(props: Props) {

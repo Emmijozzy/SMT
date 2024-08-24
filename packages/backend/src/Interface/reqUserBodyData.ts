@@ -1,4 +1,5 @@
-interface UserAdmin {
+interface ReqUserBodyData {
+  userId: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -22,4 +23,4 @@ interface UserAdmin {
   confirmPassword: string;
 }
 
-export default UserAdmin;
+export default ReqUserBodyData;

@@ -4,16 +4,17 @@ export interface ITask extends Document {
   taskId: string; // Unique task identifier (automatically generated)
   title: string;
   description?: string;
-  assignedTo: mongoose.Types.ObjectId[];
+  assignedTo: string[];
   responsibleTeam: string;
-  status: "Not Started" | "In Progress" | "Completed" | "closed";
+  status: "not started" | "in progress" | "completed" | "closed";
   managerTask: boolean;
   managerId: string;
   priority: "low" | "medium" | "high";
   dueDate: Date;
   createdAt: Date;
   updatedAt: Date;
-  subTasks: mongoose.Types.ObjectId[];
+  del_flg: boolean;
+  subTasks: string[];
 }
 
 // Define a type guard function
@@ -36,7 +37,7 @@ const taskSchema = new Schema<ITask>({
   },
   assignedTo: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "User",
       path: "userId"
     }
@@ -62,8 +63,8 @@ const taskSchema = new Schema<ITask>({
   },
   status: {
     type: String,
-    enum: ["Not Started", "In Progress", "Completed", "closed"],
-    default: "Not Started"
+    enum: ["not started", "in progress", "completed", "closed"],
+    default: "not started"
   },
   priority: {
     type: String,
@@ -80,6 +81,10 @@ const taskSchema = new Schema<ITask>({
   updatedAt: {
     type: Date,
     default: Date.now
+  },
+  del_flg: {
+    type: Boolean,
+    default: false
   },
   subTasks: [
     {

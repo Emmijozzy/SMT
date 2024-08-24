@@ -63,7 +63,7 @@ export default {
         "font-100": "hsl(var(--font-100) / <alpha-value>)",
       },
       transitionDuration: {
-        DEFAULT: "200ms",
+        DEFAULT: "300ms",
       },
       transitionTimingFunction: {
         DEFAULT: "linear",

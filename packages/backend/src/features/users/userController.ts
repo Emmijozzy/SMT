@@ -4,8 +4,8 @@ import asyncHandler from "../../utils/asyncHandler";
 // import { IUser, User } from "../auth/authModel";
 import { AuthFailureError, BadRequestError, InternalError } from "../../utils/ApiError";
 import successResponse from "../../utils/successResponse";
-import userUtils from "./userUtils";
 import { ExtendedRequest } from "./userInterface";
+import userService from "../../service/userService";
 // import validationMiddleware from "../../middleware/validationMiddleware";
 // import userValidation from "./userValidation";
 import UserService from "./userService";
@@ -90,7 +90,7 @@ export default class UserController implements IController {
 
     const result = await UserService.getAll(filters, getPaginationOptions(pagination as Record<string, string>));
 
-    if (!result || !result.length) throw new InternalError("Fatal Error fetching users");
+    if (!result || typeof result != "object") throw new InternalError("Fatal Error fetching users");
 
     successResponse(res, {
       data: result,
@@ -129,7 +129,7 @@ export default class UserController implements IController {
     }
 
     // Sanitize data in a single step
-    const sanitizedData = userUtils.sanitizeData(req.body);
+    const sanitizedData = userService.sanitizeData(req.body);
 
     // Perform authorization check
     const isAuthorized = await UserService.canEditUser(requestingUserId, requestingUserRole, sanitizedData);
@@ -164,7 +164,7 @@ export default class UserController implements IController {
     const { deleteUserId }: { deleteUserId: string } = req.body;
     if (!deleteUserId) throw new BadRequestError("User ID required");
 
-    const deleteUserData = await userUtils.deleteByuserId(deleteUserId);
+    const deleteUserData = await userService.deleteByuserId(deleteUserId);
 
     successResponse(res, {
       data: {

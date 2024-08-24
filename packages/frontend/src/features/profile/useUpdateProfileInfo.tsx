@@ -2,16 +2,16 @@
 import { useFormik } from "formik";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import log from "../../../shared/utils/log";
+import log from "../../shared/utils/log";
 // import { loginSchema } from "../../auth/authValidation";
-import { useUpdateUserProfileMutation } from "../userApiSlice";
+import { useUpdateUserProfileMutation } from "../users/userApiSlice";
 import { userProfileUpdateSchema } from "./profileValidation";
-import { RootState } from "../../../app/store";
-import { IUser } from "../userInterface";
-import { setLoader } from "../../loading/loaderSlice";
-import { saveProfile } from "../userProfileSlice";
-import { addAlert } from "../../alerts/AlertSlice";
-import ResData from "../../../shared/interface/resdata";
+import { RootState } from "../../app/store";
+import { IUser } from "../users/userInterface";
+import { setLoader } from "../loading/loaderSlice";
+import { saveProfile } from "../users/userProfileSlice";
+import { addAlert } from "../alerts/AlertSlice";
+import ResData from "../../shared/interface/resdata";
 
 const defaultValue = {
   firstName: "",

@@ -1,5 +1,12 @@
-// type Props = {}
+import { Outlet } from "react-router-dom";
+import Section from "../../shared/components/Section";
+
+// type Props = {};
 function Tasks() {
-  return <div>Tasks</div>;
+  return (
+    <Section>
+      <Outlet />
+    </Section>
+  );
 }
 export default Tasks;

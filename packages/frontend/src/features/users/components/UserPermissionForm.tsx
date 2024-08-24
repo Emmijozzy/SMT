@@ -1,11 +1,11 @@
 import { ChangeEvent, FocusEvent } from "react";
 import ToggleSwitch from "../../../shared/components/ToggleSwitch";
-import AddUser from "./AddUserInterface";
+import User from "../userInterface";
 
 type Props = {
   handleBlur: (e: FocusEvent<unknown, Element>) => void;
   handleChange: (e: ChangeEvent<unknown>) => void;
-  values: AddUser;
+  values: User;
 };
 function UserPermissionForm({ handleBlur, handleChange, values }: Props) {
   return (

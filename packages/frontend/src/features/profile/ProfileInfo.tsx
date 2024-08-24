@@ -5,8 +5,8 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import EditIcon from "@mui/icons-material/Edit";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../app/store";
-import { IUser } from "../userInterface";
+import { RootState } from "../../app/store";
+import { IUser } from "../users/userInterface";
 
 type Props = {
   handleShowEdit: () => void;
@@ -23,7 +23,7 @@ function ProfileInfo({ handleShowEdit }: Props) {
   } = useSelector((state: RootState) => state.userProfile.userProfile) as IUser;
 
   return (
-    <div className="w-full p-4 bg-base-100 rounded-lg bg-base-100 transition-all">
+    <div className="w-full p-4 bg-base-100 rounded-lg transition-all">
       <div className="w-full flex items-center justify-between">
         <h6 className="h6 capitalize font-bold">Profile Information</h6>
         <button type="button" aria-label="Edit User" className="cursor-pointer" onClick={() => handleShowEdit()}>

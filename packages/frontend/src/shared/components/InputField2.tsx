@@ -27,15 +27,15 @@ function InputField2({
 }: Props) {
   return (
     <div className={`grid w-full h-16 items-center border-b-2 border-base-content ${bodyClassName || ""}`}>
-      <label htmlFor={name} className="relative flex items-center gap-4">
-        <p className="w-fit md:w-fit md:min-w-24 body-1 mt-3 whitespace-nowrap font-bold capitalize">{label}: </p>
+      <label htmlFor={name} className="relative flex items-center gap-2">
+        <p className="w-fit md:w-fit md:min-w-24 text-lg mt-3 whitespace-nowrap font-bold capitalize">{label}: </p>
         {error && <span className="absolute top-0 right-0 mt-2 label-text-alt text-error">{error}</span>}
         <input
           name={name}
           id={name}
           type={type}
           placeholder={placeholder}
-          className={`input mt-3 px-2 body-1 outline-none rounded-b-none rounded-t-md border-none border-2 input-primary w-full  border-t-none ${className || ""}`}
+          className={`input mt-3 px-2 text-lg outline-none rounded-b-none rounded-t-md border-none border-2 input-primary w-full  border-t-none ${className || ""}`}
           value={value}
           onChange={onChange}
           disabled={disabled}

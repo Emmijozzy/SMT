@@ -6,7 +6,7 @@ interface ISubtask extends Document {
   taskId: string;
   title: string;
   description?: string;
-  status: "In Progress" | "Completed" | "Deferred" | "Cancelled";
+  status?: "not started" | "in progress" | "completed" | "closed";
   createdBy: mongoose.Types.ObjectId;
   lastModifiedBy: mongoose.Types.ObjectId;
   assignedTo: mongoose.Types.ObjectId;
@@ -72,6 +72,7 @@ const subtaskSchema = new Schema<ISubtask>({
   }
 });
 
+// checking if the subtask has a task Id
 subtaskSchema.pre<ISubtask>("save", async function (next) {
   if (!this.taskId) {
     throw new Error("Invalid Task id for sub task");
@@ -91,7 +92,7 @@ subtaskSchema.pre<ISubtask>("save", async function (next) {
     subtaskCounter = parseInt(existingSubtask.subTaskId.slice(-2)) + 1; // Get last two digits
   }
 
-  this.subTaskId = `${taskIdBase}${subtaskCounter.toString().padStart(2, "0")}`;
+  this.subTaskId = `${taskIdBase}${subtaskCounter.toString().padStart(3, "0")}`;
   next();
 });
 

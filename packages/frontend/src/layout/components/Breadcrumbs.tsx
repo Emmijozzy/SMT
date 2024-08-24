@@ -16,7 +16,7 @@ function Breadcrumbs() {
   useEffect(() => {
     let { pathname } = location;
     pathname = pathname.endsWith("/") ? pathname.replace(/.$/, "") : pathname;
-    const pathSegments = pathname.split("/");
+    const pathSegments = pathname.split("/").slice(0, 3);
 
     let concat = "";
     const newBreadcrubs = pathSegments.map((path) => {

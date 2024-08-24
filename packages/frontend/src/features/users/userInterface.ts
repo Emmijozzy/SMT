@@ -1,3 +1,28 @@
+interface User {
+  userId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNo: string;
+  role: "team_member" | "manager" | "admin";
+  team: string;
+  location: string;
+  whatsappLink: string;
+  facebookLink: string;
+  linkedInLink: string;
+  canCreateTasks: boolean;
+  canEditTasks: boolean;
+  canDeleteTasks: boolean;
+  canViewReports: boolean;
+  canAddSubtasks: boolean;
+  canReassignTasks: boolean;
+  canEditUsers: boolean;
+  canDeleteUsers: boolean;
+  canAssignRole: boolean;
+  password: string;
+  confirmPassword: string;
+}
+
 export interface IUser {
   id: string;
   userId: string;
@@ -8,6 +33,7 @@ export interface IUser {
   password: string;
   role: "team_member" | "manager" | "admin";
   phoneNo: number;
+  phone_no: number;
   teamId: string;
   team: string;
   location: string;
@@ -43,3 +69,5 @@ export interface ReqError {
     };
   };
 }
+
+export default User;

@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { createEntityAdapter } from "@reduxjs/toolkit";
 import { apiSlice } from "../../app/api/apislice";
-import { IUser, ReqError } from "./userInterface";
+import User, { IUser, ReqError } from "./userInterface";
 import { saveProfile } from "./userProfileSlice";
 import log from "../../shared/utils/log";
 import { changeStatus } from "../../shared/Slice/statusSlice";
@@ -79,6 +79,14 @@ export const userApiSlice = apiSlice.injectEndpoints({
           : [{ type: "User" as const, id: "LIST" as const }],
     }),
 
+    createUser: build.mutation({
+      query: (userData: User) => ({
+        url: "/user_admin/create",
+        method: "POST",
+        body: { ...userData },
+      }),
+    }),
+
     updateUserProfile: build.mutation({
       query: (credentials) => ({
         url: "/user/update_profile",
@@ -87,6 +95,34 @@ export const userApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: [{ type: "User" as const, id: "LIST" as const }],
     }),
+
+    updateUser: build.mutation({
+      query: (credentials) => ({
+        url: "/user_admin/update",
+        method: "PATCH",
+        body: { ...credentials },
+      }),
+      invalidatesTags: [{ type: "User" as const, id: "LIST" as const }],
+    }),
+
+    deleteUser: build.mutation({
+      query: (credentials) => ({
+        url: "/user_admin/delete",
+        method: "PATCH",
+        body: { ...credentials },
+      }),
+      invalidatesTags: [{ type: "User" as const, id: "LIST" as const }],
+    }),
+
+    restoreUser: build.mutation({
+      query: (credentials) => ({
+        url: "/user_admin/restore",
+        method: "PATCH",
+        body: { ...credentials },
+      }),
+      invalidatesTags: [{ type: "User" as const, id: "LIST" as const }],
+    }),
+
     changePassword: build.mutation({
       query: (credentials) => ({
         url: "/user/change_password",
@@ -97,5 +133,13 @@ export const userApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetUsersQuery, useGetUserProfileQuery, useUpdateUserProfileMutation, useChangePasswordMutation } =
-  userApiSlice;
+export const {
+  useCreateUserMutation,
+  useUpdateUserMutation,
+  useDeleteUserMutation,
+  useRestoreUserMutation,
+  useGetUsersQuery,
+  useGetUserProfileQuery,
+  useUpdateUserProfileMutation,
+  useChangePasswordMutation,
+} = userApiSlice;

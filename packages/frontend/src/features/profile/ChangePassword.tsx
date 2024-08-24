@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import SaveAsIcon from "@mui/icons-material/SaveAs";
 import ArrowBackSharpIcon from "@mui/icons-material/ArrowBackSharp";
-import InputField2 from "../../../shared/components/InputField2";
+import InputField2 from "../../shared/components/InputField2";
 import useChangePassword from "./useChangePassword";
 
 type Props = {

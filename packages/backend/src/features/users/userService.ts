@@ -4,12 +4,12 @@
 import { BadRequestError, InternalError, NotFoundError } from "../../utils/ApiError";
 import { IUser, User } from "../auth/authModel";
 import { IPaginationOptions } from "../../utils/getPaginationOptions";
-import userUtils from "./userUtils";
 import passwordUtils from "../../utils/passwordUtils";
-import userValidation from "./userValidation";
+// import userValidation from "./userValidation";
 import { IProfileToUpdate } from "./userInterface";
+import userService from "../../service/userService";
 
-const { userProfileUpdateSchema } = userValidation;
+// const { userProfileUpdateSchema } = userValidation;
 
 //Todo: validation of the various data each role should provided before update is allowed
 
@@ -25,7 +25,7 @@ export default class UserService {
   }
 
   static async getAll(filter: Record<string, string | number | RegExp>, paginationObption: IPaginationOptions) {
-    const { page, limit, sortField, skip, sortOrder } = paginationObption;
+    const { limit, sortField, skip, sortOrder } = paginationObption;
 
     const sort = { [sortField]: sortOrder };
 
@@ -47,7 +47,7 @@ export default class UserService {
   }
 
   static async getUserById(userId: string) {
-    const user = (await userUtils.findByUserId(userId)) as Partial<IUser>;
+    const user = (await userService.findByUserId(userId)) as Partial<IUser>;
 
     delete user.password;
 
@@ -57,7 +57,7 @@ export default class UserService {
   static async updateProfile(userId: string, profileToUpdate: IProfileToUpdate) {
     const canUpdate = ["email", "phoneNo", "location", "whatsappLink", "facebookLink", "linkedInLink"];
 
-    const user = (await userUtils.findByUserId(userId)) as IUser;
+    const user = (await userService.findByUserId(userId)) as IUser;
     if (!user.userId) throw new NotFoundError(` User with id : ${userId} not found`);
 
     if (!Object.keys(profileToUpdate).every((data) => canUpdate.includes(data)))
@@ -76,7 +76,7 @@ export default class UserService {
       }
     };
 
-    const updatedProfile = userUtils.updateUserById(userId, payload);
+    const updatedProfile = userService.updateUserById(userId, payload);
 
     if (!updatedProfile) throw new InternalError("Error updating profile");
     return updatedProfile;
@@ -85,7 +85,7 @@ export default class UserService {
   static async changePassword(userId: string, { oldPassword, newPassword }: Record<string, string>) {
     if (oldPassword == newPassword) throw new BadRequestError("Old and new password can not be the same");
 
-    const user = (await userUtils.findByUserId(userId)) as IUser;
+    const user = (await userService.findByUserId(userId)) as IUser;
 
     const match = await passwordUtils.compare(oldPassword, user);
 
@@ -93,7 +93,7 @@ export default class UserService {
 
     const hashedPassword = await passwordUtils.hash(newPassword);
 
-    const updatedUser = await userUtils.updateUserById(userId, { password: hashedPassword });
+    const updatedUser = await userService.updateUserById(userId, { password: hashedPassword });
 
     if (!updatedUser) throw new InternalError("Error in changing password");
 

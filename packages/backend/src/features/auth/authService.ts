@@ -1,7 +1,7 @@
 import { User, IUser } from "./authModel";
 import passwordUtils from "../../utils/passwordUtils";
 import { InternalError, NotFoundError, BadRequestError, AuthFailureError } from "../../utils/ApiError";
-import userUtils from "../users/userUtils";
+import userService from "../../service/userService";
 import tokenUtils from "../../utils/tokenUtils";
 import { Token } from "./authInterface";
 
@@ -13,7 +13,7 @@ export default class UserService {
     password: string
   ): Promise<IUser | Error> {
     try {
-      const foundUser: IUser | null = await userUtils.findByEmail(email);
+      const foundUser: IUser | null = await userService.findByEmail(email);
       if (foundUser) throw new BadRequestError("User already registered");
 
       const hashedPassword = await passwordUtils.hash(password);
@@ -31,7 +31,7 @@ export default class UserService {
   }
 
   public static async login(userId: string, password: string): Promise<Token> {
-    const foundUser: IUser | null = await userUtils.findByUserId(userId);
+    const foundUser: IUser | null = await userService.findByUserId(userId);
     if (!foundUser) {
       throw new NotFoundError("User not found");
     } else if (foundUser.del_flg) {
@@ -63,7 +63,7 @@ export default class UserService {
     const userId = await tokenUtils.verifyRefreshToken(refreshToken);
     if (typeof userId !== "string") throw new InternalError("Invalid token");
 
-    const foundUser: IUser | null = await userUtils.findByUserId(userId);
+    const foundUser: IUser | null = await userService.findByUserId(userId);
     if (!foundUser) {
       throw new NotFoundError("User not found");
     }

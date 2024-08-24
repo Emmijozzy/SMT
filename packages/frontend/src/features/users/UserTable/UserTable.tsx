@@ -51,7 +51,7 @@ function UserTable() {
   return (
     <>
       <div className="container">
-        <div className="w-full py-2">
+        <div className="w-full py-2 bg-base-200 p-2 rounded">
           <div className="flex flex-col w-full transition-all">
             <div className="flex justify-between items-center">
               <button
@@ -136,12 +136,12 @@ function UserTable() {
                   name="email"
                 />
                 <div className=" w-full mt-4 flex flex-wrap gap-2 justify-between">
-                  <div className="w-full md:w-[45%] flex body-1 border-b-2 border-base-content items-center">
-                    <span>Role: </span>
+                  <div className="w-full md:w-[45%] flex text-lg border-b-2 border-base-content items-center">
+                    <span className="font-bold">Role: </span>
                     <select
                       name="role"
                       id="role"
-                      className="relative select select-secondary body-1 w-full max-w-xs capitalize border-0 rounded-none focus:border-0 focus:outline-none"
+                      className="relative select select-secondary text-lg w-full max-w-xs capitalize border-0 rounded-none focus:border-0 focus:outline-none mx-2 rounded-t"
                       onChange={handleChange}
                       // onBlur={handleBlur}
                       defaultValue=""
@@ -152,10 +152,10 @@ function UserTable() {
                       <option value="admin">Admin</option>
                     </select>
                   </div>
-                  <div className="w-full md:w-[45%] flex body-1 border-b-2 border-base-content items-center">
-                    <span>Dept.: </span>
+                  <div className="w-full md:w-[45%] flex text-lg border-b-2 border-base-content items-center">
+                    <span className="font-bold">Dept.: </span>
                     <select
-                      className="relative select select-secondary body-1 w-full max-w-xs capitalize border-0 rounded-none focus:border-0 focus:outline-none"
+                      className="relative select select-secondary text-lg w-full max-w-xs capitalize border-0 rounded-none focus:border-0 focus:outline-none"
                       name="team"
                       id="team"
                       onChange={handleChange}

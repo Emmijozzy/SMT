@@ -110,6 +110,7 @@ const userSchema = new Schema<IUser>(
         can_create_tasks: false, // manager && Admin
         can_edit_tasks: true, //team_member
         can_view_tasks: true, //team member
+        can_view_reports: false,
         can_delete_tasks: false, //Admin & manager
         can_add_subtasks: false, //Admin & manger
         can_reassign_tasks: false, //Admin & manager

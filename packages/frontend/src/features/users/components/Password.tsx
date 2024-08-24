@@ -1,13 +1,13 @@
 import { FormikErrors } from "formik";
 import { ChangeEvent, FocusEvent } from "react";
 import InputField from "../../../shared/components/InputField";
-import AddUser from "./AddUserInterface";
+import User from "../userInterface";
 
 type Props = {
   handleBlur: (e: FocusEvent<unknown, Element>) => void;
   handleChange: (e: ChangeEvent<unknown>) => void;
-  errors: FormikErrors<AddUser>;
-  values: AddUser;
+  errors: FormikErrors<User>;
+  values: User;
 };
 function Password({ handleBlur, handleChange, errors, values }: Props) {
   return (

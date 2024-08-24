@@ -11,9 +11,12 @@ import Prefetch from "./features/auth/Prefetch";
 import RequireAuth from "./features/auth/RequireAuth";
 import RequireAdminRoute from "./features/auth/RequireAdminRoute";
 import RequireData from "./features/auth/RequireData";
-import Profile from "./features/users/profile/Profile";
+import Profile from "./features/profile/Profile";
 import UserTable from "./features/users/UserTable/UserTable";
 import AddUser from "./features/users/AddUser/AddUser";
+import ViewUser from "./features/users/viewUser/ViewUser";
+import EditUser from "./features/users/EditUser/EditUser";
+import TasksTable from "./features/tasks/TasksTable/TaskTable";
 
 function App() {
   return (
@@ -24,18 +27,24 @@ function App() {
       <Route element={<Prefetch />}>
         <Route element={<RequireData />}>
           <Route element={<RequireAuth />}>
+            {/* Admin Start */}
             <Route element={<RequireAdminRoute />}>
               <Route path="/dash" element={<Layout />}>
                 <Route index element={<Dashboard />} />
-                <Route path="tasks" element={<Tasks />} />
-                <Route path="teams" element={<Teams />} />
                 <Route path="users" element={<Users />}>
                   <Route index element={<UserTable />} />
                   <Route path="add-new-user" element={<AddUser />} />
+                  <Route path=":userId/view" element={<ViewUser />} />
+                  <Route path=":userId/edit" element={<EditUser />} />
                 </Route>
+                <Route path="tasks" element={<Tasks />}>
+                  <Route index element={<TasksTable />} />
+                </Route>
+                <Route path="teams" element={<Teams />} />
                 <Route path="profile" element={<Profile />} />
               </Route>
             </Route>
+            {/* Admin End */}
           </Route>
         </Route>
       </Route>

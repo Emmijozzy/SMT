@@ -166,27 +166,27 @@ import YupPassword from "yup-password";
 
 YupPassword(Yup);
 
-  const firstNameSchema = Yup.string()
-    .trim()
-    .required("First Name is required")
-    .min(2, "First Name must be at least 2 characters long")
-    .max(30, "First Name must be less than or equal to 30 characters long")
-    .matches(/^[a-zA-Z]+$/, "First Name can only contain letters");
+const firstNameSchema = Yup.string()
+  .trim()
+  .required("First Name is required")
+  .min(2, "First Name must be at least 2 characters long")
+  .max(30, "First Name must be less than or equal to 30 characters long")
+  .matches(/^[a-zA-Z]+$/, "First Name can only contain letters");
 
-  const lastNameSchema = Yup.string()
-    .trim()
-    .required("Last Name is required")
-    .min(2, "Last Name must be at least 2 characters long")
-    .max(30, "Last Name must be less than or equal to 30 characters long")
-    .matches(/^[a-zA-Z]+$/, "Last Name can only contain letters");
+const lastNameSchema = Yup.string()
+  .trim()
+  .required("Last Name is required")
+  .min(2, "Last Name must be at least 2 characters long")
+  .max(30, "Last Name must be less than or equal to 30 characters long")
+  .matches(/^[a-zA-Z]+$/, "Last Name can only contain letters");
 
-  const emailSchema = Yup.string().trim().required("Email is required").email("Please enter a valid email address");
+const emailSchema = Yup.string().trim().required("Email is required").email("Please enter a valid email address");
 
-  const passwordSchema = Yup.string().required("Password is required").password();
+const passwordSchema = Yup.string().required("Password is required").password();
 
-  const confirmPasswordSchema = Yup.string()
-    .required("Confirm Password is required")
-    .oneOf([Yup.ref("password")], "Confirm Password does not match your password");
+const confirmPasswordSchema = Yup.string()
+  .required("Confirm Password is required")
+  .oneOf([Yup.ref("password")], "Confirm Password does not match your password");
 
 const registrationSchema = Yup.object({
   firstName: firstNameSchema,

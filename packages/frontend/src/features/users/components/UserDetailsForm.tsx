@@ -1,15 +1,16 @@
 import { FormikErrors } from "formik";
 import { ChangeEvent, FocusEvent } from "react";
 import InputField from "../../../shared/components/InputField";
-import AddUser from "./AddUserInterface";
+import User from "../userInterface";
 
 type Props = {
   handleBlur: (e: FocusEvent<unknown, Element>) => void;
   handleChange: (e: ChangeEvent<unknown>) => void;
-  errors: FormikErrors<AddUser>;
-  values: AddUser;
+  errors: FormikErrors<User>;
+  values: User;
+  disabled?: boolean;
 };
-function UserDetailsForm({ handleBlur, handleChange, values, errors }: Props) {
+function UserDetailsForm({ handleBlur, handleChange, values, errors, disabled }: Props) {
   return (
     <div className="w-full flex flex-col">
       <div className="w-full flex flex-col md:flex-row md:gap-4">
@@ -22,6 +23,7 @@ function UserDetailsForm({ handleBlur, handleChange, values, errors }: Props) {
           value={values.firstName}
           onBlur={handleBlur}
           error={`${errors.firstName || ""}`}
+          disabled={disabled}
         />
         <InputField
           inputbodyClassName="w-full md:w-1/2"
@@ -32,6 +34,7 @@ function UserDetailsForm({ handleBlur, handleChange, values, errors }: Props) {
           value={values.lastName}
           onBlur={handleBlur}
           error={`${errors.lastName || ""}`}
+          disabled={disabled}
         />
       </div>
       <InputField
@@ -73,7 +76,7 @@ function UserDetailsForm({ handleBlur, handleChange, values, errors }: Props) {
         label="Whatsapp Link"
         type="url"
         onChange={handleChange}
-        value={values.whatsappLink}
+        value={values.whatsappLink ? values.whatsappLink : ""}
         onBlur={handleBlur}
         error={`${errors.whatsappLink || ""}`}
       />
@@ -84,7 +87,7 @@ function UserDetailsForm({ handleBlur, handleChange, values, errors }: Props) {
         label="Facebook ink"
         type="url"
         onChange={handleChange}
-        value={values.facebookLink}
+        value={values.facebookLink ? values.facebookLink : ""}
         onBlur={handleBlur}
         error={`${errors.facebookLink || ""}`}
       />
@@ -95,43 +98,51 @@ function UserDetailsForm({ handleBlur, handleChange, values, errors }: Props) {
         label="LinkedIn Link"
         type="url"
         onChange={handleChange}
-        value={values.linkedInLink}
+        value={values.linkedInLink ? values.linkedInLink : ""}
         onBlur={handleBlur}
         error={`${errors.linkedInLink || ""}`}
       />
-      <div className="mt-4 flex flex-wrap gap-2 justify-center">
-        <select
-          name="role"
-          id="role"
-          className="relative select select-secondary w-full max-w-xs capitalize"
-          onChange={handleChange}
-          onBlur={handleBlur}
-          defaultValue="select"
-        >
-          <option disabled value="select">
-            Select user role
-          </option>
-          <option value="team_member">Team Member</option>
-          <option value="manager">Manager</option>
-          <option value="admin">Admin</option>
-        </select>
-        <select
-          className="select select-secondary w-full max-w-xs"
-          name="team"
-          id="team"
-          onChange={handleChange}
-          onBlur={handleBlur}
-          defaultValue="select"
-        >
-          <option disabled value="select">
-            Select user Department
-          </option>
-          <option>Developer</option>
-          <option>UI/UX</option>
-          <option>Data Analysit</option>
-        </select>
+      <div className=" w-full mt-3 flex flex-wrap gap-2 justify-between">
+        <div className="w-full md:w-[45%] flex text-lg border-b-2 border-base-content/60 items-center">
+          <span>Role: </span>
+          <select
+            name="role"
+            id="role"
+            className="relative select select-secondary text-lg w-full max-w-xs capitalize border-0 rounded-none focus:border-0 focus:outline-none"
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={values.role}
+            defaultValue=""
+          >
+            <option value="">Select user role</option>
+            <option value="team_member">Team Member</option>
+            <option value="manager">Manager</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div className="w-full md:w-[45%] flex text-lg border-b-2 border-base-content/60 items-center">
+          <span>Dept.: </span>
+          <select
+            className="relative select select-secondary text-lg w-full max-w-xs capitalize border-0 rounded-none focus:border-0 focus:outline-none"
+            name="team"
+            id="team"
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={values.team}
+          >
+            <option value="">Select user Department</option>
+            <option value="developer">Developer</option>
+            <option value="UI/UX">UI/UX</option>
+            <option value="data analysit">Data Analysit</option>
+          </select>
+        </div>
       </div>
     </div>
   );
 }
+
+UserDetailsForm.defaultProps = {
+  disabled: false,
+};
+
 export default UserDetailsForm;

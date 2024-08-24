@@ -12,6 +12,7 @@ type Props = {
   label: string;
   id: string;
   placeholder?: string;
+  disabled?: boolean;
 };
 
 function InputField({
@@ -26,12 +27,12 @@ function InputField({
   label,
   id,
   placeholder,
+  disabled,
 }: Props) {
   return (
     <div className={`relative h-12 mt-4 ${inputbodyClassName || ""}`}>
       <span className="absolute top-0 right-0 text-[0.5rem] lg:text-[0.7rem] text-error">{error}</span>
       <input
-        required
         className={`w-full h-full border-b-2 border-base-content/50 rounded-t-lg py-1 focus:border-b-2 focus:border-primary transition-colors focus:outline-none peer bg-inherit ${inputClassName || ""}`}
         id={id}
         name={id}
@@ -40,6 +41,8 @@ function InputField({
         onChange={onChange}
         onBlur={onBlur}
         placeholder={placeholder}
+        disabled={disabled}
+        aria-required={false}
       />
       <label
         className={`absolute top-1/2 translate-y-[-50%] bg-transparent left-0 px-0 peer-focus:top-0 peer-focus:left-0 text-sm leading-4 font-bold capitalize peer-focus:text-xs peer-focus:font-bold peer-focus:text-primary peer-valid:-top-0 peer-valid:left-0 peer-valid:text-xs peer-valid:font-bold peer-valid:text-primary duration-150 ${labelClassName || ""}`}
@@ -59,6 +62,7 @@ InputField.defaultProps = {
   onChange: () => {},
   onBlur: () => {},
   placeholder: "",
+  disabled: false,
 };
 
 export default InputField;

@@ -1,12 +1,14 @@
-import { FaRegEdit } from "react-icons/fa";
+import { FaRegEdit, FaTrashRestore } from "react-icons/fa";
 import { GrView } from "react-icons/gr";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
 import { usersSelectors } from "../userSlice";
 import Avartar from "../../../shared/components/Avartar";
 import getRelativeTimeString from "../../../shared/utils/getRelativeTimeString";
 import { RootState } from "../../../app/store";
+import { setUserId, setShowModal } from "../DeleteUser/DeleteUserSlice";
 
 type Props = {
   userId: string;
@@ -14,16 +16,29 @@ type Props = {
 function TableBody({ userId }: Props) {
   const user = useSelector((state: RootState) => usersSelectors.selectById(state, userId));
   // console.log(user);
+
+  const dispatch = useDispatch();
+
+  const handleDelete = () => {
+    dispatch(setUserId({ userId, forDelete: true }));
+    dispatch(setShowModal());
+  };
+
+  const handleRestore = () => {
+    dispatch(setUserId({ userId, forDelete: false }));
+    dispatch(setShowModal());
+  };
+
   let content;
 
   if (user) {
-    const { fullName, profilePicUrl: profilePic, email, role, team, createdAt: joined } = user;
+    const { fullName, profilePicUrl: profilePic, email, role, team, createdAt: joined, del_flg: DelFlg } = user;
 
     const dateJoined: string | Date = new Date(joined);
 
     const relativeTimeString = getRelativeTimeString(dateJoined);
     content = (
-      <tr className="border-b border-base-content/80 hover:bg-base-300 capitalize">
+      <tr className={`border-b border-base-content/80 hover:bg-base-300 capitalize ${DelFlg ? "opacity-30" : ""}`}>
         <td className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
           <div className="flex px-2 py-1">
             <div className="mr-2">
@@ -60,15 +75,21 @@ function TableBody({ userId }: Props) {
         </td>
         <td aria-label="Action" className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
           <div className="flex justify-center items-center gap-5">
-            <Link to="http://bmbdsjhfg">
+            <Link to={`/dash/users/${userId}/Edit`}>
               <FaRegEdit className="h-6 w-6 text-base-content/70 hover:text-warning cursor-pointer" />
             </Link>
-            <Link to="http://bmbdsjhfg">
+            <Link to={`/dash/users/${userId}/view`}>
               <GrView className="h-6 w-6 text-base-content/70 hover:text-info cursor-pointer" />
             </Link>
-            <Link to="http://bmbdsjhfg">
-              <RiDeleteBin6Line className="h-6 w-6 text-base-content/70 hover:text-error cursor-pointer" />
-            </Link>
+            {DelFlg ? (
+              <button type="button" aria-label="delete user" className="outline-none" onClick={handleRestore}>
+                <FaTrashRestore className="h-6 w-6 text-base-content/70 hover:text-error cursor-pointer" />
+              </button>
+            ) : (
+              <button type="button" aria-label="delete user" className="outline-none" onClick={handleDelete}>
+                <RiDeleteBin6Line className="h-6 w-6 text-base-content/70 hover:text-error cursor-pointer" />
+              </button>
+            )}
           </div>
         </td>
       </tr>

@@ -12,6 +12,8 @@ import localStorageMiddleware from "./api/middleware";
 import loaderReducer from "../features/loading/loaderSlice";
 import userTableReducer from "../features/users/userTableSlice";
 import usersReducer from "../features/users/userSlice";
+import deleteUserReducer from "../features/users/DeleteUser/DeleteUserSlice";
+import tasksTableReducer from "../features/tasks/TasksTable/tasksTableSlice";
 
 // Define RootState interface
 export interface RootState {
@@ -23,6 +25,8 @@ export interface RootState {
   loader: ReturnType<typeof loaderReducer>;
   userTable: ReturnType<typeof userTableReducer>;
   users: ReturnType<typeof usersReducer>;
+  deleteUser: ReturnType<typeof deleteUserReducer>;
+  taskTable: ReturnType<typeof tasksTableReducer>;
 }
 export const store = configureStore({
   reducer: {
@@ -35,6 +39,8 @@ export const store = configureStore({
     loader: loaderReducer,
     userTable: userTableReducer,
     users: usersReducer,
+    deleteUser: deleteUserReducer,
+    taskTable: tasksTableReducer,
   },
   middleware: (GetDefaultMiddleware) =>
     GetDefaultMiddleware().concat(apiSlice.middleware).concat(localStorageMiddleware),

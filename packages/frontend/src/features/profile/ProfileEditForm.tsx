@@ -1,7 +1,7 @@
 import SaveAsIcon from "@mui/icons-material/SaveAs";
 import ArrowBackSharpIcon from "@mui/icons-material/ArrowBackSharp";
 import { useEffect } from "react";
-import InputField2 from "../../../shared/components/InputField2";
+import InputField2 from "../../shared/components/InputField2";
 import useUpdateProfileInfo from "./useUpdateProfileInfo";
 
 type Props = {
@@ -20,7 +20,7 @@ function ProfileEditForm({ handleShowEdit }: Props) {
   }, [handleShowEdit, isSuccess]);
 
   return (
-    <form onSubmit={handleSubmit} className="w-full p-4 bg-base-100 rounded-lg bg-base-100 transition-all">
+    <form onSubmit={handleSubmit} className="w-full p-4 bg-base-100 rounded-lg transition-all">
       <div className="w-full flex items-center justify-between">
         <h6 className="h6 capitalize font-bold">Edit Profile Information</h6>
         <div className="flex gap-4">
