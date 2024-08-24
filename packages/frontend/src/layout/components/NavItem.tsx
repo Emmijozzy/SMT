@@ -4,6 +4,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
+import Dashboard from "../../features/Dashboard/Dashboard";
 
 type MuiIcon = OverridableComponent<SvgIconTypeMap<object, "svg">> & {
   muiName: string;
@@ -22,7 +23,10 @@ function NavItem({ title, path, Icon, className, onClick }: Props) {
   const selectColor = useSelector((state: RootState) => state.layout.selectColor);
 
   // const selectedColor = ((color: string) => `bg-${color}-gradient`)("red");
-  const isNavActive = (): boolean => path === location.pathname;
+  const isNavActive = (): boolean =>
+    title.toLowerCase() === "dashboard"
+      ? path == location.pathname
+      : location.pathname.toLowerCase().includes(title.toLowerCase());
 
   return (
     <NavLink to={path || ""} className={`${className || ""}`}>
