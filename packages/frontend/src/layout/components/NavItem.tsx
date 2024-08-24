@@ -4,7 +4,6 @@ import { NavLink, useLocation } from "react-router-dom";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
-import Dashboard from "../../features/Dashboard/Dashboard";
 
 type MuiIcon = OverridableComponent<SvgIconTypeMap<object, "svg">> & {
   muiName: string;
