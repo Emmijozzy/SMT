@@ -21,7 +21,9 @@
     "sourceType": "module",
     "project": true
   },
-  "plugins": ["@typescript-eslint", "react", "react-refresh"],
+  "plugins": ["plugin:@typescript-eslint/recommended",
+  "plugin:react/recommended",
+  "plugin:prettier/recommended"],
   "settings": {
     "import/resolver": {
       "typescript": {
@@ -52,6 +54,8 @@
     "react-refresh/only-export-components": ["warn", { "allowConstantExport": true }],
     "no-empty": "warn",
     "prefer-const": "warn",
+    "@typescript-eslint/no-unsafe-assignment": "error",
+    "@typescript-eslint/no-unsafe-call": "error",
     "@typescript-eslint/no-non-null-asserted-optional-chain": "warn",
     "@typescript-eslint/ban-ts-comment": "warn",
     "@typescript-eslint/ban-types": "warn",

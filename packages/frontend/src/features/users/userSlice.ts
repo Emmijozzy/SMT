@@ -10,7 +10,7 @@ const usersSlice = createSlice({
   initialState: usersAdapter.getInitialState(),
   reducers: {
     // usersAdded: usersAdapter.addOne,
-    usersReceived(state, action) {
+    setUsers(state, action) {
       const users = action.payload as Record<string, IUser> | readonly IUser[];
       // console.log(users);
       usersAdapter.setAll(state, users);
@@ -18,7 +18,7 @@ const usersSlice = createSlice({
   },
 });
 
-export const { usersReceived } = usersSlice.actions;
+export const { setUsers } = usersSlice.actions;
 
 export const usersSelectors = usersAdapter.getSelectors<RootState>((state) => state.users);
 

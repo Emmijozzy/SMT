@@ -17,6 +17,7 @@ import AddUser from "./features/users/AddUser/AddUser";
 import ViewUser from "./features/users/viewUser/ViewUser";
 import EditUser from "./features/users/EditUser/EditUser";
 import TasksTable from "./features/tasks/TasksTable/TaskTable";
+import CreateTask from "./features/tasks/createTask/CreateTask";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
                 </Route>
                 <Route path="tasks" element={<Tasks />}>
                   <Route index element={<TasksTable />} />
+                  <Route path="create_task" element={<CreateTask />} />
                 </Route>
                 <Route path="teams" element={<Teams />} />
                 <Route path="profile" element={<Profile />} />

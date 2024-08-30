@@ -6,63 +6,53 @@ import ResData from "../../../shared/interface/resdata";
 import log from "../../../shared/utils/log";
 import { addAlert } from "../../alerts/AlertSlice";
 import { setLoader } from "../../loading/loaderSlice";
-import { userSchema } from "../userValidation";
-import User from "../userInterface";
-import { useCreateUserMutation } from "../userApiSlice";
+import { useCreateTaskMutation } from "../tasksApiSlice";
+import User from "../../users/userInterface";
+import { userSchema } from "../../users/userValidation";
+import { ITask } from "../tasksInterface";
+import taskSchema from "../taskSchema";
 
-const initialValues: User = {
-  userId: "",
-  firstName: "",
-  lastName: "",
-  email: "",
-  phoneNo: "+234",
-  role: "team_member",
-  team: "",
-  location: "",
-  whatsappLink: "",
-  facebookLink: "",
-  linkedInLink: "",
-  canCreateTasks: false,
-  canEditTasks: false,
-  canDeleteTasks: false,
-  canViewReports: false,
-  canAddSubtasks: false,
-  canReassignTasks: false,
-  canDeleteUsers: false,
-  canEditUsers: false,
-  canAssignRole: false,
-  password: "",
-  confirmPassword: "",
-};
+const initialValues: ITask = {
+  title : "",
+  description: "",
+  responsibleTeam: "",
+  status: "not started",
+  managerTask: false,
+  managerId: "",
+  priority: "low",
+  startDate: new Date(Date.now()).toISOString().split("T")[0],
+  dueDate: new Date(Date.now()).toISOString().split("T")[0],
+}
 
-function useAddUser() {
+
+const useCreateTask = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [createUser, { isSuccess, isError }] = useCreateUserMutation();
+  const [createTask, { isSuccess, isError }] = useCreateTaskMutation();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues,
-    validationSchema: userSchema,
-    onSubmit: async (values: User) => {
+    validationSchema: taskSchema,
+    onSubmit: async (values: ITask) => {
       setIsSubmitting(true);
       dispatch(setLoader(true));
       try {
         // console.log(values);
-        const resData = (await createUser({ ...values })) as ResData;
+        const resData = (await createTask({ ...values })) as ResData;
         if (Object.keys(resData)[0] === "error" || isError) {
           const resError = resData.error as ResData;
           throw new Error(resError.data.message);
         }
         const resMessage = resData.data.message;
         dispatch(addAlert({ message: resMessage, type: "success" }));
-        navigate("/dash/users");
+        navigate("/dash/tasks");
       } catch (e) {
         const err = e as Error;
         dispatch(addAlert({ message: err.message, type: "error" }));
-        log("error", "Change password Error", err.message, err.stack as string);
+        log("error", "Error creating new task", err.message, err.stack as string);
       } finally {
         setIsSubmitting(false);
         dispatch(setLoader(false));
@@ -81,5 +71,5 @@ function useAddUser() {
     isSubmitting,
     isSuccess,
   };
-}
-export default useAddUser;
+};
+export default useCreateTask;

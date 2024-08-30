@@ -84,6 +84,20 @@ export default {
         "calc-half-vh": "calc(100% - 80px)",
         // Add more custom heights using calc() here
       },
+      keyframes: {
+        slideRight: {
+          "0%": { transform: "translateX(100%)" },
+          "100%": { transform: "translateX(0)" },
+        },
+        slideLeft: {
+          "0%": { transform: "translateX(-100%)" },
+          "100%": { transform: "translateX(0)" },
+        },
+      },
+      animation: {
+        "slide-right": "slideRight 0.5s ease-in-out",
+        "slide-left": "slideLeft 0.5s ease-in-out",
+      },
     },
   },
 

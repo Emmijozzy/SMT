@@ -2,7 +2,7 @@
 import { useState, useEffect, ChangeEvent } from "react";
 import { useDispatch } from "react-redux";
 import { useGetUsersQuery } from "../userApiSlice";
-import { usersReceived } from "../userSlice";
+import { setUsers } from "../userSlice";
 import useFilteredQuery from "./useFilteredQuery";
 
 const useUserTable = () => {
@@ -33,7 +33,7 @@ const useUserTable = () => {
     if (searchedUserId) {
       setUserIds(searchedUserId);
     } else if (ResUsers) {
-      dispatch(usersReceived(ResUsers?.entities));
+      dispatch(setUsers(ResUsers?.entities));
       setUserIds(ResUsers?.ids);
     }
   }, [ResUsers, searchedUserId]);
