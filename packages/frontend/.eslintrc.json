@@ -21,9 +21,14 @@
     "sourceType": "module",
     "project": true
   },
-  "plugins": ["plugin:@typescript-eslint/recommended",
-  "plugin:react/recommended",
-  "plugin:prettier/recommended"],
+  "plugins": [
+  // "plugin:@typescript-eslint/recommended",
+  // "plugin:react/recommended",
+  // "plugin:prettier/recommended",
+  "@typescript-eslint",
+  "react",
+  "react-refresh"
+],
   "settings": {
     "import/resolver": {
       "typescript": {

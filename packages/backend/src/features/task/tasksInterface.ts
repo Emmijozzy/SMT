@@ -6,9 +6,24 @@ export interface TaskPayload {
   assignedTo?: string[];
   priority: "low" | "medium" | "high";
   status?: "not started" | "in progress" | "completed" | "closed";
+  startDate: string;
   dueDate?: string;
   managerTask: boolean;
   managerId: string;
   subTasks?: string[];
   del_flg?: boolean;
+}
+export interface Task {
+  taskId: string;
+  title: string;
+  description: string;
+  assignedTo: string[];
+  responsibleTeam: string;
+  status: "not started" | "in progress" | "completed" | "closed";
+  managerTask: boolean;
+  managerId: string;
+  priority: "low" | "medium" | "high";
+  dueDate: Date;
+  startDate: Date;
+  del_flg: boolean;
 }

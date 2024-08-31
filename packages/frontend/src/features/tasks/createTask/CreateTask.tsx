@@ -1,11 +1,14 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable indent */
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import ArrowBackSharpIcon from "@mui/icons-material/ArrowBackSharp";
+import { useDispatch } from "react-redux";
 import FormStep1 from "./components/FormStep1";
 import FormStep2 from "./components/FormStep2";
 import FormStep3 from "./components/FormStep3";
 import useCreateTask from "./useCreateTask";
+import { addAlert } from "../../alerts/AlertSlice";
 
 type Direction = "left" | "right" | "";
 
@@ -13,16 +16,20 @@ function CreateTask() {
   const [step, setStep] = useState(1);
   const [direction, setDirection] = useState<Direction>("");
   const [height, setHeight] = useState(0);
-  // const [width, setWidth] = useState(0);
   const formRef = useRef<HTMLDivElement>(null);
+  const formSubmitRef = useRef<HTMLFormElement>(null);
 
-  const {
-    handleSubmit,
-    handleChange,
-    errors,
-    values,
-    isSubmitting,
-  } = useCreateTask()
+  const { handleSubmit, handleChange, errors, values, validateForm } = useCreateTask();
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const errs = Object.values(errors);
+    errs.forEach((error) => {
+      dispatch(addAlert({ message: error, type: "error" }));
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [handleSubmit]);
 
   const handleNextStep = () => {
     setDirection("right");
@@ -52,13 +59,9 @@ function CreateTask() {
 
   useEffect(() => {
     if (formRef.current) {
-      // Adjust the height of the container based on the content
       setHeight(formRef.current.scrollHeight);
-      // setWidth(formRef.current.scroll);
     }
   }, [step, direction]);
-
-  console.log(step);
 
   return (
     <div className="container">
@@ -77,7 +80,7 @@ function CreateTask() {
           </button>
         </div>
       </div>
-      <form className="w-full bg-base-200 rounded pt-3">
+      <form ref={formSubmitRef} onSubmit={handleSubmit} className="w-full bg-base-200 rounded pt-3">
         <div className="flex flex-col w-full relative overflow-hidden" style={{ height: `${height + 40}px` }}>
           <ul className="flex items-center h-10 gap mx-auto">
             <li
@@ -97,13 +100,30 @@ function CreateTask() {
             </li>
           </ul>
           <div
-            className={`absolute w-full top-10 transition-transform duration-500 ease-in-out transform ${transitionClass} ${stepClass}`}
+            className={`absolute w-full top-10 transition-transform duration-500 ease-in-out transform ${transitionClass || ""} ${stepClass}`}
             ref={formRef}
-            // style={{ right: direction == "right" ? "-100%" : direction == "left" ? "100%" : "0" }}
           >
-            {step === 1 && <FormStep1 onNext={handleNextStep} errors={errors} values={values} handleChange={handleChange} />}
-            {step === 2 && <FormStep2 onNext={handleNextStep} onPrevious={handlePreviousStep} values={values} handleChange={handleChange} />}
-            {step === 3 && <FormStep3 onSubmit={handleSubmit} onPrevious={handlePreviousStep} values={values} errors={errors} handleChange={handleChange} />}
+            {step === 1 && (
+              <FormStep1 onNext={handleNextStep} errors={errors} values={values} handleChange={handleChange} />
+            )}
+            {step === 2 && (
+              <FormStep2
+                onNext={handleNextStep}
+                onPrevious={handlePreviousStep}
+                values={values}
+                handleChange={handleChange}
+              />
+            )}
+            {step === 3 && (
+              <FormStep3
+                // onSubmit={handleSubmit}
+                onPrevious={handlePreviousStep}
+                values={values}
+                errors={errors}
+                handleChange={handleChange}
+                validate={validateForm}
+              />
+            )}
           </div>
         </div>
       </form>
@@ -111,10 +131,3 @@ function CreateTask() {
   );
 }
 export default CreateTask;
-
-// <div className="max-w-md mx-auto p-8 border rounded shadow-md mt-10">
-//   {step === 1 && <FormStep1 onNext={handleNextStep} />}
-//   {step === 2 && <FormStep2 onNext={handleNextStep} onPrevious={handlePreviousStep} />}
-//   {step === 3 && <FormStep3 onSubmit={handleSubmit} onPrevious={handlePreviousStep} />}
-//   <div className="mt-4 text-gray-500">Step {step} of 3</div>
-// </div>

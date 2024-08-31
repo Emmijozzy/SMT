@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import * as Yup from "yup";
 
 const taskSchema = Yup.object().shape({
@@ -23,19 +25,26 @@ const taskSchema = Yup.object().shape({
     .trim()
     .required("Status is required")
     .oneOf(
-      ["Not Started", "In Progress", "Completed", "Closed"],
-      "Invalid Task Status, status cam either be: Not Started, In Progress, Completed or Closed"
+      ["not started", "in progress", "completed", "closed"],
+      "Invalid Task Status, status cam either be: Not Started, In Progress, Completed or Closed",
     ),
   managerTask: Yup.boolean(),
   managerId: Yup.string().when("managerTask", (managerTask, schema) => {
     const manTask = managerTask as unknown as boolean;
-    return manTask == true ? schema.required("Manager Id is required") : schema.notRequired();
+    return manTask === true ? schema.required("Manager Id is required") : schema.notRequired();
   }),
   priority: Yup.string().oneOf(["low", "medium", "high"], "priority can either be low, medium or high"),
-  dueDate: Yup.date(),
-  StartDate: Yup.date(),
+  startDate: Yup.date().required("Start Date is required"),
+  dueDate: Yup.date()
+    .required("Due Date is required")
+    // eslint-disable-next-line func-names
+    .test("is-later", "Due Date must be later than Start Date", function (dueDat) {
+      const startDate = new Date(this.parent.startDate as string).getTime();
+      const dueDate = new Date(dueDat).getTime();
+      return dueDate > startDate;
+    }),
   del_flg: Yup.boolean(),
-  subTasks: Yup.array().of(Yup.string().trim())
+  subTasks: Yup.array().of(Yup.string().trim()),
 });
 
 export default taskSchema;

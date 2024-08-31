@@ -7,23 +7,20 @@ import log from "../../../shared/utils/log";
 import { addAlert } from "../../alerts/AlertSlice";
 import { setLoader } from "../../loading/loaderSlice";
 import { useCreateTaskMutation } from "../tasksApiSlice";
-import User from "../../users/userInterface";
-import { userSchema } from "../../users/userValidation";
 import { ITask } from "../tasksInterface";
 import taskSchema from "../taskSchema";
 
 const initialValues: ITask = {
-  title : "",
+  title: "",
   description: "",
   responsibleTeam: "",
   status: "not started",
   managerTask: false,
   managerId: "",
   priority: "low",
-  startDate: new Date(Date.now()).toISOString().split("T")[0],
-  dueDate: new Date(Date.now()).toISOString().split("T")[0],
-}
-
+  startDate: "",
+  dueDate: "",
+};
 
 const useCreateTask = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,8 +37,8 @@ const useCreateTask = () => {
       setIsSubmitting(true);
       dispatch(setLoader(true));
       try {
-        // console.log(values);
         const resData = (await createTask({ ...values })) as ResData;
+        // console.log(resData);
         if (Object.keys(resData)[0] === "error" || isError) {
           const resError = resData.error as ResData;
           throw new Error(resError.data.message);
@@ -60,7 +57,7 @@ const useCreateTask = () => {
     },
   });
 
-  const { handleSubmit, handleBlur, handleChange, errors, values } = formik;
+  const { handleSubmit, handleBlur, handleChange, errors, values, validateForm } = formik;
 
   return {
     handleSubmit,
@@ -70,6 +67,7 @@ const useCreateTask = () => {
     values,
     isSubmitting,
     isSuccess,
+    validateForm,
   };
 };
 export default useCreateTask;

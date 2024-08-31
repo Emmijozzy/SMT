@@ -6,14 +6,14 @@ import successResponse from "../../../utils/successResponse";
 import TasksSevices from "../../../service/taskService";
 import filtersToMongooseQuery from "../../../utils/filtersToMongooseQuery";
 import getPaginationOptions from "../../../utils/getPaginationOptions";
+import { Task } from "features/task/tasksInterface";
 import { ITask } from "../../../features/task/model/task";
-import { Task } from "../../../features/task/taskInterface";
 import { TaskPayload } from "features/task/tasksInterface";
 import validationMiddleware from "../../../middleware/validationMiddleware";
 import taskSchema from "../../../features/task/taskSchema";
 
 export default class TasksAdminController implements IController {
-  public path = "/admin_task";
+  public path = "/tasks_admin";
   public router = Router();
 
   constructor() {
@@ -28,7 +28,7 @@ export default class TasksAdminController implements IController {
   };
 
   private createTask = asyncHandler(async (req: Request, res: Response) => {
-    const { title, description, responsibleTeam, priority, dueDate, managerTask, managerId } = req.body;
+    const { title, description, responsibleTeam, priority, dueDate, managerTask, managerId, startDate } = req.body;
     if (!title.trim() || !description.trim() || !responsibleTeam || !dueDate)
       throw new BadRequestError("Incomplete data provided");
 
@@ -38,6 +38,7 @@ export default class TasksAdminController implements IController {
       responsibleTeam,
       priority,
       dueDate,
+      startDate,
       managerTask,
       managerId
     });
@@ -106,6 +107,7 @@ export default class TasksAdminController implements IController {
       managerTask,
       managerId,
       priority,
+      startDate,
       dueDate,
       del_flg
     } = req.body as Task;
@@ -122,7 +124,8 @@ export default class TasksAdminController implements IController {
       description: description ? description : task.description,
 
       priority: priority ? priority : task.priority,
-      dueDate: dueDate ? new Date(dueDate).toISOString() : new Date(task.dueDate).toISOString()
+      dueDate: dueDate ? new Date(dueDate).toISOString() : new Date(task.dueDate).toISOString(),
+      startDate: startDate ? new Date(startDate).toISOString() : new Date(task.startDate).toISOString()
     };
 
     if (status == "not started" || status == "in progress" || status == "completed" || status == "closed") {

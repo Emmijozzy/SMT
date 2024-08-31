@@ -7,9 +7,9 @@ import createTaskId from "../features/task/utils/createTaskId";
 import { IPaginationOptions } from "../utils/getPaginationOptions";
 
 export const createTask = async (Payload: TaskPayload): Promise<ITask> => {
-  const { title, description, responsibleTeam, priority, dueDate, managerTask, managerId } = Payload;
-  const team = (await TeamModel.findOne({ teamId: responsibleTeam })) as ITeam;
-  if (!team) throw new InternalError("Error in fetching team");
+  const { title, description, responsibleTeam, priority, dueDate, startDate, managerTask, managerId } = Payload;
+  // const team = (await TeamModel.findOne({ teamId: responsibleTeam })) as ITeam;
+  // if (!team) throw new InternalError("Error in fetching team");
 
   const taskId = await createTaskId();
   if (!taskId) throw new InternalError("Error in creating task Id ");
@@ -26,9 +26,10 @@ export const createTask = async (Payload: TaskPayload): Promise<ITask> => {
       taskId,
       title: title.trim(),
       description: description?.trim(),
-      responsibleTeam: team.teamId,
+      responsibleTeam: responsibleTeam /* * Change back to: responsibleTeam: team.teamId  */,
       priority,
       dueDate,
+      startDate,
       managerTask,
       managerId: manager.userId ? manager.userId : ""
     };
@@ -37,9 +38,10 @@ export const createTask = async (Payload: TaskPayload): Promise<ITask> => {
       taskId,
       title: title.trim(),
       description: description?.trim(),
-      responsibleTeam: team.teamId,
+      responsibleTeam: responsibleTeam /* * Change back to: responsibleTeam: team.teamId  */,
       priority,
-      dueDate
+      dueDate,
+      startDate
     };
   }
 

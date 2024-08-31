@@ -1,14 +1,5 @@
 import * as Yup from "yup";
 
-const userProfileUpdateSchema = Yup.object().shape({
-  email: Yup.string().email().trim().optional(),
-  phoneNo: Yup.string().trim().required("Phone number is required").phone([], "phone number be valid"),
-  location: Yup.string().trim().required().min(2, "Location can not be less than 2"),
-  whatsappLink: Yup.string().trim().url().optional(),
-  facebookLink: Yup.string().trim().url().optional(),
-  linkedInLink: Yup.string().trim().url().optional()
-});
-
 const taskSchema = Yup.object().shape({
   taskId: Yup.string(),
   title: Yup.string()
@@ -42,8 +33,7 @@ const taskSchema = Yup.object().shape({
   }),
   priority: Yup.string().oneOf(["low", "medium", "high"], "priority can either be low, medium or high"),
   dueDate: Yup.date(),
-  createdAt: Yup.date(),
-  updatedAt: Yup.date(),
+  StartDate: Yup.date(),
   del_flg: Yup.boolean(),
   subTasks: Yup.array().of(Yup.string().trim())
 });

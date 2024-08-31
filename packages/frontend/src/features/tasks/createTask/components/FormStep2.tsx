@@ -1,9 +1,8 @@
-import ToggleSwitch from "../../../../shared/components/ToggleSwitch";
-import Select from "../../../../shared/components/Select";
-import { FormikErrors } from "formik";
-import { ITask } from "../../tasksInterface";
 import { ChangeEvent } from "react";
 import { useSelector } from "react-redux";
+import ToggleSwitch from "../../../../shared/components/ToggleSwitch";
+import Select from "../../../../shared/components/Select";
+import { ITask } from "../../tasksInterface";
 import { RootState } from "../../../../app/store";
 import { usersSelectors } from "../../../users/userSlice";
 
@@ -13,10 +12,10 @@ type Props = {
   handleChange: (e: ChangeEvent<unknown>) => void;
   values: ITask;
 };
-function FormStep2({ onNext, onPrevious, values, handleChange  }: Props) {
-  const users = useSelector((state: RootState) => usersSelectors.selectAll(state));
-
-  console.log(users)
+function FormStep2({ onNext, onPrevious, values, handleChange }: Props) {
+  const users = useSelector((state: RootState) => usersSelectors.selectAll(state)).filter(
+    (user) => user.role === "manager",
+  );
 
   return (
     <div>
@@ -40,10 +39,11 @@ function FormStep2({ onNext, onPrevious, values, handleChange  }: Props) {
           name="managerId"
           label="Manager"
           placeholder="Select Manager"
-          options={["developer", "UI/UX", "Analysist"]}
+          usersOption={users}
           className="gap-[1.6rem] pt-2"
           value={values.managerId}
           handleChange={handleChange}
+          disabled={!values.managerTask}
         />
       </div>
       <div className="w-full flex mt-4 justify-between bg-base-100 pt-4">

@@ -11,6 +11,7 @@ export interface ITask extends Document {
   managerId: string;
   priority: "low" | "medium" | "high";
   dueDate: Date;
+  startDate: Date;
   createdAt: Date;
   updatedAt: Date;
   del_flg: boolean;
@@ -72,6 +73,9 @@ const taskSchema = new Schema<ITask>({
     default: "medium"
   },
   dueDate: {
+    type: Date
+  },
+  startDate: {
     type: Date
   },
   createdAt: {
