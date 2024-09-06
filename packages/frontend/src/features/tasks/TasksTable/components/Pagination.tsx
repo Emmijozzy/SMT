@@ -39,7 +39,7 @@ function Pagination({ totalRows, rowsPerPageOptions = [5, 10, 15, 20] }: Props) 
     dispatch(setCurrentPage(page));
   };
 
-  console.log(pageNumbers, currentPage);
+  // console.log(pageNumbers, currentPage);
 
   return (
     <div className="w-full flex items-center justify-between my-2">

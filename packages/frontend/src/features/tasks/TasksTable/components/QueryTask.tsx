@@ -2,12 +2,16 @@ import { Link } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import SearchIcon from "@mui/icons-material/Search";
-import CloseIcon from '@mui/icons-material/Close';
-import { useState } from "react";
+import CloseIcon from "@mui/icons-material/Close";
+import { memo, useState } from "react";
 import InputField2 from "../../../../shared/components/InputField2";
+import Select from "../../../../shared/components/Select";
+import UseTaskFilterQuery from "../UseTaskFilterQuery";
 
-function QueryTask() {
+const QueryTask = memo(() => {
   const [showFileterd, setShowFiltered] = useState(false);
+
+  const { handleSubmit, handleChange, values, isSubmitting } = UseTaskFilterQuery();
 
   const handleShowFiltered = () => {
     setShowFiltered((pre) => !pre);
@@ -51,62 +55,74 @@ function QueryTask() {
             </button>
           </div>
           <div className={`w-full transition ${showFileterd ? "" : "hidden"}`}>
-            <form /* onSubmit={handleSubmit} */>
+            <form onSubmit={handleSubmit}>
               <InputField2
-                label="Fullname"
-                placeholder="Enter name"
-                // onChange={handleChange}
-                // value={values.fullName}
-                name="fullName"
+                label="title"
+                placeholder="Enter title"
+                onChange={handleChange}
+                value={values.title}
+                name="title"
               />
-              <InputField2
-                label="email"
-                placeholder="Enter email"
-                // onChange={handleChange}
-                // value={values.email}
-                name="email"
-              />
-              <InputField2
-                label="Status"
-                placeholder="Enter your firstname"
-                // onChange={handleChange}
-                // value={values.status}
-                name="email"
-              />
+
               <div className=" w-full mt-4 flex flex-wrap gap-2 justify-between">
-                <div className="w-full md:w-[45%] flex text-lg border-b-2 border-base-content items-center">
-                  <span className="font-bold">Status: </span>
-                  <select
-                    name="role"
-                    id="role"
-                    className="relative select select-secondary text-lg w-full max-w-xs capitalize border-0 rounded-none focus:border-0 focus:outline-none mx-2 rounded-t"
-                    // onChange={handleChange}
-                    // onBlur={handleBlur}
-                    defaultValue=""
-                  >
-                    <option value="">Select task status</option>
-                    <option value="not started">not started</option>
-                    <option value="in process">in process</option>
-                    <option value="completed">completed</option>
-                    <option value="close">close</option>
-                  </select>
-                </div>
-                <div className="w-full md:w-[45%] flex text-lg border-b-2 border-base-content items-center">
-                  <span className="font-bold">Priority: </span>
-                  <select
-                    className="relative select select-secondary text-lg w-full max-w-xs capitalize border-0 rounded-none focus:border-0 focus:outline-none mx-2 rounded-t"
-                    name="team"
-                    id="team"
-                    // onChange={handleChange}
-                    // onBlur={handleBlur}
-                    defaultValue=""
-                  >
-                    <option value="">Select Task priority</option>
-                    <option value="high">High</option>
-                    <option value="medium">medium</option>
-                    <option value="low">low</option>
-                  </select>
-                </div>
+                <InputField2
+                  label="Assignee"
+                  placeholder="Enter task assignee"
+                  onChange={handleChange}
+                  value={values.assignedTo}
+                  name="email"
+                  bodyClassName="lg:w-[49%]"
+                />
+                <Select
+                  className="lg:w-[49%]"
+                  labelClass="mr-2 lg:mr-8"
+                  label="team"
+                  placeholder="Select responsible team"
+                  options={["developer", "ui/ux", "analyst"]}
+                  name="responsibleTeam"
+                  value={values.priority}
+                  handleChange={handleChange}
+                />
+              </div>
+              <div className=" w-full mt-4 flex flex-wrap gap-2 justify-between">
+                <InputField2
+                  label="Start Date"
+                  onChange={handleChange}
+                  value={values.startDate}
+                  name="startDate"
+                  bodyClassName="lg:w-[49%]"
+                  type="date"
+                />
+                <InputField2
+                  label="Due Date"
+                  onChange={handleChange}
+                  value={values.dueDate}
+                  name="dueDate"
+                  bodyClassName="lg:w-[49%]"
+                  type="date"
+                />
+              </div>
+              <div className=" w-full mt-4 flex flex-wrap gap-2 justify-between">
+                <Select
+                  className="lg:w-[49%]"
+                  label="status"
+                  labelClass="mr-2 lg:mr-10"
+                  placeholder="Select task status"
+                  options={["not started", "in progress", "completed", "closed"]}
+                  name="status"
+                  value={values.status}
+                  handleChange={handleChange}
+                />
+                <Select
+                  className="lg:w-[49%]"
+                  labelClass="mr-2 lg:mr-8"
+                  label="priority"
+                  placeholder="Select task priority"
+                  options={["high", "medium", "low"]}
+                  name="priority"
+                  value={values.priority}
+                  handleChange={handleChange}
+                />
               </div>
               <div className="w-full flex mt-4 justify-center">
                 <button
@@ -114,7 +130,7 @@ function QueryTask() {
                   className="px-8 py-3 button text-center text-base-content border transition-all bg-base-300 hover:scale-[105%] hover:shadow-lg hover:shadow-base-300 hover:bg-base-content hover:text-base-300  rounded-lg cursor-pointer ease-in"
                   // onClick={handleFormValidation}
                 >
-                  {/* isSubmitting */ true ? "Loading..." : "Search"}
+                  {isSubmitting ? "Loading..." : "Search"}
                 </button>
               </div>
             </form>
@@ -123,5 +139,5 @@ function QueryTask() {
       </div>
     </div>
   );
-}
+});
 export default QueryTask;

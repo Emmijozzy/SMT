@@ -14,7 +14,7 @@ const tasksSlice = createSlice({
   initialState: taskAdapter.getInitialState(),
   reducers: {
     setTasks(state, action) {
-      const tasks = action.payload as Record<string, ITask> | readonly ITask[];
+      const tasks = (action.payload as Record<string, ITask> | readonly ITask[]) || [];
       taskAdapter.setAll(state, tasks);
     },
   },

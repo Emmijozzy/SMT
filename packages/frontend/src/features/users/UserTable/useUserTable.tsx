@@ -66,7 +66,7 @@ const useUserTable = () => {
     }
 
     // console.log(filteredUserIds);
-  }, [currentPage, rowPerPage, userIds, setFilteredUserIds]);
+  }, [currentPage, rowPerPage, userIds, setFilteredUserIds, searchedUserId]);
 
   const handleRowPerPage = (e: ChangeEvent<HTMLSelectElement>) => {
     setFilteredUserIds([]);

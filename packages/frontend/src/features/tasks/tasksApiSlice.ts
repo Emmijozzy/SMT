@@ -1,9 +1,4 @@
-/* eslint-disable import/no-cycle */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { createEntityAdapter } from "@reduxjs/toolkit";
+/* eslint-disable indent */
 import { ITask } from "./tasksInterface";
 import { apiSlice } from "../../app/api/apislice";
 
@@ -12,6 +7,14 @@ type TaskResponse = ITask[];
 interface ResData {
   data: ITask[];
 }
+
+type Result = {
+  data: ITask[];
+  isSuccess: boolean;
+  isError: boolean;
+  message: string;
+  statusCode: number;
+};
 
 export const tasksApiSlice = apiSlice.injectEndpoints({
   endpoints: (build) => ({
@@ -22,7 +25,7 @@ export const tasksApiSlice = apiSlice.injectEndpoints({
         body: { ...taskData },
       }),
     }),
-    
+
     getTasks: build.query<TaskResponse, void>({
       query: (query) => {
         const filteredQuery = query as unknown as Record<string, string>;
@@ -30,13 +33,13 @@ export const tasksApiSlice = apiSlice.injectEndpoints({
         if (typeof filteredQuery == "object") {
           const stringifyQuery = JSON.stringify(filteredQuery);
           return {
-            url: `/tasks_admin/task?filters=${stringifyQuery}`,
-            validateStatus: (response, result) => response.status === 200 || !result.isError,
+            url: `/tasks_admin/tasks?filters=${stringifyQuery}`,
+            validateStatus: (response, result: Result) => response.status === 200 || !result?.isError,
           };
         }
         return {
-          url: "/tasks_admin/task",
-          validateStatus: (response, result) => response.status === 200 || !result.isError,
+          url: "/tasks_admin/tasks",
+          validateStatus: (response, result: Result) => response.status === 200 || !result.isError,
         };
       },
       transformResponse: (responseData: ResData) => {
@@ -63,4 +66,4 @@ export const tasksApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const {useCreateTaskMutation, useGetTasksQuery} = tasksApiSlice;
+export const { useCreateTaskMutation, useGetTasksQuery } = tasksApiSlice;

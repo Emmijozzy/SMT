@@ -22,7 +22,7 @@ const tasksTasbleSlice = createSlice({
       state.pagination.rowsPerPage = typeof action.payload == "number" ? action.payload : 0;
     },
     setCurrentPage: (state, action) => {
-      console.log(action.payload);
+      // console.log(action.payload);
       state.pagination.currentPage = typeof action.payload == "number" ? action.payload : 0;
     },
     setTotalRows: (state, action) => {
