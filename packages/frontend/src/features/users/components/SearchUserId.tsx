@@ -4,9 +4,8 @@ import { ChangeEvent } from "react";
 
 type Props = {
   handleSearchId: (e: ChangeEvent<HTMLInputElement>) => void;
-  searchId: string | undefined;
 };
-function SearchUserId({ handleSearchId, searchId }: Props) {
+function SearchUserId({ handleSearchId }: Props) {
   return (
     <div className="div relative w-2/4 hidden md:inline">
       <button type="button" aria-label="Search User" className="absolute left-2 -translate-y-1/2 top-1/2 p-1">
@@ -15,7 +14,6 @@ function SearchUserId({ handleSearchId, searchId }: Props) {
       <input
         className="w-full input rounded-lg px-8 py-4 border-2 border-transparent focus:outline-none focus:border-primary/50 placeholder-gray-400 transition-all duration-300 shadow-md"
         placeholder="Search User ID ...."
-        value={searchId}
         type="text"
         onChange={(e) => handleSearchId(e)}
       />

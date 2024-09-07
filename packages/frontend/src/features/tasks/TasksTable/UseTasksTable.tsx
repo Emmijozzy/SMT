@@ -1,14 +1,16 @@
-import { useEffect, useMemo, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetTasksQuery } from "../tasksApiSlice";
 import { setTasks, tasksSelectors } from "../tasksSlice";
 import { RootState } from "../../../app/store";
 import { setTotalRows } from "./tasksTableSlice";
+import removeSpecialCharacters from "../../../shared/utils/removeSpecialCharacters";
 
 function UseTasksTable() {
   const [filteredTask, setFilteredTask] = useState<string[]>();
   const { data, isLoading, isSuccess, isError, error } = useGetTasksQuery();
   const [totalTasks, setTotalTasks] = useState<string[]>();
+  const [searchId, setSearchId] = useState<string>();
 
   const dispatch = useDispatch();
 
@@ -37,8 +39,22 @@ function UseTasksTable() {
   }, [currentPage, rowsPerPage, totalTasks]);
 
   useEffect(() => {
-    setFilteredTask(filterTask);
-  }, [filterTask]);
+    const searchedtaskId = (search: string): string[] => {
+      const searchReg = new RegExp(removeSpecialCharacters(search.trim()), "gi");
+      const foundTask = totalTaskIds?.filter((Id) => Id?.match(searchReg));
+      return foundTask && foundTask?.length > 0 ? foundTask : [];
+    };
+
+    if (searchId?.trim()) {
+      setFilteredTask(searchedtaskId(searchId));
+    } else {
+      setFilteredTask(filterTask);
+    }
+  }, [filterTask, searchId, setSearchId, totalTaskIds]);
+
+  const handleSearchId = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchId(e.target.value);
+  };
 
   return {
     totalTasks,
@@ -47,6 +63,7 @@ function UseTasksTable() {
     isLoading,
     isSuccess,
     error,
+    handleSearchId,
   };
 }
 export default UseTasksTable;

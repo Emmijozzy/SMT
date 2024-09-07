@@ -1,4 +1,5 @@
 import { useState, useEffect, ChangeEvent } from "react";
+import removeSpecialCharacters from "../../../shared/utils/removeSpecialCharacters";
 
 const useSearchById = (userIds: string[]) => {
   const [searchId, setSearchId] = useState<string>();
@@ -6,10 +7,10 @@ const useSearchById = (userIds: string[]) => {
 
   useEffect(() => {
     if (searchId) {
-      const searchReg = new RegExp(searchId.trim(), "gi");
+      const searchReg = new RegExp(removeSpecialCharacters(searchId.trim()), "gi");
       const foundIds = userIds?.filter((userId: string) => {
         const foundUserId = userId?.match(searchReg);
-        return foundUserId ? foundUserId.length > 0 : null;
+        return foundUserId && foundUserId?.length > 0 ? foundUserId : null;
       });
       setSearchIds(foundIds);
     } else {

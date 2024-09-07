@@ -3,12 +3,16 @@ import AddIcon from "@mui/icons-material/Add";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
-import { memo, useState } from "react";
+import { ChangeEvent, memo, useState } from "react";
 import InputField2 from "../../../../shared/components/InputField2";
 import Select from "../../../../shared/components/Select";
 import UseTaskFilterQuery from "../UseTaskFilterQuery";
 
-const QueryTask = memo(() => {
+type Props = {
+  handleSearchId: (e: ChangeEvent<HTMLInputElement>) => void;
+};
+
+const QueryTask = memo(({ handleSearchId }: Props) => {
   const [showFileterd, setShowFiltered] = useState(false);
 
   const { handleSubmit, handleChange, values, isSubmitting } = UseTaskFilterQuery();
@@ -37,7 +41,7 @@ const QueryTask = memo(() => {
                 placeholder="Search Task ID ...."
                 // value={searchId}
                 type="text"
-                // onChange={(e) => handleSearchId(e)}
+                onChange={(e) => handleSearchId(e)}
               />
               <button type="button" aria-label="reset" className="absolute right-3 -translate-y-1/2 top-1/2 p-1">
                 <CloseIcon className="h-8 w-8 text-base-content/60" />

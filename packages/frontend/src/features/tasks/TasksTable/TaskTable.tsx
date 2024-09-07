@@ -6,14 +6,14 @@ import UseTasksTable from "./UseTasksTable";
 import TaskTableRow from "./components/TaskTableRow";
 
 const TasksTable = memo(() => {
-  const { totalTasks, filteredTask } = UseTasksTable();
+  const { totalTasks, filteredTask, handleSearchId } = UseTasksTable();
 
   // Memoize filtered tasks to avoid unnecessary recalculations
   const memoizedFilteredTasks = useMemo(() => filteredTask || [], [filteredTask]);
 
   return (
     <>
-      <QueryTask />
+      <QueryTask handleSearchId={handleSearchId} />
       <div className="container">
         <div className="w-full">
           <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-base-200 text-base-content/70">
