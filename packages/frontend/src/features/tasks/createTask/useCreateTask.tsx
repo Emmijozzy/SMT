@@ -4,11 +4,12 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ResData from "../../../shared/interface/resdata";
 import log from "../../../shared/utils/log";
+import { toSentenceCase } from "../../../shared/utils/toSentenceCase";
 import { addAlert } from "../../alerts/AlertSlice";
 import { setLoader } from "../../loading/loaderSlice";
 import { useCreateTaskMutation } from "../tasksApiSlice";
-import { ITask } from "../tasksInterface";
 import taskSchema from "../taskSchema";
+import { ITask } from "../tasksInterface";
 
 const initialValues: ITask = {
   title: "",
@@ -37,7 +38,12 @@ const useCreateTask = () => {
       setIsSubmitting(true);
       dispatch(setLoader(true));
       try {
-        const resData = (await createTask({ ...values })) as ResData;
+        const payload = {
+          ...values,
+          description: toSentenceCase(values.description),
+        };
+
+        const resData = (await createTask({ ...payload })) as ResData;
         // console.log(resData);
         if (Object.keys(resData)[0] === "error" || isError) {
           const resError = resData.error as ResData;

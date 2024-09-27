@@ -3,19 +3,20 @@
 /* eslint-disable import/no-cycle */
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { persistReducer, persistStore } from "redux-persist";
-import { apiSlice } from "./api/apislice";
-import authReducer from "../features/auth/authSlice";
 import alertReducer from "../features/alerts/AlertSlice";
-import userProfileReducer from "../features/users/userProfileSlice";
-import statusReducer from "../shared/Slice/statusSlice";
-import layoutReducer from "../layout/layoutSlice";
-import localStorageMiddleware from "./api/middleware";
+import authReducer from "../features/auth/authSlice";
 import loaderReducer from "../features/loading/loaderSlice";
-import userTableReducer from "../features/users/userTableSlice";
-import usersReducer from "../features/users/userSlice";
-import deleteUserReducer from "../features/users/DeleteUser/DeleteUserSlice";
-import tasksTableReducer from "../features/tasks/TasksTable/tasksTableSlice";
 import tasksReducer from "../features/tasks/tasksSlice";
+import tasksTableReducer from "../features/tasks/TasksTable/tasksTableSlice";
+import deleteUserReducer from "../features/users/DeleteUser/DeleteUserSlice";
+import userProfileReducer from "../features/users/userProfileSlice";
+import deleteTaskReducer from "../features/tasks/deleteTask/deleteTaskSlice";
+import usersReducer from "../features/users/userSlice";
+import userTableReducer from "../features/users/userTableSlice";
+import layoutReducer from "../layout/layoutSlice";
+import statusReducer from "../shared/Slice/statusSlice";
+import { apiSlice } from "./api/apislice";
+import localStorageMiddleware from "./api/middleware";
 import persistConfig from "./persistConfig";
 
 const rootReducer = combineReducers({
@@ -29,9 +30,10 @@ const rootReducer = combineReducers({
   userTable: userTableReducer,
   users: usersReducer,
   deleteUser: deleteUserReducer,
+  deleteTask: deleteTaskReducer,
   taskTable: tasksTableReducer,
   tasks: tasksReducer,
-})
+});
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
@@ -48,18 +50,19 @@ export interface RootState {
   deleteUser: ReturnType<typeof deleteUserReducer>;
   taskTable: ReturnType<typeof tasksTableReducer>;
   tasks: ReturnType<typeof tasksReducer>;
+  deleteTask: ReturnType<typeof deleteTaskReducer>;
 }
 
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (GetDefaultMiddleware) =>
     GetDefaultMiddleware({
-      serializableCheck: false
-    }).concat(apiSlice.middleware).concat(localStorageMiddleware),
+      serializableCheck: false,
+    })
+      .concat(apiSlice.middleware)
+      .concat(localStorageMiddleware),
 });
 
 export type AppDispatch = typeof store.dispatch;
 
 export const persistor = persistStore(store);
-
-

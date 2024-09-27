@@ -1,9 +1,8 @@
 import { IUser, User } from "../features/auth/authModel";
-import TeamModel, { ITeam } from "../features/team/teamModel";
-import { InternalError, BadRequestError, ApiError } from "../utils/ApiError";
 import { ITask, Task } from "../features/task/model/task";
 import { TaskPayload } from "../features/task/tasksInterface";
 import createTaskId from "../features/task/utils/createTaskId";
+import { ApiError, BadRequestError, InternalError } from "../utils/ApiError";
 import { IPaginationOptions } from "../utils/getPaginationOptions";
 
 export const createTask = async (Payload: TaskPayload): Promise<ITask> => {
@@ -85,9 +84,35 @@ export const updateTaskById = async (task: TaskPayload): Promise<ITask | null> =
   }
 };
 
+export const deleteTaskById = async (taskId: string): Promise<ITask | null> => {
+  const task: ITask | null = await getTaskById(taskId);
+
+  if (!task) throw new BadRequestError(`Invalid Task ${taskId}, task does not exist `);
+
+  const deletedTask = await Task.findOneAndUpdate({ taskId: task.taskId }, { del_flg: true }, { new: true });
+
+  if (!deletedTask) throw new InternalError(`Error deleting task ${taskId}`);
+
+  return deletedTask;
+};
+
+export const restoreTaskById = async (taskId: string): Promise<ITask | null> => {
+  const task: ITask | null = await getTaskById(taskId);
+
+  if (!task) throw new BadRequestError(`Invalid Task ${taskId}, task does not exist `);
+
+  const restoredTask = await Task.findOneAndUpdate({ taskId: task.taskId }, { del_flg: false }, { new: true });
+
+  if (!restoredTask) throw new InternalError(`Error deleting task ${taskId}`);
+
+  return restoredTask;
+};
+
 export default {
   createTask,
   getAll,
   getTaskById,
-  updateTaskById
+  updateTaskById,
+  deleteTaskById,
+  restoreTaskById
 };

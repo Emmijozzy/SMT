@@ -167,3 +167,13 @@ hr {
   font-size: 14px;
   pointer-events: none; /* Disable interaction with label */
 }
+
+.gridTemplateColumn {
+  grid-template-columns: 7rem minmax(200px, 1fr);
+} 
+
+@media screen and (min-width: 568px) {
+  .gridTemplateColumn {
+    grid-template-columns: 10rem minmax(200px, 1fr);
+  }
+}

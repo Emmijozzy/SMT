@@ -42,7 +42,7 @@ function Pagination({ totalRows, rowsPerPageOptions = [5, 10, 15, 20] }: Props) 
   // console.log(pageNumbers, currentPage);
 
   return (
-    <div className="w-full flex items-center justify-between my-2">
+    <div className="w-full flex items-center justify-between my-2 px-2">
       <div className="flex items-center space-x-2">
         <label htmlFor="rowsPerPage" className="text-sm font-medium text-gray-700">
           Rows per page:

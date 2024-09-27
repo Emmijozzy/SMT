@@ -72,10 +72,10 @@ const useUpdateProfileInfo = () => {
         // setResData(data);
       } catch (e) {
         const error = e as Error;
+        dispatch(setLoader(false));
         log("error", "Update profile Error", error.message, error.stack as string);
       } finally {
         setIsSubmitting(false);
-        dispatch(setLoader(false));
       }
     },
   });

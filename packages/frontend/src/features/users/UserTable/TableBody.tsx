@@ -32,13 +32,13 @@ function TableBody({ userId }: Props) {
   let content;
 
   if (user) {
-    const { fullName, profilePicUrl: profilePic, email, role, team, createdAt: joined, del_flg: DelFlg } = user;
+    const { fullName, profilePicUrl: profilePic, email, role, team, createdAt: joined, del_flg: delFlg } = user;
 
     const dateJoined: string | Date = new Date(joined);
 
     const relativeTimeString = getRelativeTimeString(dateJoined);
     content = (
-      <tr className={`border-b border-base-content/80 hover:bg-base-300 capitalize ${DelFlg ? "opacity-30" : ""}`}>
+      <tr className={`border-b border-base-content/80 hover:bg-base-300 capitalize ${delFlg ? "opacity-30" : ""}`}>
         <td className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
           <div className="flex px-2 py-1">
             <div className="mr-2">
@@ -81,7 +81,7 @@ function TableBody({ userId }: Props) {
             <Link to={`/dash/users/${userId}/view`}>
               <GrView className="h-6 w-6 text-base-content/70 hover:text-info cursor-pointer" />
             </Link>
-            {DelFlg ? (
+            {delFlg ? (
               <button type="button" aria-label="delete user" className="outline-none" onClick={handleRestore}>
                 <FaTrashRestore className="h-6 w-6 text-base-content/70 hover:text-error cursor-pointer" />
               </button>

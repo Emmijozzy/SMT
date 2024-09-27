@@ -1,16 +1,18 @@
-import { Router, Response, Request } from "express";
+import { Request, Response, Router } from "express";
+import { Task, TaskPayload } from "features/task/tasksInterface";
+import { ExtendedRequest } from "features/users/userInterface";
+import { ITask } from "../../../features/task/model/task";
+import taskSchema from "../../../features/task/taskSchema";
+import { ENUM_USER_ROLES } from "../../../features/users/enumUserRoles";
 import IController from "../../../Interface/controller";
-import { BadRequestError, InternalError, NotFoundError } from "../../../utils/ApiError";
-import asyncHandler from "../../../utils/asyncHandler";
-import successResponse from "../../../utils/successResponse";
+import authMiddleware from "../../../middleware/authMiddleware";
+import validationMiddleware from "../../../middleware/validationMiddleware";
 import TasksSevices from "../../../service/taskService";
+import { AuthFailureError, BadRequestError, InternalError, NotFoundError } from "../../../utils/ApiError";
+import asyncHandler from "../../../utils/asyncHandler";
 import filtersToMongooseQuery from "../../../utils/filtersToMongooseQuery";
 import getPaginationOptions from "../../../utils/getPaginationOptions";
-import { Task } from "features/task/tasksInterface";
-import { ITask } from "../../../features/task/model/task";
-import { TaskPayload } from "features/task/tasksInterface";
-import validationMiddleware from "../../../middleware/validationMiddleware";
-import taskSchema from "../../../features/task/taskSchema";
+import successResponse from "../../../utils/successResponse";
 
 export default class TasksAdminController implements IController {
   public path = "/tasks_admin";
@@ -24,7 +26,9 @@ export default class TasksAdminController implements IController {
     this.router.post("/create", this.createTask); /* *TODO - Validate Data recived  */
     this.router.get("/tasks", this.getTasks);
     this.router.get("/task", this.getTaskById);
-    this.router.post("/update", validationMiddleware(taskSchema), this.updateTask);
+    this.router.put("/update", validationMiddleware(taskSchema), this.updateTask);
+    this.router.patch("/delete", authMiddleware(ENUM_USER_ROLES.ADMIN), this.deleteTask);
+    this.router.patch("/restore", authMiddleware(ENUM_USER_ROLES.ADMIN), this.restoreTask);
   };
 
   private createTask = asyncHandler(async (req: Request, res: Response) => {
@@ -108,8 +112,7 @@ export default class TasksAdminController implements IController {
       managerId,
       priority,
       startDate,
-      dueDate,
-      del_flg
+      dueDate
     } = req.body as Task;
 
     // * Check if the Task exist
@@ -132,12 +135,12 @@ export default class TasksAdminController implements IController {
       taskPayload.status = status;
     }
 
-    // * check for assignedTo and perform the necessary update as required if there is chnage
-    if (assignedTo.length != task.assignedTo.length) {
+    // * check for assignedTo and perform the necessary update as required if there is change
+    if (assignedTo && assignedTo.length != task.assignedTo.length) {
       taskPayload.assignedTo = assignedTo;
     }
 
-    // * check for responsibleTeam and update if there is any update requied, then update as required
+    // * check for responsibleTeam and update if there is any update required, then update as required
     if (responsibleTeam != task.responsibleTeam) {
       taskPayload.responsibleTeam = responsibleTeam;
     }
@@ -146,7 +149,7 @@ export default class TasksAdminController implements IController {
     if (managerTask != task.managerTask && managerTask) {
       if (!managerId) throw new BadRequestError("Manager Id is required");
       taskPayload.subTasks = [];
-      //TODO - Algorthm to delete the subtask created with the task Id
+      //TODO - Algorithm to delete the subtask created with the task Id
       taskPayload.assignedTo = [];
       taskPayload.managerId = managerId;
       taskPayload.managerTask = managerTask;
@@ -155,17 +158,52 @@ export default class TasksAdminController implements IController {
       taskPayload.managerTask = managerTask;
     }
 
-    // *  check for del_flg and update if there is any change to it
-    if (del_flg != task.del_flg) {
-      taskPayload.del_flg = del_flg;
-    }
-
     // *  Send the update to the database
     const result = TasksSevices.updateTaskById(taskPayload);
 
     successResponse(res, {
       data: result,
       message: "Task updated successfully"
+    });
+  });
+
+  private deleteTask = asyncHandler(async (req: ExtendedRequest, res: Response) => {
+    const requestUserRole = req.user?.userRole;
+    if (!requestUserRole) throw new InternalError("unauthorized");
+    if (requestUserRole != "admin") throw new AuthFailureError("unauthorized");
+
+    const { deleteTaskId }: { deleteTaskId: string } = req.body;
+    console.log(deleteTaskId);
+    if (!deleteTaskId) throw new BadRequestError("Task ID is required");
+
+    const deleteTaskData = await TasksSevices.deleteTaskById(deleteTaskId);
+
+    successResponse(res, {
+      data: {
+        userId: deleteTaskData?.taskId,
+        deleteTaskData
+      },
+      message: "Task deleted successfully."
+    });
+  });
+
+  private restoreTask = asyncHandler(async (req: ExtendedRequest, res: Response) => {
+    const requestUserRole = req.user?.userRole;
+    if (!requestUserRole) throw new InternalError("unauthorized");
+    if (requestUserRole != "admin") throw new AuthFailureError("unauthorized");
+
+    const { restoreTaskId }: { restoreTaskId: string } = req.body;
+    console.log(restoreTaskId);
+    if (!restoreTaskId) throw new BadRequestError("Task ID is required");
+
+    const restoreTaskData = await TasksSevices.restoreTaskById(restoreTaskId);
+
+    successResponse(res, {
+      data: {
+        userId: restoreTaskData?.taskId,
+        restoreTaskData
+      },
+      message: "Task restored successfully."
     });
   });
 }

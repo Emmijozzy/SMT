@@ -5,8 +5,8 @@ const taskSchema = Yup.object().shape({
   title: Yup.string()
     .trim()
     .required("Title is required")
-    .min(5, "Title must be at least 5 charater")
-    .max(20, "Title must be at most 20 charater"),
+    .min(5, "Title must be at least 5 character")
+    .max(20, "Title must be at most 20 character"),
   description: Yup.string()
     .trim()
     .required("Description is required")
@@ -23,7 +23,7 @@ const taskSchema = Yup.object().shape({
     .trim()
     .required("Status is required")
     .oneOf(
-      ["Not Started", "In Progress", "Completed", "Closed"],
+      ["not started", "in progress", "completed", "closed"],
       "Invalid Task Status, status cam either be: Not Started, In Progress, Completed or Closed"
     ),
   managerTask: Yup.boolean(),

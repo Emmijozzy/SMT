@@ -34,11 +34,7 @@ function ViewUser() {
           <h6 className="h6 capitalize font-bold">User Details</h6>
           <div className="flex items-center gap-4">
             <Link to={`../${userId}/edit`}>
-              <button
-                type="button"
-                aria-label="Edit User"
-                className="cursor-pointer" /*  onClick={() => handleShowEdit()} */
-              >
+              <button type="button" aria-label="Edit User" className="cursor-pointer">
                 <EditIcon className="w-7 h-7" />
               </button>
             </Link>

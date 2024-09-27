@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import logger from "../utils/logger";
 import { db } from "../config";
-import { InternalError } from "utils/ApiError";
 
 const options = {
   autoIndex: true,

@@ -1,6 +1,7 @@
 export const port: number = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 
 export const environment = process.env.NODE_ENV;
+
 //Database
 export const db = {
   dburl: process.env.DB_URL || "",

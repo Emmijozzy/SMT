@@ -8,6 +8,7 @@ import SettingBar from "./components/SettingBar";
 import { RootState } from "../app/store";
 import Loader from "../features/loading/Loader";
 import DeleteUser from "../features/users/DeleteUser/DeleteUser";
+import DeleteTask from "../features/tasks/deleteTask/deleteTaskModal";
 
 function Layout() {
   const theme = useSelector((state: RootState) => state.layout.themes);
@@ -32,6 +33,7 @@ function Layout() {
       <SettingBar />
       <Main />
       <DeleteUser />
+      <DeleteTask />
     </div>
   );
 }

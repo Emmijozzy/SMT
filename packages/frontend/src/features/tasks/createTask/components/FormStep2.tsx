@@ -24,7 +24,7 @@ function FormStep2({ onNext, onPrevious, values, handleChange }: Props) {
           name="responsibleTeam"
           label="Team"
           placeholder="Select responsible team"
-          options={["developer", "UI/UX", "Analysist"]}
+          options={["developer", "UI/UX", "Analyst"]}
           className="gap-[1.6rem] pt-2"
           value={values.responsibleTeam}
           handleChange={handleChange}

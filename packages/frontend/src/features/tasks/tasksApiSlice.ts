@@ -1,6 +1,6 @@
 /* eslint-disable indent */
-import { ITask } from "./tasksInterface";
 import { apiSlice } from "../../app/api/apislice";
+import { ITask } from "./tasksInterface";
 
 type TaskResponse = ITask[];
 
@@ -63,7 +63,40 @@ export const tasksApiSlice = apiSlice.injectEndpoints({
             ]
           : [{ type: "Tasks", id: "LIST" }],
     }),
+
+    updateTask: build.mutation({
+      query: (taskData: ITask) => ({
+        url: "tasks_admin/update",
+        method: "PUT",
+        body: { ...taskData },
+      }),
+      invalidatesTags: (_result, _error, arg) => [{ type: "Tasks", id: arg.taskId }],
+    }),
+
+    deleteTask: build.mutation({
+      query: (credentials: Record<string, string>) => ({
+        url: "/tasks_admin/delete",
+        method: "PATCH",
+        body: { ...credentials },
+      }),
+      invalidatesTags: [{ type: "Tasks" as const, id: "LIST" as const }],
+    }),
+
+    restoreTask: build.mutation({
+      query: (credentials: Record<string, string>) => ({
+        url: "/tasks_admin/restore",
+        method: "PATCH",
+        body: { ...credentials },
+      }),
+      invalidatesTags: [{ type: "Tasks" as const, id: "LIST" as const }],
+    }),
   }),
 });
 
-export const { useCreateTaskMutation, useGetTasksQuery } = tasksApiSlice;
+export const {
+  useCreateTaskMutation,
+  useGetTasksQuery,
+  useUpdateTaskMutation,
+  useDeleteTaskMutation,
+  useRestoreTaskMutation,
+} = tasksApiSlice;
