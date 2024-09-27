@@ -45,7 +45,6 @@ function DeleteUser() {
     const restorerUser = async () => {
       try {
         const resData = (await restoreUser({ restoreUserId: userId })) as ResData;
-        console.log(resData);
         if (Object.keys(resData)[0] === "error" || isResError) {
           const resError = resData.error as ResData;
           throw new Error(resError.data.message);
