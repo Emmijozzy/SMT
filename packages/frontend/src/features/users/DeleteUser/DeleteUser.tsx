@@ -16,8 +16,6 @@ function DeleteUser() {
   const userId = useSelector(getUserId);
   const dispatch = useDispatch();
 
-  console.log(forDelete);
-
   const [deleteUser, { isError: isDelError, isLoading: isDelLoading }] = useDeleteUserMutation();
   const [restoreUser, { isError: isResError, isLoading: isResLoading }] = useRestoreUserMutation();
 
@@ -25,7 +23,6 @@ function DeleteUser() {
     const deleterUser = async () => {
       try {
         const resData = (await deleteUser({ deleteUserId: userId })) as ResData;
-        console.log(resData);
         if (Object.keys(resData)[0] === "error" || isDelError) {
           const resError = resData.error as ResData;
           throw new Error(resError.data.message);
