@@ -38,7 +38,7 @@ function InputField3({
             id={name}
             type={type}
             placeholder={placeholder}
-            className={`input h-8 mt-3 px-2 text-sm bg-base-200 leading-3 outline-none rounded-b-none rounded-t-md border-none border-2 input-primary w-full  border-t-none ${className || ""}`}
+            className={`input h-8 mt-3 px-2 text-sm bg-base-100 leading-3 outline-none rounded-b-none rounded-t-md border-none border-2 input-primary w-full  border-t-none ${className || ""}`}
             value={value}
             onChange={onChange}
             disabled={disabled}
@@ -50,7 +50,7 @@ function InputField3({
             name={name}
             rows={3}
             // cols={20}
-            className={`w-full bg-base-200 mt-2 rounded-t-md p-2 outline-none border-none ${className || ""}`}
+            className={`w-full bg-base-100 mt-2 rounded-t-md p-2 outline-none border-none ${className || ""}`}
             placeholder={placeholder}
             value={value}
             onChange={onChange}

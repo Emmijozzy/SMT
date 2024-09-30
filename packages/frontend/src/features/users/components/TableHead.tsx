@@ -1,7 +1,7 @@
 function TableHead() {
   return (
     <thead className="align-bottom">
-      <tr className="border-b border-base-content/80 ">
+      <tr className="border-b border-base-content/40 ">
         <th className="px-6 py-3 font-bold text-left uppercase align-middle text-md border-b-solid tracking-none whitespace-nowrap text-base-content/70 ">
           Details
         </th>

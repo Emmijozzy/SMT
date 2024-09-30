@@ -4,7 +4,7 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import { ChangeEvent, memo, useState } from "react";
-import InputField2 from "../../../../shared/components/InputField2";
+import InputField3 from "../../../../shared/components/InputField3";
 import Select from "../../../../shared/components/Select";
 import UseTaskFilterQuery from "../UseTaskFilterQuery";
 
@@ -60,7 +60,7 @@ const QueryTask = memo(({ handleSearchId }: Props) => {
           </div>
           <div className={`w-full transition ${showFileterd ? "" : "hidden"}`}>
             <form onSubmit={handleSubmit}>
-              <InputField2
+              <InputField3
                 label="title"
                 placeholder="Enter title"
                 onChange={handleChange}
@@ -69,7 +69,7 @@ const QueryTask = memo(({ handleSearchId }: Props) => {
               />
 
               <div className=" w-full mt-4 flex flex-wrap gap-2 justify-between">
-                <InputField2
+                <InputField3
                   label="Assignee"
                   placeholder="Enter task assignee"
                   onChange={handleChange}
@@ -78,7 +78,7 @@ const QueryTask = memo(({ handleSearchId }: Props) => {
                   bodyClassName="lg:w-[49%]"
                 />
                 <Select
-                  className="lg:w-[49%]"
+                  className="lg:w-[49%] border-b-[1px] border-base-content/40 h-13 text-sm gap-4 "
                   labelClass="mr-2 lg:mr-8"
                   label="team"
                   placeholder="Select responsible team"
@@ -89,7 +89,7 @@ const QueryTask = memo(({ handleSearchId }: Props) => {
                 />
               </div>
               <div className=" w-full mt-4 flex flex-wrap gap-2 justify-between">
-                <InputField2
+                <InputField3
                   label="Start Date"
                   onChange={handleChange}
                   value={values.startDate}
@@ -97,7 +97,7 @@ const QueryTask = memo(({ handleSearchId }: Props) => {
                   bodyClassName="lg:w-[49%]"
                   type="date"
                 />
-                <InputField2
+                <InputField3
                   label="Due Date"
                   onChange={handleChange}
                   value={values.dueDate}
@@ -108,7 +108,7 @@ const QueryTask = memo(({ handleSearchId }: Props) => {
               </div>
               <div className=" w-full mt-4 flex flex-wrap gap-2 justify-between">
                 <Select
-                  className="lg:w-[49%]"
+                  className="lg:w-[49%] border-b-[1px] border-base-content/40 h-13 text-sm gap-4 "
                   label="status"
                   labelClass="mr-2 lg:mr-10"
                   placeholder="Select task status"
@@ -118,7 +118,7 @@ const QueryTask = memo(({ handleSearchId }: Props) => {
                   handleChange={handleChange}
                 />
                 <Select
-                  className="lg:w-[49%]"
+                  className="lg:w-[49%] border-b-[1px] border-base-content/40 h-13 text-sm gap-4 "
                   labelClass="mr-2 lg:mr-8"
                   label="priority"
                   placeholder="Select task priority"

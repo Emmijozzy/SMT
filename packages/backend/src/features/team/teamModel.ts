@@ -5,8 +5,16 @@ export interface ITeam extends Document {
   teamId?: string; // Unique team identifier (automatically generated)
   name: string;
   description: string;
-  memberIds?: string[]; // Array of ObjectIds referencing User documents
+  members?: [
+    {
+      user: string;
+      role: "team_member" | "manager" | "admin";
+      joinedAt: Date;
+    }
+  ]; // Array of ObjectIds referencing User documents
   managerId?: string; // Array of ObjectIds referencing Project documents (optional)
+  tasks?: string[];
+  subTasks?: string[];
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -25,12 +33,36 @@ const teamSchema = new Schema<ITeam>({
   description: {
     type: String
   },
-  memberIds: [
+  members: [
+    {
+      user: {
+        type: String,
+        ref: "User", // Reference to your User model
+        required: true
+      },
+      role: {
+        type: String,
+        enum: ["team_member", "manager", "admin"],
+        default: "team_member"
+      },
+      joinedAt: {
+        type: Date,
+        default: Date.now
+      }
+    }
+  ],
+  tasks: [
     {
       type: String,
-      ref: "User",
-      path: "userId"
-      // required: true
+      ref: "Task", // Reference to your Task model
+      path: "taskId" // Path to the task ID in the Task model
+    }
+  ],
+  subTasks: [
+    {
+      type: String,
+      ref: "Subtask",
+      path: "subTaskId"
     }
   ],
   managerId: {

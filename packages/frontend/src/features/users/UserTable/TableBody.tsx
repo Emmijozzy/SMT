@@ -1,14 +1,14 @@
 import { FaRegEdit, FaTrashRestore } from "react-icons/fa";
 import { GrView } from "react-icons/gr";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
-import { usersSelectors } from "../userSlice";
+import { RootState } from "../../../app/store";
 import Avartar from "../../../shared/components/Avartar";
 import getRelativeTimeString from "../../../shared/utils/getRelativeTimeString";
-import { RootState } from "../../../app/store";
-import { setUserId, setShowModal } from "../DeleteUser/DeleteUserSlice";
+import { setShowModal, setUserId } from "../DeleteUser/DeleteUserSlice";
+import { usersSelectors } from "../userSlice";
 
 type Props = {
   userId: string;
@@ -38,7 +38,9 @@ function TableBody({ userId }: Props) {
 
     const relativeTimeString = getRelativeTimeString(dateJoined);
     content = (
-      <tr className={`border-b border-base-content/80 hover:bg-base-300 capitalize ${delFlg ? "opacity-30" : ""}`}>
+      <tr
+        className={`border-b-[1px] border-base-content/40 hover:bg-base-300 capitalize ${delFlg ? "opacity-30" : ""}`}
+      >
         <td className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
           <div className="flex px-2 py-1">
             <div className="mr-2">

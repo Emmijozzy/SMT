@@ -40,6 +40,7 @@ function EditTaskDetails({ handleEditTaskDetails, taskId }: Props) {
       inputType={inputType}
       type={type}
       disabled={name === "taskId"}
+      className="bg-base-200"
     />
   );
 
@@ -52,7 +53,7 @@ function EditTaskDetails({ handleEditTaskDetails, taskId }: Props) {
       handleChange={handleChange}
       options={options}
       labelClass="w-14"
-      className="border-b-[1px] border-base-content/40 h-13 text-sm gap-9"
+      className="border-b-[1px] border-base-content/40 h-13 text-sm gap-9 "
     />
   );
 

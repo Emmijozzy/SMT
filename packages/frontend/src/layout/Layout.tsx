@@ -15,8 +15,6 @@ function Layout() {
 
   const isLoading = useSelector((state: RootState) => state.loader.isLoading);
 
-  console.log(isLoading);
-
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
 

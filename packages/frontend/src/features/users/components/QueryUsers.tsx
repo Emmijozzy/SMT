@@ -1,5 +1,5 @@
 import { ChangeEvent } from "react";
-import InputField2 from "../../../shared/components/InputField2";
+import InputField3 from "../../../shared/components/InputField3";
 import Select from "../../../shared/components/Select";
 // import useFilteredQuery from "../UserTable/useFilteredQuery";
 
@@ -15,21 +15,21 @@ function QueryUsers({ showFileterd, handleChange, handleSubmit, values, isSubmit
   return (
     <div className={`w-full transition ${showFileterd ? "" : "hidden"}`}>
       <form onSubmit={handleSubmit}>
-        <InputField2
+        <InputField3
           label="Fullname"
           placeholder="Enter name"
           onChange={handleChange}
           value={values.fullName}
           name="fullName"
         />
-        <InputField2
+        <InputField3
           label="email"
           placeholder="Enter email"
           onChange={handleChange}
           value={values.email}
           name="email"
         />
-        <InputField2
+        <InputField3
           label="Status"
           placeholder="Enter your firstname"
           onChange={handleChange}
@@ -38,7 +38,7 @@ function QueryUsers({ showFileterd, handleChange, handleSubmit, values, isSubmit
         />
         <div className=" w-full mt-4 flex flex-wrap gap-2 justify-between">
           <Select
-            className="lg:w-[49%]"
+            className="lg:w-[49%] border-b-[1px] border-base-content/40 h-13 text-sm gap-9 "
             labelClass="mr-2 lg:mr-8"
             label="role"
             placeholder="Select user role"
@@ -47,7 +47,7 @@ function QueryUsers({ showFileterd, handleChange, handleSubmit, values, isSubmit
             handleChange={handleChange}
           />
           <Select
-            className="lg:w-[49%]"
+            className="lg:w-[49%] border-b-[1px] border-base-content/40 h-13 text-sm gap-9 "
             labelClass="mr-2 lg:mr-8"
             label="Dept."
             placeholder="Select user Department"

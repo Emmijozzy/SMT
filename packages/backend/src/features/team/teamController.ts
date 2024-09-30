@@ -30,7 +30,7 @@ export default class TeamController implements IController {
       //console.log(teamId);
     }
 
-    const teamPaylaod = {
+    const teamPayload = {
       teamId,
       name,
       description,
@@ -38,7 +38,7 @@ export default class TeamController implements IController {
       managerId
     };
 
-    const team = await TeamModel.create(teamPaylaod);
+    const team = await TeamModel.create(teamPayload);
 
     if (!team) throw new InternalError("Error creating team");
 
