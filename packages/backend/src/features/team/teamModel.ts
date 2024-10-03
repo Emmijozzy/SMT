@@ -9,7 +9,7 @@ export interface ITeam extends Document {
     {
       user: string;
       role: "team_member" | "manager" | "admin";
-      joinedAt: Date;
+      joinedAt?: Date;
     }
   ]; // Array of ObjectIds referencing User documents
   managerId?: string; // Array of ObjectIds referencing Project documents (optional)
@@ -22,13 +22,13 @@ export interface ITeam extends Document {
 const teamSchema = new Schema<ITeam>({
   teamId: {
     type: String,
-    required: true,
     unique: true // Ensure unique team IDs
   },
   name: {
     type: String,
     required: true,
-    maxLength: 255
+    maxLength: 255,
+    unique: true
   },
   description: {
     type: String
@@ -42,7 +42,7 @@ const teamSchema = new Schema<ITeam>({
       },
       role: {
         type: String,
-        enum: ["team_member", "manager", "admin"],
+        enum: ["team_member", "manager"],
         default: "team_member"
       },
       joinedAt: {
@@ -68,8 +68,8 @@ const teamSchema = new Schema<ITeam>({
   managerId: {
     type: String,
     ref: "User",
-    path: "userId"
-    // required: true
+    path: "userId",
+    required: true
   },
   createdAt: {
     type: Date,
@@ -84,11 +84,17 @@ const teamSchema = new Schema<ITeam>({
 // teamSchema.set("_id", false);
 
 teamSchema.pre<ITeam>("save", async function (next) {
-  if (!this.teamId) {
-    this.teamId = uuidv4().substring(0, 5);
-    //console.log(this.teamId);
+  // console.log("Inside pre('save') hook!");
+
+  try {
+    if (!this.teamId) {
+      this.teamId = uuidv4().substring(0, 8);
+    }
+    next();
+  } catch (err: unknown) {
+    const error = err as Error;
+    next(new Error("Error generating team ID: " + error.message));
   }
-  next();
 });
 
 export default mongoose.model<ITeam>("Team", teamSchema);
