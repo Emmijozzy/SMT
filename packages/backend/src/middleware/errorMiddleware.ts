@@ -17,6 +17,7 @@ const errorMiddleware = (error: IApiError, req: Request, res: Response, next: Ne
       res.status(500).json({ status: 500, message: error.message });
     }
   }
+  next();
 };
 
 export default errorMiddleware;

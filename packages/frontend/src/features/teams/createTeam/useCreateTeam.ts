@@ -62,7 +62,6 @@ const useCreateTeam = () => {
   const { handleSubmit, handleBlur, handleChange, errors, values } = formik;
 
   const handleFormValidation = () => {
-    console.log(values);
     const errorsArr = Object.values(errors);
     errorsArr?.forEach((err) => {
       dispatch(addAlert({ message: err, type: "error" }));
