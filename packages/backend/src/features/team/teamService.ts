@@ -1,4 +1,4 @@
-import { InternalError, NotFoundError } from "../../utils/ApiError";
+import { BadRequestError, InternalError, NotFoundError } from "../../utils/ApiError";
 import { ICreateTeam, IUpdateTeam } from "./teamInterface";
 import { ITeam } from "./teamModel";
 import TeamRepository from "./teamRepository";
@@ -11,13 +11,15 @@ export default class TeamService {
 
   async createTeam(teamData: ICreateTeam): Promise<ITeam> {
     try {
-      // *TODO - re-consider the internal logic validation here
+      const { name } = teamData;
+      const teamWithName = await this._teamRepository.getTeam({ name: name });
+      if (teamWithName.length > 0) throw new BadRequestError("Team with the same name already exists", "", __filename);
       const team = await this._teamRepository.create(teamData);
       return team;
     } catch (err: unknown) {
       const error = err as Error;
       console.error(error.message);
-      throw new InternalError("Could not create team ERR:" + error.message);
+      throw new InternalError("Could not create team ERR:" + error.message, "", __filename);
     }
   }
 
@@ -28,7 +30,7 @@ export default class TeamService {
     } catch (err: unknown) {
       const error = err as Error;
       console.error(error.message);
-      throw new InternalError("Could not fetch teams ERR:" + error.message);
+      throw new InternalError("Could not fetch teams ERR:" + error.message, "", __filename);
     }
   }
   async getTeamById(teamId: string): Promise<ITeam | null> {
@@ -38,7 +40,7 @@ export default class TeamService {
     } catch (err: unknown) {
       const error = err as Error;
       console.error(error.message);
-      throw new InternalError("Could not fetch team ERR:" + error.message);
+      throw new InternalError("Could not fetch team ERR:" + error.message, "", __filename);
     }
   }
 
@@ -65,7 +67,7 @@ export default class TeamService {
     } catch (err: unknown) {
       const error = err as Error;
       console.error(error.message);
-      throw new InternalError("Could not update team ERR:" + error.message);
+      throw new InternalError("Could not update team ERR:" + error.message, "", __filename);
     }
   }
 
@@ -83,7 +85,7 @@ export default class TeamService {
     } catch (err: unknown) {
       const error = err as Error;
       console.error(error.message);
-      throw new InternalError("Could not delete team ERR:" + error.message);
+      throw new InternalError("Could not delete team ERR:" + error.message, "", __filename);
     }
   }
 }

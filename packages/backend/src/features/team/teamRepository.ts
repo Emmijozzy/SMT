@@ -15,7 +15,7 @@ export default class TeamRepository {
       if (error.name === "Validation") {
         throw new BadRequestError("Invalid team data provided");
       } else {
-        throw new InternalError("Failed to create team.  ERROR: " + error.message + " " + error.stack);
+        throw new InternalError("Failed to create team.  ERROR: " + error.message + " ", error.stack, __filename);
       }
     }
   }
@@ -26,7 +26,18 @@ export default class TeamRepository {
     } catch (err: unknown) {
       const error = err as Error;
       console.error("Error fetching teams", error);
-      throw new InternalError("Failed to fetch teams.  ERROR: " + error.message);
+      throw new InternalError("Failed to fetch teams.  ERROR: " + error.message + " ", error.stack, __filename);
+    }
+  }
+
+  async getTeam<T extends keyof ITeam>(object: Record<T, string>): Promise<ITeam[]> {
+    try {
+      const teams = await Team.find(object).lean().exec();
+      return teams;
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error("Error fetching teams", error);
+      throw new InternalError("Failed to fetch teams.  ERROR: " + error.message + " ", error.stack, __filename);
     }
   }
 
@@ -38,7 +49,7 @@ export default class TeamRepository {
     } catch (err: unknown) {
       const error = err as Error;
       console.error("Error fetching team by id", error);
-      throw new InternalError("Failed to fetch team by id.  ERROR: " + error.message);
+      throw new InternalError("Failed to fetch team by id.  ERROR: " + error.message + " ", error.stack, __filename);
     }
   }
 
@@ -50,7 +61,7 @@ export default class TeamRepository {
     } catch (err: unknown) {
       const error = err as Error;
       console.error("Error updating team by id", error);
-      throw new InternalError("Failed to update team by id.  ERROR: " + error.message);
+      throw new InternalError("Failed to update team by id.  ERROR: " + error.message + " ", error.stack, __filename);
     }
   }
 
@@ -62,7 +73,7 @@ export default class TeamRepository {
     } catch (err: unknown) {
       const error = err as Error;
       console.error("Error deleting team by id", error);
-      throw new InternalError("Failed to delete team by id.  ERROR: " + error.message);
+      throw new InternalError("Failed to delete team by id.  ERROR: " + error.message + " ", error.stack, __filename);
     }
   }
 }

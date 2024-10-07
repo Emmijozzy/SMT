@@ -6,11 +6,13 @@ import { persistReducer, persistStore } from "redux-persist";
 import alertReducer from "../features/alerts/AlertSlice";
 import authReducer from "../features/auth/authSlice";
 import loaderReducer from "../features/loading/loaderSlice";
+import deleteTaskReducer from "../features/tasks/deleteTask/deleteTaskSlice";
 import tasksReducer from "../features/tasks/tasksSlice";
 import tasksTableReducer from "../features/tasks/TasksTable/tasksTableSlice";
+import teamTableReducer from "../features/teams/teamTable/teamTableSlice";
+import teamReducer from "../features/teams/teamSlice";
 import deleteUserReducer from "../features/users/DeleteUser/DeleteUserSlice";
 import userProfileReducer from "../features/users/userProfileSlice";
-import deleteTaskReducer from "../features/tasks/deleteTask/deleteTaskSlice";
 import usersReducer from "../features/users/userSlice";
 import userTableReducer from "../features/users/userTableSlice";
 import layoutReducer from "../layout/layoutSlice";
@@ -33,6 +35,8 @@ const rootReducer = combineReducers({
   deleteTask: deleteTaskReducer,
   taskTable: tasksTableReducer,
   tasks: tasksReducer,
+  teams: teamReducer,
+  teamTable: teamTableReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -51,6 +55,8 @@ export interface RootState {
   taskTable: ReturnType<typeof tasksTableReducer>;
   tasks: ReturnType<typeof tasksReducer>;
   deleteTask: ReturnType<typeof deleteTaskReducer>;
+  teams: ReturnType<typeof teamReducer>;
+  teamTable: ReturnType<typeof teamTableReducer>;
 }
 
 export const store = configureStore({

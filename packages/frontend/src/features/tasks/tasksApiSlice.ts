@@ -24,6 +24,7 @@ export const tasksApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: { ...taskData },
       }),
+      invalidatesTags: [{ type: "Tasks" as const, id: "LIST" as const }],
     }),
 
     getTasks: build.query<TaskResponse, void>({

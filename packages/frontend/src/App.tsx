@@ -5,7 +5,7 @@ import Login from "./features/auth/Login";
 import Register from "./features/auth/Register";
 import Dashboard from "./features/Dashboard/Dashboard";
 import Tasks from "./features/tasks/Tasks";
-import Teams from "./features/teams/Teams";
+import Teams from "./features/teams/Team";
 import Users from "./features/users/Users";
 import Prefetch from "./features/auth/Prefetch";
 import RequireAuth from "./features/auth/RequireAuth";
@@ -19,6 +19,8 @@ import EditUser from "./features/users/EditUser/EditUser";
 import TasksTable from "./features/tasks/TasksTable/TaskTable";
 import CreateTask from "./features/tasks/createTask/CreateTask";
 import ViewTask from "./features/tasks/viewTask/ViewTask";
+import TeamTable from "./features/teams/teamTable/TeamTable";
+import CreateTeam from "./features/teams/createTeam/CreateTeam";
 
 function App() {
   return (
@@ -44,7 +46,10 @@ function App() {
                   <Route path="create_task" element={<CreateTask />} />
                   <Route path=":taskId" element={<ViewTask />} />
                 </Route>
-                <Route path="teams" element={<Teams />} />
+                <Route path="teams" element={<Teams />}>
+                  <Route index element={<TeamTable />} />
+                  <Route path="create_team" element={<CreateTeam />} />
+                </Route>
                 <Route path="profile" element={<Profile />} />
               </Route>
             </Route>
