@@ -1,9 +1,9 @@
-import React, { memo, useMemo } from "react";
-import TableHead from "./components/TableHead";
+import { memo, useMemo } from "react";
 import Pagination from "./components/Pagination";
 import QueryTask from "./components/QueryTask";
-import UseTasksTable from "./UseTasksTable";
+import TableHead from "./components/TableHead";
 import TaskTableRow from "./components/TaskTableRow";
+import UseTasksTable from "./UseTasksTable";
 
 const TasksTable = memo(() => {
   const { totalTasks, filteredTask, handleSearchId } = UseTasksTable();
@@ -31,11 +31,7 @@ const TasksTable = memo(() => {
                   <tbody className="mb-10 mt-2">
                     {memoizedFilteredTasks.length > 0 ? (
                       memoizedFilteredTasks.map((id, i) =>
-                        i === 0 ? (
-                          <TaskTableRow key={id} taskId={id} firstItem />
-                        ) : (
-                          <TaskTableRow key={id} taskId={id} />
-                        ),
+                        i === 0 ? <TaskTableRow key={id} taskId={id} /> : <TaskTableRow key={id} taskId={id} />,
                       )
                     ) : (
                       <tr>
