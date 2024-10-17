@@ -62,6 +62,17 @@ export const teamApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: [{ type: "Teams" as const, id: "LIST" as const }],
     }),
+
+    updateTeam: build.mutation<ITeam, { teamId: string; updatedTeam: ITeam }>({
+      query: ({ teamId, updatedTeam }) => ({
+        url: `/team/update/?id=${teamId}`,
+        method: "PUT",
+        body: { ...updatedTeam },
+        validateStatus: (response, result: Result) =>
+          response.status === 200 || response.status === 204 || !result.isError,
+      }),
+      invalidatesTags: (_, __, arg) => [{ type: "Team" as const, id: arg.teamId }],
+    }),
   }),
 });
-export const { useGetTeamsQuery, useCreateTeamMutation } = teamApiSlice;
+export const { useGetTeamsQuery, useCreateTeamMutation, useUpdateTeamMutation } = teamApiSlice;

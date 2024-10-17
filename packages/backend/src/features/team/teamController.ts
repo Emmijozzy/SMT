@@ -23,7 +23,7 @@ export default class TeamController implements IController {
     this.router.post("/create", validationMiddleware(teamValidation.teamSchema), this.create);
     this.router.get("/teams", this.getTeams);
     this.router.get("/", this.getTeam);
-    this.router.patch("/", validationMiddleware(teamValidation.teamSchema), this.updateTeam);
+    this.router.put("/update", validationMiddleware(teamValidation.teamSchema), this.updateTeam);
     this.router.delete("/", this.deleteTeam);
   }
 

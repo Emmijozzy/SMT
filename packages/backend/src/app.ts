@@ -1,12 +1,12 @@
-import express, { Application } from "express";
-import cors from "cors";
-import helmet from "helmet";
 import compression from "compression";
 import cookieParser from "cookie-parser";
+import cors from "cors";
+import express, { Application } from "express";
+import helmet from "helmet";
 import IController from "./Interface/controller";
 import { corsOptions } from "./config/corsOptions";
-import errorMiddleware from "./middleware/errorMiddleware";
 import { connectDB } from "./database";
+import errorMiddleware from "./middleware/errorMiddleware";
 import logger from "./utils/logger";
 
 class App {

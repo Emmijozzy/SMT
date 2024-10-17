@@ -21,6 +21,7 @@ import CreateTask from "./features/tasks/createTask/CreateTask";
 import ViewTask from "./features/tasks/viewTask/ViewTask";
 import TeamTable from "./features/teams/teamTable/TeamTable";
 import CreateTeam from "./features/teams/createTeam/CreateTeam";
+import ViewTeam from "./features/teams/viewTeam/ViewTeam";
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
                 <Route path="teams" element={<Teams />}>
                   <Route index element={<TeamTable />} />
                   <Route path="create_team" element={<CreateTeam />} />
+                  <Route path=":teamId" element={<ViewTeam />} />
                 </Route>
                 <Route path="profile" element={<Profile />} />
               </Route>
