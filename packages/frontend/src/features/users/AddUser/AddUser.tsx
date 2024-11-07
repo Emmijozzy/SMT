@@ -2,13 +2,13 @@
 // import { Link } from "react-router-dom";
 import ArrowBackSharpIcon from "@mui/icons-material/ArrowBackSharp";
 // import Button2 from "../../../shared/components/Button2";
-import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import { addAlert } from "../../alerts/AlertSlice";
+import Password from "../components/Password";
 import UserDetailsForm from "../components/UserDetailsForm";
 import UserPermissionForm from "../components/UserPermissionForm";
-import Password from "../components/Password";
 import useAddUser from "./useAddUser";
-import { addAlert } from "../../alerts/AlertSlice";
 
 function AddUser() {
   const { handleSubmit, handleBlur, handleChange, errors, values, isSubmitting } = useAddUser();
@@ -41,19 +41,12 @@ function AddUser() {
       </div>
       <form onSubmit={handleSubmit}>
         <div role="tablist" className="tabs tabs-lifted tabs-sm">
-          <input type="radio" name="my_tabs_2" role="tab" className="tab h-10 " aria-label="Details" />
+          <input type="radio" name="my_tabs_2" role="tab" className="tab h-10 " aria-label="Details" defaultChecked />
           <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box p-6">
             <UserDetailsForm handleBlur={handleBlur} handleChange={handleChange} errors={errors} values={values} />
           </div>
 
-          <input
-            type="radio"
-            name="my_tabs_2"
-            role="tab"
-            className="tab h-10"
-            aria-label="Permissions"
-            defaultChecked
-          />
+          <input type="radio" name="my_tabs_2" role="tab" className="tab h-10" aria-label="Permissions" />
           <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box p-6">
             <UserPermissionForm handleBlur={handleBlur} handleChange={handleChange} values={values} />
           </div>

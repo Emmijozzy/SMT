@@ -18,7 +18,6 @@ class App {
     this.initialiseMiddleWare();
     this.initialiseRouters();
     this.initialiseErrorHandling();
-
     process.on("uncaughtException", (e) => {
       logger.error(e);
     });

@@ -18,8 +18,8 @@ function ViewTeamDetails({ team, handleEditTeamDetails }: Props) {
   )?.fullName;
   return (
     <div className="container transition-all">
-      <div className="w-full flex flex-col">
-        <div className="w-full flex justify-between">
+      <div className="w-full flex flex-col bg-base-200 rounded-lg py-2">
+        <div className="w-full flex justify-between px-4">
           <h6 className="h6">Details</h6>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-2">

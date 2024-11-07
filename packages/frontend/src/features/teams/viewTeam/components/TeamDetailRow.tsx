@@ -7,7 +7,7 @@ type Props = {
 function TeamDetailRow({ label, value, className }: Props) {
   return (
     <tr
-      className={`w-full grid gridTemplateColumn text-[16px] leading-6 border-b-[1px] border-base-content/10 ${className || ""}`}
+      className={`w-full grid gridTemplateColumn text-[16px] leading-6 border-b-[1px] border-base-content/10 px-4 ${className || ""} `}
     >
       <td className="font-bold">
         <strong>{label}:</strong>
