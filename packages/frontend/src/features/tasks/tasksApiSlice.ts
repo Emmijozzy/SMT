@@ -1,6 +1,8 @@
 /* eslint-disable indent */
 import { apiSlice } from "../../app/api/apislice";
+import log from "../../shared/utils/log";
 import { ITask } from "./tasksInterface";
+import { setTasks } from "./tasksSlice";
 
 type TaskResponse = ITask[];
 
@@ -52,6 +54,15 @@ export const tasksApiSlice = apiSlice.injectEndpoints({
         }));
 
         return tasks;
+      },
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(setTasks(data));
+        } catch (e: unknown) {
+          const error = e as Error;
+          log("error", "TeamApi getTeam Error", error.message, error.stack as string);
+        }
       },
       providesTags: (result) =>
         result

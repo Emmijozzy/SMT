@@ -17,7 +17,7 @@ const userColumnFactory = (teamNames: string[]) => {
         filterable: false,
       },
       {
-        label: "Team",
+        label: "team",
         searchable: false,
         sortable: true,
         filterable: true,

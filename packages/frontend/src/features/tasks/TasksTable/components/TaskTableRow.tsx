@@ -2,34 +2,32 @@
 import { AvatarGroup } from "@mui/material";
 import { useMemo } from "react";
 import { GrView } from "react-icons/gr";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { RootState } from "../../../../app/store";
 import Avartar from "../../../../shared/components/Avartar";
 import getDaysLeft from "../../../../shared/utils/getDaysLeft";
 import { ITask } from "../../tasksInterface";
-import { tasksSelectors } from "../../tasksSlice";
 import Completion from "./Completion";
 import PriorityIndicator from "./PriorityIndicator";
 
-type Props = {
-  taskId: string;
+type Props<T> = {
+  data: T;
 };
 
-function TaskTableRow({ taskId }: Props) {
-  const getTask = useSelector((state: RootState) => tasksSelectors.selectById(state, taskId)) as ITask;
-
+function TaskTableRow<T extends ITask>({ data }: Props<T>) {
   const content = useMemo(() => {
-    if (getTask) {
-      const { title, responsibleTeam, priority, status, assignedTo, dueDate, del_flg: delFlg } = getTask;
+    if (data) {
+      const { title, taskId, responsibleTeam, priority, status, assignedTo, dueDate, del_flg: delFlg } = data;
       const daysLeft = getDaysLeft(dueDate || new Date().toDateString());
       return (
         <tr className={`relative hover:bg-base-100 ${delFlg ? "opacity-20" : ""}`}>
           <td className="border-t-0 w-64 px-4align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2 text-left flex items-center">
             <Avartar name={title} imgUrl="" />
-            <span className="ml-3 font-bold truncate ... text-base-content capitalize hover:overflow-visible hover:bg-base-100">
-              {title}
-            </span>
+            <div>
+              <span className="ml-3 font-bold truncate ... text-base-content capitalize hover:overflow-visible hover:bg-base-100">
+                {title}
+              </span>
+              <p className="ml-3 text-xs leading-tight text-base-content/50">{taskId}</p>
+            </div>
           </td>
           <td className="border-t-0 px-4align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2 capitalize">
             <span>{responsibleTeam}</span>
@@ -69,25 +67,23 @@ function TaskTableRow({ taskId }: Props) {
             <span>{daysLeft}</span>
           </td>
           <td className="border-t-0 max-w-20 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2 text-right">
-            <Link to={`${taskId}`} className="flex view justify-between ">
+            <Link to={`${taskId as string}`} className="flex view justify-between ">
               <GrView className="h-6 w-6 text-base-content/70 hover:text-secondary cursor-pointer" />
             </Link>
           </td>
         </tr>
       );
     }
-    return null; // Return null if task is not available
-  }, [getTask, taskId]); // Only re-calculate when task changes
-
-  return (
-    content || (
+    return (
       <tr>
         <td className="text-center">
           <span>...Loading</span>
         </td>
       </tr>
-    )
-  );
+    ); // Return null if task is not available
+  }, [data]); // Only re-calculate when task changes
+
+  return content; // Return the content of the task row, or a loading spinner if data is not available
 }
 
 export default TaskTableRow;

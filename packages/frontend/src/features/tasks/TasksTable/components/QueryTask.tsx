@@ -1,24 +1,18 @@
-import { Link } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import SearchIcon from "@mui/icons-material/Search";
-import CloseIcon from "@mui/icons-material/Close";
-import { ChangeEvent, memo, useState } from "react";
+import { memo, useState } from "react";
+import { Link } from "react-router-dom";
 import InputField3 from "../../../../shared/components/InputField3";
 import Select from "../../../../shared/components/Select";
 import UseTaskFilterQuery from "../UseTaskFilterQuery";
 
-type Props = {
-  handleSearchId: (e: ChangeEvent<HTMLInputElement>) => void;
-};
-
-const QueryTask = memo(({ handleSearchId }: Props) => {
-  const [showFileterd, setShowFiltered] = useState(false);
+const QueryTask = memo(() => {
+  const [showFilter, setShowFilter] = useState(false);
 
   const { handleSubmit, handleChange, values, isSubmitting } = UseTaskFilterQuery();
 
   const handleShowFiltered = () => {
-    setShowFiltered((pre) => !pre);
+    setShowFilter((pre) => !pre);
   };
 
   return (
@@ -32,21 +26,8 @@ const QueryTask = memo(({ handleSearchId }: Props) => {
               onClick={() => handleShowFiltered()}
               className="h-full flex items-center mr-3"
             >
-              <ArrowDropDownIcon className={`h-14 w-14 transition ${showFileterd ? "rotate-180" : ""}`} />
+              <ArrowDropDownIcon className={`h-14 w-14 transition ${showFilter ? "rotate-180" : ""}`} />
             </button>
-            <div className="div relative w-2/4 hidden md:inline">
-              <SearchIcon className="h-8 w-8 absolute left-1 -translate-y-1/2 top-1/2 p-1 pr-2 text-base-content/60" />
-              <input
-                className="w-full input rounded-lg px-8 py-4 border-2 border-transparent focus:outline-none focus:border-primary/50 placeholder-gray-400 transition-all duration-300 shadow-md"
-                placeholder="Search Task ID ...."
-                // value={searchId}
-                type="text"
-                onChange={(e) => handleSearchId(e)}
-              />
-              <button type="button" aria-label="reset" className="absolute right-3 -translate-y-1/2 top-1/2 p-1">
-                <CloseIcon className="h-8 w-8 text-base-content/60" />
-              </button>
-            </div>
 
             <button
               type="button"
@@ -58,7 +39,7 @@ const QueryTask = memo(({ handleSearchId }: Props) => {
               </Link>
             </button>
           </div>
-          <div className={`w-full transition ${showFileterd ? "" : "hidden"}`}>
+          <div className={`w-full transition ${showFilter ? "" : "hidden"}`}>
             <form onSubmit={handleSubmit}>
               <InputField3
                 label="title"

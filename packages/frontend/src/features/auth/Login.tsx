@@ -1,7 +1,7 @@
 import loginImage from "../../assets/images/SvG/Computer login-rafiki.svg";
 import Alerts from "../alerts/Alerts";
-import LoginForm from "./components/LoginForm";
-import LeftImage from "./components/LeftImage";
+import LoginForm from "./Components/LoginForm";
+import LeftImage from "./Components/LeftImage";
 import useLogin from "./hooks/useLogin";
 
 function Login() {

@@ -1,7 +1,7 @@
-import React from "react";
 import { FormikErrors } from "formik";
-import Button from "./Button";
-import FormInput from "./FormInput";
+import React from "react";
+import Button from "../../../shared/components/Button";
+import FormInput from "../../../shared/components/FormInput";
 import { LoginData } from "../authInterface";
 
 type Props = {

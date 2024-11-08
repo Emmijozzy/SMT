@@ -13,7 +13,7 @@ export function useTableState<T>(defaultColumn: string) {
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleFilter = useCallback((option: string, column: string) => {
-    console.log(option, "option", column, "column");
+    // console.log(option, "option", column, "column");
     setToFilter({ option, column });
   }, []);
 

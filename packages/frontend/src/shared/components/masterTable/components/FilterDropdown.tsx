@@ -23,8 +23,8 @@ export const FilterDropdown = memo(({ show, options, onSelect }: FilterDropdownP
         </li>
         {options.map((option) => (
           <li key={option}>
-            <button type="button" onClick={() => onSelect(option.toLowerCase())}>
-              {option}
+            <button type="button" className="capitalize" onClick={() => onSelect(option.toLowerCase())}>
+              {option.replace("_", " ")}
             </button>
           </li>
         ))}

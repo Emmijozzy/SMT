@@ -1,6 +1,8 @@
 /* eslint-disable indent */
 import { apiSlice } from "../../app/api/apislice";
+import log from "../../shared/utils/log";
 import { ITeam } from "./teamInterface";
+import { setTeams } from "./teamSlice";
 
 type TeamResponse = ITeam[];
 
@@ -39,6 +41,15 @@ export const teamApiSlice = apiSlice.injectEndpoints({
           ...team,
           _id: team.teamId,
         }));
+      },
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(setTeams(data));
+        } catch (e: unknown) {
+          const error = e as Error;
+          log("error", "TeamApi getTeam Error", error.message, error.stack as string);
+        }
       },
       providesTags: (result) =>
         result

@@ -1,8 +1,8 @@
-import React from "react";
 import { FormikErrors } from "formik";
+import React from "react";
+import Button from "../../../shared/components/Button";
+import FormInput from "../../../shared/components/FormInput";
 import { RegisterData } from "../authInterface";
-import Button from "./Button";
-import FormInput from "./FormInput";
 
 type Props = {
   handleSubmit: (e?: React.FormEvent<HTMLFormElement> | undefined) => void;

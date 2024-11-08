@@ -7,6 +7,7 @@ type Props = {
   className: string;
   columns: {
     label: string;
+    as?: string;
     sortable?: boolean;
     filterable?: boolean;
     filterOptions?: string[];
@@ -30,9 +31,9 @@ const TableHeader = memo(({ className, columns, onSort, onFilter, sortedBy }: Pr
             <FilterDropdown
               show={column.filterable || false}
               options={column.filterOptions || []}
-              onSelect={(option) => onFilter(option, column.label.toLowerCase())}
+              onSelect={(option) => onFilter(option, column.label)}
             />
-            {column.label}
+            {column.as || column.label}
           </div>
         </th>
       ))}
