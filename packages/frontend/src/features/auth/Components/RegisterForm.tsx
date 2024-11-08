@@ -78,7 +78,7 @@ function RegisterForm({ handleSubmit, handleBlur, handleChange, errors, values, 
               />
             </div>
             <Button isSubmitting={isSubmitting} name="Register" className="mt-8" />
-            <p className="block mt-4 font-sans text-xs text-base antialiased font-normal leading-relaxed text-center text-gray-700">
+            <p className="block mt-4 font-sans text-base antialiased font-normal leading-relaxed text-center text-gray-700">
               Already have an account?
               <a className="ml-1 font-semibold text-pink-500 transition-colors hover:text-blue-700" href="/login">
                 Login Now!

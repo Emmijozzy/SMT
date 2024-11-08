@@ -52,7 +52,7 @@ function LoginForm({ handleSubmit, handleBlur, handleChange, errors, values, isS
               </a>
             </p>
             <Button isSubmitting={isSubmitting} name="login" className="mt-10" />
-            <p className="block mt-4 font-sans text-xs text-base antialiased font-normal leading-relaxed text-center text-gray-700">
+            <p className="block mt-4 font-sans text-base antialiased font-normal leading-relaxed text-center text-gray-700">
               Don't have an account?
               <a className="ml-1 font-semibold text-pink-500 transition-colors hover:text-blue-700" href="./register">
                 Register Now!
