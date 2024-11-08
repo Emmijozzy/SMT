@@ -4,10 +4,12 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { RootState } from "../../../../app/store";
 import Avartar from "../../../../shared/components/Avartar";
-import Users from "../../../../shared/components/Users";
+import { ITask } from "../../../tasks/tasksInterface";
+import { IUser } from "../../../users/userInterface";
 import { ITeam } from "../../teamInterface";
 import { teamSelectors } from "../../teamSlice";
 import TaskState from "./TaskState";
+import TeamUsers from "./TeamUsers";
 
 type Props = {
   teamId: string;
@@ -28,31 +30,27 @@ function TeamTableRow({ teamId }: Props) {
             </span>
           </td>
           <td className="border-t-0 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2 capitalize">
-            <Users users={members} aria-label={`Members of ${name}`} />
+            <TeamUsers users={members as IUser[]} aria-label={`Members of ${name}`} />
           </td>
-          <td className="border-t-0 px-4align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2">
+          <td className="border-t-0 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2">
             <TaskState
-              taskIds={(tasks as string[]) || []}
+              tasks={(tasks as ITask[]) || []}
               status="not started"
               aria-label={`Not started tasks for ${name}`}
             />
           </td>
-          <td className="border-t-0 px-4align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2">
+          <td className="border-t-0  align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2">
             <TaskState
-              taskIds={(tasks as string[]) || []}
+              tasks={(tasks as ITask[]) || []}
               status="in progress"
               aria-label={`In progress tasks for ${name}`}
             />
           </td>
-          <td className="border-t-0 px-4align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2">
-            <TaskState
-              taskIds={(tasks as string[]) || []}
-              status="Completed"
-              aria-label={`Completed tasks for ${name}`}
-            />
+          <td className="border-t-0 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2">
+            <TaskState tasks={(tasks as ITask[]) || []} status="Completed" aria-label={`Completed tasks for ${name}`} />
           </td>
-          <td className="border-t-0 px-4align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2">
-            <TaskState taskIds={(tasks as string[]) || []} status="closed" aria-label={`Closed tasks for ${name}`} />
+          <td className="border-t-0 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2">
+            <TaskState tasks={(tasks as ITask[]) || []} status="closed" aria-label={`Closed tasks for ${name}`} />
           </td>
 
           <td className="border-t-0 max-w-20 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2 text-right">

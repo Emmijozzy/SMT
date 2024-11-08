@@ -5,9 +5,7 @@ import { RootState } from "../../../app/store";
 import MasterTable from "../../../shared/components/masterTable/MasterTable";
 import Section from "../../../shared/components/Section";
 import { ITask } from "../../tasks/tasksInterface";
-import { tasksSelectors } from "../../tasks/tasksSlice";
 import { IUser } from "../../users/userInterface";
-import { usersSelectors } from "../../users/userSlice";
 import { ITeam } from "../teamInterface";
 import { teamSelectors } from "../teamSlice";
 import EditTeamDetails from "./components/EditTeamDetails";
@@ -27,20 +25,9 @@ function ViewTeam() {
 
   const getTeam = useSelector((state: RootState) => teamSelectors.selectById(state, teamId || "")) as ITeam;
 
-  const teamMember = getTeam?.members?.map((member) => member.user);
-
-  const allTasks = useSelector((state: RootState) => tasksSelectors.selectAll(state));
-  const allUsers = useSelector((state: RootState) => usersSelectors.selectAll(state));
-
   const allTeamsName = useSelector((state: RootState) => teamSelectors.selectAll(state))?.map((team) => team.name);
 
   const teamUserColumns = userColumnFactory([...allTeamsName]);
-
-  const teamTaskData = allTasks.filter((task) => getTeam?.tasks?.includes(task?.taskId as string)) as (ITask &
-    Record<string, unknown>)[];
-
-  const getTeamUsersData = allUsers.filter((user) => teamMember?.includes(user.userId)) as (IUser &
-    Record<string, unknown>)[];
 
   const TeamTaskTable = MasterTable<ITask & Record<string, unknown>>();
   const TeamUserTable = MasterTable<IUser & Record<string, unknown>>();
@@ -60,9 +47,19 @@ function ViewTeam() {
         )}
 
         {/* Add additional components for managing team users */}
-        <TeamUserTable name="Members" data={getTeamUsersData} tableHead={teamUserColumns} TableBody={TeamUserRow} />
+        <TeamUserTable
+          name="Members"
+          data={getTeam.members as (IUser & Record<string, unknown>)[]}
+          tableHead={teamUserColumns}
+          TableBody={TeamUserRow}
+        />
         {/* Add additional components for managing team tasks */}
-        <TeamTaskTable name="Team Task" data={teamTaskData} tableHead={teamTaskColumn} TableBody={TeamTaskRow} />
+        <TeamTaskTable
+          name="Team Task"
+          data={getTeam.tasks as (ITask & Record<string, unknown>)[]}
+          tableHead={teamTaskColumn}
+          TableBody={TeamTaskRow}
+        />
       </Section>
     );
   }
