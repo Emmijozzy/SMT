@@ -21,7 +21,18 @@ export default class TeamRepository {
   }
   async getTeams(): Promise<ITeam[]> {
     try {
-      const teams = await Team.find({}).lean().exec();
+      const teams = await Team.find({})
+        .populate({
+          path: "tasks",
+          model: "Task",
+          foreignField: "taskId"
+        })
+        .populate({
+          path: "members",
+          model: "User",
+          foreignField: "userId"
+        })
+        .exec();
       return teams;
     } catch (err: unknown) {
       const error = err as Error;
@@ -32,7 +43,18 @@ export default class TeamRepository {
 
   async getTeam<T extends keyof ITeam>(object: Record<T, string>): Promise<ITeam[]> {
     try {
-      const teams = await Team.find(object).lean().exec();
+      const teams = await Team.find(object)
+        .populate({
+          path: "tasks",
+          model: "Task",
+          foreignField: "taskId"
+        })
+        .populate({
+          path: "members",
+          model: "User",
+          foreignField: "userId"
+        })
+        .exec();
       return teams;
     } catch (err: unknown) {
       const error = err as Error;
@@ -43,7 +65,18 @@ export default class TeamRepository {
 
   async getTeamById(teamId: string): Promise<ITeam> {
     try {
-      const team = await Team.find({ teamId }).lean().exec();
+      const team = await Team.find({ teamId })
+        .populate({
+          path: "tasks",
+          model: "Task",
+          foreignField: "taskId"
+        })
+        .populate({
+          path: "members",
+          model: "User",
+          foreignField: "userId"
+        })
+        .exec();
       if (!team) throw new Error(`Team ${teamId} not found`);
       return team[0];
     } catch (err: unknown) {

@@ -35,20 +35,9 @@ const teamSchema = new Schema<ITeam>({
   },
   members: [
     {
-      user: {
-        type: String,
-        ref: "User", // Reference to your User model
-        required: true
-      },
-      role: {
-        type: String,
-        enum: ["team_member", "manager"],
-        default: "team_member"
-      },
-      joinedAt: {
-        type: Date,
-        default: Date.now
-      }
+      type: String,
+      ref: "User",
+      path: "userId"
     }
   ],
   tasks: [

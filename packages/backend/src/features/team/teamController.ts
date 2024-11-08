@@ -72,7 +72,7 @@ export default class TeamController implements IController {
   private updateTeam = asyncHandler(async (req: Request, res: Response) => {
     const id = req.query.id;
 
-    console.log(id);
+    // console.log(id);
     const { name, description, managerId, tasks, subTasks, members } = req.body;
 
     if (!id) throw new BadRequestError("Team ID is required");
@@ -86,7 +86,7 @@ export default class TeamController implements IController {
       members
     };
 
-    console.log(payload);
+    // console.log(payload);
 
     const updatedTeam = await this._teamService.updateTeamById(id as string, payload);
 
