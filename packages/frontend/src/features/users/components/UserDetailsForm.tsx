@@ -37,6 +37,7 @@ function UserDetailsForm({ handleChange, values, errors, disabled }: Props) {
       placeholder={`Select ${label}`}
       options={options}
       name={id}
+      value={String(values[id])}
       handleChange={handleChange}
       // disabled={disabled}
     />

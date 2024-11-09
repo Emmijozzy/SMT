@@ -4,7 +4,7 @@ type Props = {
   className?: string;
 };
 
-function TeamDetailRow({ label, value, className }: Props) {
+function DetailRow({ label, value, className }: Props) {
   return (
     <tr
       className={`w-full grid gridTemplateColumn text-[16px] leading-6 border-b-[1px] border-base-content/10 px-4 ${className || ""} `}
@@ -19,8 +19,8 @@ function TeamDetailRow({ label, value, className }: Props) {
   );
 }
 
-TeamDetailRow.defaultProps = {
+DetailRow.defaultProps = {
   className: "",
 };
 
-export default TeamDetailRow;
+export default DetailRow;
