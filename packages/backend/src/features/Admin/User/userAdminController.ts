@@ -54,7 +54,7 @@ export default class UserAdminController implements IController {
   });
 
   private updateUser = asyncHandler(async (req: ExtendedRequest, res: Response) => {
-    if (!req.user) throw new InternalError("Internal servre Error");
+    if (!req.user) throw new InternalError("Internal server Error");
     const { userId: requestingUserId, userRole: requestingUserRole } = req.user; // Destructuring for concise variable access
 
     const payload: Partial<IUser> = userService.userDataRestructure(req.body);

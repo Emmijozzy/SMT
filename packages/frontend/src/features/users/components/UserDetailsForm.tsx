@@ -1,31 +1,29 @@
 import { FormikErrors } from "formik";
-import { ChangeEvent, FocusEvent } from "react";
+import { ChangeEvent } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../app/store";
-import InputField from "../../../shared/components/InputField";
+import InputField3 from "../../../shared/components/InputField3";
 import Select from "../../../shared/components/Select";
 import { teamSelectors } from "../../teams/teamSlice";
 import User from "../userInterface";
 
 type Props = {
-  handleBlur: (e: FocusEvent<unknown, Element>) => void;
   handleChange: (e: ChangeEvent<unknown>) => void;
   errors: FormikErrors<User>;
   values: User;
   disabled?: boolean;
 };
-function UserDetailsForm({ handleBlur, handleChange, values, errors, disabled }: Props) {
+function UserDetailsForm({ handleChange, values, errors, disabled }: Props) {
   const teams = useSelector((state: RootState) => teamSelectors.selectAll(state));
   const renderInputField = <T extends keyof User>(id: T, label: string, type: string, halfWith = false) => (
-    <InputField
-      inputbodyClassName={`w-full ${halfWith ? "md:w-1/2" : ""}`}
-      inputClassName="w-full"
-      id={id}
+    <InputField3
+      bodyClassName={`w-full ${halfWith ? "md:w-1/2" : ""}`}
+      className="w-full"
+      name={id}
       label={label}
       type={type}
       onChange={handleChange}
       value={String(values[id])}
-      onBlur={handleBlur}
       error={errors[id] ? String(errors[id]) : ""}
       disabled={disabled}
     />
@@ -33,12 +31,14 @@ function UserDetailsForm({ handleBlur, handleChange, values, errors, disabled }:
 
   const renderSelectField = <T extends keyof User>(id: T, label: string, options: string[]) => (
     <Select
-      className="border-b-[1px] border-base-content/70 w-[49%]"
-      name={id}
-      handleChange={handleChange}
+      className="lg:w-[49%] border-b-[1px] border-base-content/40 h-13 text-sm gap-9 "
+      labelClass="mr-2 lg:mr-8"
       label={label}
       placeholder={`Select ${label}`}
       options={options}
+      name={id}
+      handleChange={handleChange}
+      // disabled={disabled}
     />
   );
 
@@ -57,7 +57,7 @@ function UserDetailsForm({ handleBlur, handleChange, values, errors, disabled }:
 
       <div className=" w-full mt-3 flex flex-wrap gap-2 justify-between">
         {renderSelectField("role", "Role", ["team_member", "manager", "admin"])}
-        {renderSelectField("team", "Team", ["developer", "UI/UX", "data analyst"])}
+        {renderSelectField("team", "Team", [...teams.map((team) => team.name)])}
       </div>
     </div>
   );

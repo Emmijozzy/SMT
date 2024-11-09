@@ -1,19 +1,15 @@
 import ArrowBackSharpIcon from "@mui/icons-material/ArrowBackSharp";
 // import Button2 from "../../../shared/components/Button2";
-import { Link, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import UserDetailsForm from "../components/UserDetailsForm";
-import UserPermissionForm from "../components/UserPermissionForm";
-import Password from "../components/Password";
-import useEditUser from "./useEditUser";
+import { Link, useParams } from "react-router-dom";
 import { addAlert } from "../../alerts/AlertSlice";
+import UserForm from "../components/UserForm";
+import useEditUser from "./useEditUser";
 
 function EditUser() {
   const { userId = "" } = useParams<{ userId: string }>();
 
   const { handleSubmit, handleBlur, handleChange, errors, values, isSubmitting } = useEditUser(userId);
-
-  console.log(values);
 
   const dispatch = useDispatch();
 
@@ -41,24 +37,15 @@ function EditUser() {
           </button>
         </div>
       </div>
-      <form onSubmit={handleSubmit}>
-        <h5 className="h5 underline text-center underline-offset-8 my-3">User Details</h5>
-        <UserDetailsForm handleBlur={handleBlur} handleChange={handleChange} errors={errors} values={values} disabled />
-        <h5 className="h5 underline text-center underline-offset-8 my-4">Permissions</h5>
-        <UserPermissionForm handleBlur={handleBlur} handleChange={handleChange} values={values} />
-        <h5 className="h5 underline text-center underline-offset-8 my-3">Security</h5>
-        <Password handleBlur={handleBlur} handleChange={handleChange} errors={errors} values={values} />
-
-        <div className="absolute container w-full left-0 bottom-[-6rem]  flex justify-center gap-4">
-          <button
-            type="submit"
-            className="px-4 py-2 button text-center text-base-content border transition-all bg-base-300 hover:scale-[105%] hover:shadow-lg hover:shadow-base-300 hover:bg-base-content hover:text-base-300  rounded-lg cursor-pointer ease-in"
-            onClick={handleFormValidation}
-          >
-            {isSubmitting ? "Loading..." : "Save"}
-          </button>
-        </div>
-      </form>
+      <UserForm
+        handleSubmit={handleSubmit}
+        handleBlur={handleBlur}
+        handleChange={handleChange}
+        isSubmitting={isSubmitting}
+        handleFormValidation={handleFormValidation}
+        errors={errors}
+        values={values}
+      />
     </div>
   );
 }

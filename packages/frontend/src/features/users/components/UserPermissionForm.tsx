@@ -7,75 +7,36 @@ type Props = {
   handleChange: (e: ChangeEvent<unknown>) => void;
   values: User;
 };
+
 function UserPermissionForm({ handleBlur, handleChange, values }: Props) {
+  const permissions = [
+    { id: "canCreateTasks", label: "Can Create Tasks" },
+    { id: "canEditTasks", label: "Can Edit Tasks" },
+    { id: "canDeleteTasks", label: "Can Delete Tasks" },
+    { id: "canAddSubtasks", label: "Can Add Subtasks" },
+    { id: "canReassignTasks", label: "Can Reassign Tasks" },
+    { id: "canViewReports", label: "Can View Reports" },
+    { id: "canEditUsers", label: "Can Edit Users" },
+    { id: "canDeleteUsers", label: "Can Delete Users" },
+    { id: "canAssignRole", label: "Can Assign Roles" },
+  ];
+
   return (
     <div className="w-full h-full">
       <div className="flex flex-col lg:grid lg:grid-cols-2 gap-4">
-        <ToggleSwitch
-          id="canCreateTasks"
-          label="Can Create Tasks"
-          value={values.canCreateTasks}
-          onChange={handleChange}
-          onBlur={handleBlur}
-        />
-        <ToggleSwitch
-          id="canEditTasks"
-          label="can edit tasks"
-          value={values.canEditTasks}
-          onChange={handleChange}
-          onBlur={handleBlur}
-        />
-        <ToggleSwitch
-          id="canDeleteTasks"
-          label="can delete users"
-          value={values.canDeleteTasks}
-          onChange={handleChange}
-          onBlur={handleBlur}
-        />
-        <ToggleSwitch
-          id="canAddSubtasks"
-          label="can add subtasks"
-          value={values.canAddSubtasks}
-          onChange={handleChange}
-          onBlur={handleBlur}
-        />
-        <ToggleSwitch
-          id="canReassignTasks"
-          label="can reassign tasks"
-          value={values.canReassignTasks}
-          onChange={handleChange}
-          onBlur={handleBlur}
-        />
-        <ToggleSwitch
-          id="canViewReports"
-          label="can view Report"
-          value={values.canViewReports}
-          onChange={handleChange}
-          onBlur={handleBlur}
-        />
-        <ToggleSwitch
-          id="canEditUsers"
-          label="can Edit users"
-          value={values.canEditUsers}
-          onChange={handleChange}
-          onBlur={handleBlur}
-        />
-        <ToggleSwitch
-          id="canDeleteUsers"
-          label="can Edit users"
-          value={values.canDeleteUsers}
-          onChange={handleChange}
-          onBlur={handleBlur}
-        />
-        <ToggleSwitch
-          id="canAssignRole"
-          label="can Assign roles"
-          value={values.canAssignRole}
-          onChange={handleChange}
-          onBlur={handleBlur}
-        />
+        {permissions.map(({ id, label }) => (
+          <ToggleSwitch
+            key={id}
+            id={id}
+            label={label}
+            value={values[id as keyof User] as boolean}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+        ))}
       </div>
     </div>
   );
 }
+
 export default UserPermissionForm;

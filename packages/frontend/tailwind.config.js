@@ -4,9 +4,9 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /** @type {import('tailwindcss').Config} */
-import plugin from "tailwindcss/plugin";
-import { fontFamily } from "tailwindcss/defaultTheme";
 import daisyui from "daisyui";
+import { fontFamily } from "tailwindcss/defaultTheme";
+import plugin from "tailwindcss/plugin";
 
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}", "./public/assets/**/*.{js,ts,jsx,tsx}"],
@@ -107,7 +107,8 @@ export default {
       addBase({});
       addComponents({
         ".container": {
-          "@apply relative w-full max-w-[77.5rem] mx-auto p-2 md:p-4 xl:max-w-[87.5rem] rounded-lg bg-base-100": {},
+          "@apply relative w-full min-w-[350px] max-w-[77.5rem] mx-auto p-2 md:p-4 xl:max-w-[87.5rem] rounded-lg bg-base-100":
+            {},
         },
         ".h1": {
           "@apply font-semibold text-[2.5rem] leading-[3.25rem] md:text-[2.75rem] md:leading-[3.75rem] lg:text-[3.25rem] lg:leading-[4.0625rem] xl:text-[3.75rem] xl:leading-[4.5rem]":

@@ -11,8 +11,8 @@ type Props = {
 
 function ToggleSwitch({ id, label, value = false, onChange, onBlur }: Props) {
   return (
-    <div className="grid grid-cols-[75%,auto] h-14  items-center gap-4 border-b border-base-content/40  capitalize py-2">
-      <span className="text-lg leading-4 font-bold">{label}</span>
+    <div className="grid grid-cols-[75%,auto] h-10  items-center gap-4 border-b border-base-content/40  capitalize py-2">
+      <span className="text-sm leading-4 font-bold">{label}</span>
       <label htmlFor={id} className="relative inline-flex items-center cursor-pointer">
         <input
           type="checkbox"

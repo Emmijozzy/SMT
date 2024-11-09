@@ -5,10 +5,8 @@ import ArrowBackSharpIcon from "@mui/icons-material/ArrowBackSharp";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { addAlert } from "../../alerts/AlertSlice";
-import Password from "../components/Password";
-import UserDetailsForm from "../components/UserDetailsForm";
-import UserPermissionForm from "../components/UserPermissionForm";
 import useAddUser from "./useAddUser";
+import UserForm from "../components/UserForm";
 
 function AddUser() {
   const { handleSubmit, handleBlur, handleChange, errors, values, isSubmitting } = useAddUser();
@@ -25,8 +23,8 @@ function AddUser() {
   return (
     <div className="container transition-all">
       <div className="w-full flex flex-col md:flex-row-reverse md:justify-between">
-        <div className="order-1 flex">
-          <h2 className="md:hidden h6 font-bold capitalize">Add New User</h2>
+        <div className="order-1 flex w-full">
+          <h2 className="md:justify-between h6 font-bold capitalize">Add New User</h2>
           <button
             type="button"
             aria-label="Edit User"
@@ -39,33 +37,15 @@ function AddUser() {
           </button>
         </div>
       </div>
-      <form onSubmit={handleSubmit}>
-        <div role="tablist" className="tabs tabs-lifted tabs-sm">
-          <input type="radio" name="my_tabs_2" role="tab" className="tab h-10 " aria-label="Details" defaultChecked />
-          <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box p-6">
-            <UserDetailsForm handleBlur={handleBlur} handleChange={handleChange} errors={errors} values={values} />
-          </div>
-
-          <input type="radio" name="my_tabs_2" role="tab" className="tab h-10" aria-label="Permissions" />
-          <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box p-6">
-            <UserPermissionForm handleBlur={handleBlur} handleChange={handleChange} values={values} />
-          </div>
-
-          <input type="radio" name="my_tabs_2" role="tab" className="tab h-10" aria-label="Password" />
-          <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box p-6">
-            <Password handleBlur={handleBlur} handleChange={handleChange} errors={errors} values={values} />
-          </div>
-        </div>
-        <div className="absolute container w-full left-0 bottom-[-6rem]  flex justify-center gap-4">
-          <button
-            type="submit"
-            className="px-4 py-2 button text-center text-base-content border transition-all bg-base-300 hover:scale-[105%] hover:shadow-lg hover:shadow-base-300 hover:bg-base-content hover:text-base-300  rounded-lg cursor-pointer ease-in"
-            onClick={handleFormValidation}
-          >
-            {isSubmitting ? "Loading..." : "Submit"}
-          </button>
-        </div>
-      </form>
+      <UserForm
+        handleSubmit={handleSubmit}
+        handleBlur={handleBlur}
+        handleChange={handleChange}
+        isSubmitting={isSubmitting}
+        handleFormValidation={handleFormValidation}
+        errors={errors}
+        values={values}
+      />
     </div>
   );
 }

@@ -34,7 +34,7 @@ function Select({
         <select
           name={name}
           id={name}
-          className="relative select h-10 select-secondary w-full max-w-xs capitalize border-0 rounded-none focus:border-0 focus:outline-none mx-2 rounded-t"
+          className={`relative h-10 select-secondary bg-base-100 w-full max-w-xs capitalize border-0 rounded-none focus:border-0 focus:outline-none mx-2 rounded-t ${disabled ? "bg-base-200 cursor-not-allowed" : ""}`}
           onChange={handleChange}
           defaultValue={value}
           disabled={disabled}
