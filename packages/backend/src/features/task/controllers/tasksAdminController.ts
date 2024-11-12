@@ -1,12 +1,12 @@
 import { Request, Response, Router } from "express";
 import { Task, TaskPayload } from "features/task/tasksInterface";
 import { ExtendedRequest } from "features/users/userInterface";
-import { ITask } from "../../../features/task/model/task";
-import taskSchema from "../../../features/task/taskSchema";
-import { ENUM_USER_ROLES } from "../../../features/users/enumUserRoles";
 import IController from "../../../Interface/controller";
 import authMiddleware from "../../../middleware/authMiddleware";
 import validationMiddleware from "../../../middleware/validationMiddleware";
+import { ENUM_USER_ROLES } from "../../users/enumUserRoles";
+import { ITask } from "../model/task";
+import taskSchema from "../taskSchema";
 
 import TasksServices from "../../../service/taskService"; // Corrected typo
 import { AuthFailureError, BadRequestError, InternalError, NotFoundError } from "../../../utils/ApiError";

@@ -5,8 +5,8 @@ import TeamRepository from "./teamRepository";
 
 export default class TeamService {
   private teamRepository: TeamRepository;
-  constructor(teamRepository: TeamRepository) {
-    this.teamRepository = teamRepository;
+  constructor() {
+    this.teamRepository = new TeamRepository();
   }
 
   async createTeam(teamData: ICreateTeam): Promise<ITeam> {

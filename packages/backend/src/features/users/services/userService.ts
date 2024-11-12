@@ -1,9 +1,9 @@
-import { IUser } from "../../features/auth/authModel";
-import { BadRequestError, InternalError, NotFoundError } from "../../utils/ApiError";
-import { IPaginationOptions } from "../../utils/getPaginationOptions";
-import passwordUtils from "../../utils/passwordUtils";
-import { IProfileToUpdate } from "./userInterface";
-import { UserRepository } from "./userRepository";
+import { IUser } from "../../../features/auth/authModel";
+import { BadRequestError, InternalError, NotFoundError } from "../../../utils/ApiError";
+import { IPaginationOptions } from "../../../utils/getPaginationOptions";
+import passwordUtils from "../../../utils/passwordUtils";
+import { IProfileToUpdate } from "../userInterface";
+import { UserRepository } from "../userRepository";
 
 export class UserService {
   private userRepository: UserRepository;

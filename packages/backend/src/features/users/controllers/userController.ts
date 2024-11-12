@@ -1,16 +1,16 @@
 import { Response, Router } from "express";
-import IController from "../../Interface/controller";
-import authMiddleware from "../../middleware/authMiddleware";
-import validationMiddleware from "../../middleware/validationMiddleware";
-import { AuthFailureError, BadRequestError, InternalError, NotFoundError } from "../../utils/ApiError";
-import asyncHandler from "../../utils/asyncHandler";
-import filtersToMongooseQuery from "../../utils/filtersToMongooseQuery";
-import getPaginationOptions from "../../utils/getPaginationOptions";
-import successResponse from "../../utils/successResponse";
-import { ENUM_USER_ROLES } from "./enumUserRoles";
-import { ExtendedRequest } from "./userInterface";
-import { UserService } from "./userService";
-import userValidation from "./userValidation";
+import IController from "../../../Interface/controller";
+import authMiddleware from "../../../middleware/authMiddleware";
+import validationMiddleware from "../../../middleware/validationMiddleware";
+import { InternalError, NotFoundError } from "../../../utils/ApiError";
+import asyncHandler from "../../../utils/asyncHandler";
+import filtersToMongooseQuery from "../../../utils/filtersToMongooseQuery";
+import getPaginationOptions from "../../../utils/getPaginationOptions";
+import successResponse from "../../../utils/successResponse";
+import { ENUM_USER_ROLES } from "../enumUserRoles";
+import { UserService } from "../services/userService";
+import { ExtendedRequest } from "../userInterface";
+import userValidation from "../userValidation";
 
 export default class UserController implements IController {
   public path = "/user";

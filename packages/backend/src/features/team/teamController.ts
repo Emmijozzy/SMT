@@ -11,12 +11,11 @@ import teamValidation from "./teamValidation";
 export default class TeamController implements IController {
   public path = "/team";
   public router = Router();
-  private _teamService: TeamService;
+  private teamService: TeamService;
 
-  constructor(teamService: TeamService) {
-    this._teamService = teamService;
+  constructor() {
+    this.teamService = new TeamService();
     this.initializeRouter();
-    //console.log(this.path);
   }
 
   private initializeRouter(): void {
@@ -36,7 +35,7 @@ export default class TeamController implements IController {
       managerId
     };
 
-    const team = await this._teamService.createTeam(teamPayload);
+    const team = await this.teamService.createTeam(teamPayload);
 
     if (!team) throw new InternalError("Error creating team");
 
@@ -47,7 +46,7 @@ export default class TeamController implements IController {
   });
 
   private getTeams = asyncHandler(async (_req: Request, res: Response) => {
-    const teams = await this._teamService.getTeams();
+    const teams = await this.teamService.getTeams();
 
     if (teams == null || teams.length === 0) throw new InternalError("Error fetching teams");
     successResponse(res, {
@@ -61,7 +60,7 @@ export default class TeamController implements IController {
     // console.log(id);
     if (!id) throw new BadRequestError("Team ID is required");
 
-    const team = await this._teamService.getTeamById(id as string);
+    const team = await this.teamService.getTeamById(id as string);
     if (!team) throw new InternalError("Error fetching team");
     successResponse(res, {
       data: team,
@@ -88,7 +87,7 @@ export default class TeamController implements IController {
 
     // console.log(payload);
 
-    const updatedTeam = await this._teamService.updateTeamById(id as string, payload);
+    const updatedTeam = await this.teamService.updateTeamById(id as string, payload);
 
     if (!updatedTeam) throw new InternalError("Error updating team");
 
@@ -102,7 +101,7 @@ export default class TeamController implements IController {
     const id = req.query.id;
     // console.log(id);
     if (!id) throw new BadRequestError("Team ID is required");
-    const deletedTeam = await this._teamService.deleteTeamById(id as string);
+    const deletedTeam = await this.teamService.deleteTeamById(id as string);
     if (!deletedTeam) throw new InternalError("Error deleting team");
 
     successResponse(res, {

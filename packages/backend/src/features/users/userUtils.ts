@@ -9,8 +9,8 @@ export class UserUtils {
     // Implement authorization checks based on role and edited data
     if (userRole === "admin") {
       // Admin can edit all personal data except specific properties (excluding targetUserId)
-      const restrictedProps = [""]; // Assuming other properties for admins to not edit
-      return userId === targetUserId || !Object.keys(editedData).some((key) => restrictedProps.includes(key));
+      const restrictedProps = ["firstName, lastName, fullName"]; // Assuming other properties for admins to not edit
+      return !Object.keys(editedData).some((key) => restrictedProps.includes(key));
     } else if (userRole === "manager") {
       // Manager can edit all properties except specific ones (excluding targetUserId)
       const restrictedProps = ["team", "role", "permissions", "del_flg"];

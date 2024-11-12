@@ -1,5 +1,4 @@
 import { UserRepository } from "../../features/users/userRepository";
-import userService from "../../service/userService";
 import {
   AuthFailureError,
   BadRequestError,

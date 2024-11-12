@@ -1,16 +1,16 @@
 import { Request, Response, Router } from "express";
-import IController from "../../Interface/controller";
-import authMiddleware from "../../middleware/authMiddleware";
-import validationMiddleware from "../../middleware/validationMiddleware";
+import IController from "../../../Interface/controller";
+import authMiddleware from "../../../middleware/authMiddleware";
+import validationMiddleware from "../../../middleware/validationMiddleware";
 // import UserService from "../../service/userService";
-import { AuthFailureError, BadRequestError, InternalError } from "../../utils/ApiError";
-import asyncHandler from "../../utils/asyncHandler";
-import successResponse from "../../utils/successResponse";
-import { userAdminSchema, userUpdateAdminSchema } from "../Admin/User/userAdminValidation";
-import { ENUM_USER_ROLES } from "./enumUserRoles";
-import { ExtendedRequest } from "./userInterface";
-import { UserOrchestrator } from "./userOrchestrator";
-import { UserService } from "./userService";
+import { AuthFailureError, BadRequestError, InternalError } from "../../../utils/ApiError";
+import asyncHandler from "../../../utils/asyncHandler";
+import successResponse from "../../../utils/successResponse";
+import { ENUM_USER_ROLES } from "../enumUserRoles";
+import { UserOrchestrator } from "../services/userOrchestrator";
+import { UserService } from "../services/userService";
+import { userAdminSchema, userUpdateAdminSchema } from "../userAdminValidation";
+import { ExtendedRequest } from "../userInterface";
 
 export default class UserAdminController implements IController {
   public path = "/user_admin";

@@ -8,7 +8,7 @@ import authSchema from "./authValidation";
 import validationMiddleware from "../../middleware/validationMiddleware";
 import successResponse from "../../utils/successResponse";
 
-export default class Auth implements IController {
+export default class AuthController implements IController {
   public path = "/auth";
   public router = Router();
   private authService: AuthService;

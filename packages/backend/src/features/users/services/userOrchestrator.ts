@@ -1,11 +1,10 @@
-import { IUser } from "../../features/auth/authModel";
-import TeamRepository from "../../features/team/teamRepository";
-import TeamService from "../../features/team/teamService";
-import ReqUserBodyData from "../../Interface/reqUserBodyData";
-import { InternalError } from "../../utils/ApiError";
-import passwordUtils from "../../utils/passwordUtils";
+import ReqUserBodyData from "../../../Interface/reqUserBodyData";
+import { InternalError } from "../../../utils/ApiError";
+import passwordUtils from "../../../utils/passwordUtils";
+import { IUser } from "../../auth/authModel";
+import TeamService from "../../team/teamService";
+import { UserUtils } from "../userUtils";
 import { UserService } from "./userService";
-import { UserUtils } from "./userUtils";
 
 export class UserOrchestrator {
   private userService: UserService;
@@ -13,7 +12,7 @@ export class UserOrchestrator {
 
   constructor() {
     this.userService = new UserService();
-    this.teamService = new TeamService(new TeamRepository());
+    this.teamService = new TeamService();
   }
 
   public createUser = async (requestUserData: unknown) => {
