@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import EditIcon from "@mui/icons-material/Edit";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import EditIcon from "@mui/icons-material/Edit";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import { IUser } from "../users/userInterface";
@@ -16,10 +16,10 @@ function ProfileInfo({ handleShowEdit }: Props) {
   const {
     fullName,
     email,
-    teamId,
-    phoneNo: PhoneNo,
+    team,
+    phone_no: PhoneNo,
     location,
-    socialLinks: { whatsappLink, facebookLink, linkedInLink },
+    socialLinks,
   } = useSelector((state: RootState) => state.userProfile.userProfile) as IUser;
 
   return (
@@ -41,7 +41,7 @@ function ProfileInfo({ handleShowEdit }: Props) {
         </div>
         <div className="flex w-full h-16 items-center border-b-2 border-base-content">
           <p className="w-20 md:w-32 body-1 mr-10 font-bold  capitalize">Dept. :</p>
-          <p className="w-40 md:w-fit body-1 truncate ... hover:text-clip capitalize">{teamId}</p>
+          <p className="w-40 md:w-fit body-1 truncate ... hover:text-clip capitalize">{team || ""}</p>
         </div>
         <div className="flex w-full h-16 items-center border-b-2 border-base-content">
           <p className="w-20 md:w-32 body-1 mr-10 font-bold  capitalize">Phone :</p>
@@ -54,13 +54,31 @@ function ProfileInfo({ handleShowEdit }: Props) {
         <div className="flex w-full h-16 items-center  border-base-content">
           <p className="w-20 md:w-32 body-1 mr-10 font-bold  capitalize">Social :</p>
           <div className="flex gap-4">
-            <a aria-label="Whatsapp" href={whatsappLink} className="cursor-pointer">
+            <a
+              aria-label="Whatsapp"
+              href={socialLinks?.whatsappLink || "https://"}
+              target="_blank"
+              className="cursor-pointer"
+              rel="noreferrer"
+            >
               <WhatsAppIcon className="w-7 h-7" />
             </a>
-            <a aria-label="Facebook" href={facebookLink} className="cursor-pointer">
+            <a
+              aria-label="Facebook"
+              href={socialLinks?.facebookLink || "https://"}
+              target="_blank"
+              className="cursor-pointer"
+              rel="noreferrer"
+            >
               <FacebookIcon className="w-7 h-7" />
             </a>
-            <a aria-label="LinkedIn" href={linkedInLink} className="cursor-pointer">
+            <a
+              aria-label="LinkedIn"
+              href={socialLinks?.linkedInLink || "https://"}
+              target="_blank"
+              className="cursor-pointer"
+              rel="noreferrer"
+            >
               <LinkedInIcon className="w-7 h-7" />
             </a>
           </div>

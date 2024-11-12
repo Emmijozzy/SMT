@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { FormikErrors } from "formik";
 import { ChangeEvent } from "react";
 import { useSelector } from "react-redux";
@@ -29,7 +30,12 @@ function UserDetailsForm({ handleChange, values, errors, disabled }: Props) {
     />
   );
 
-  const renderSelectField = <T extends keyof User>(id: T, label: string, options: string[]) => (
+  const renderSelectField = <T extends keyof User>(
+    id: T,
+    label: string,
+    options: string[],
+    teamsOptions: string[][] = [],
+  ) => (
     <Select
       className="lg:w-[49%] border-b-[1px] border-base-content/40 h-13 text-sm gap-9 "
       labelClass="mr-2 lg:mr-8"
@@ -40,6 +46,7 @@ function UserDetailsForm({ handleChange, values, errors, disabled }: Props) {
       value={String(values[id])}
       handleChange={handleChange}
       // disabled={disabled}
+      teamsOptions={teamsOptions}
     />
   );
 
@@ -58,7 +65,7 @@ function UserDetailsForm({ handleChange, values, errors, disabled }: Props) {
 
       <div className=" w-full mt-3 flex flex-wrap gap-2 justify-between">
         {renderSelectField("role", "Role", ["team_member", "manager", "admin"])}
-        {renderSelectField("team", "Team", [...teams.map((team) => team.name)])}
+        {renderSelectField("teamId", "Team", [], [...teams.map((team) => [team.teamId, team.name])] as string[][])}
       </div>
     </div>
   );

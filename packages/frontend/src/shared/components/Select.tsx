@@ -6,6 +6,7 @@ type Props = {
   placeholder: string;
   options?: string[];
   usersOption?: IUser[];
+  teamsOptions?: string[][];
   value?: string;
   label: string;
   className?: string;
@@ -23,6 +24,7 @@ function Select({
   className,
   name,
   usersOption,
+  teamsOptions,
   disabled,
 }: Props) {
   return (
@@ -52,6 +54,12 @@ function Select({
                 {user.fullName}: ({user.role})
               </option>
             ))}
+          {teamsOptions &&
+            teamsOptions.map((team) => (
+              <option key={team[0]} value={team[0]}>
+                {team[1]}
+              </option>
+            ))}
         </select>
       </div>
     </div>
@@ -63,6 +71,7 @@ Select.defaultProps = {
   className: "",
   options: [],
   usersOption: [],
+  teamsOptions: [],
   disabled: false,
   labelClass: "",
 };

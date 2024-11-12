@@ -1,5 +1,4 @@
 import bcrypt from "bcrypt";
-import { IUser } from "../features/auth/authModel";
 import { InternalError } from "./ApiError";
 
 const hash = async (password: string): Promise<string> => {
@@ -10,8 +9,8 @@ const hash = async (password: string): Promise<string> => {
   return hashedPassword;
 };
 
-const compare = async (inputPassword: string, foundUser: IUser): Promise<boolean> => {
-  return await bcrypt.compare(inputPassword, foundUser.password);
+const compare = async (inputPassword: string, userPassword: string): Promise<boolean> => {
+  return await bcrypt.compare(inputPassword, userPassword);
 };
 
 export default {

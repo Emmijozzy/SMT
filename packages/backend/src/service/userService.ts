@@ -1,5 +1,6 @@
 /* eslint-disable indent */
-import ReqUserBodyData from "Interface/reqUserBodyData";
+import ReqUserBodyData from "../Interface/reqUserBodyData";
+import { IPaginationOptions } from "../utils/getPaginationOptions";
 import { IUser, User } from "../features/auth/authModel";
 import { BadRequestError, InternalError, NotFoundError } from "../utils/ApiError";
 import passwordUtils from "../utils/passwordUtils";
@@ -7,7 +8,7 @@ import passwordUtils from "../utils/passwordUtils";
 const createUser = async (userData: Partial<IUser>) => {
   try {
     if (!userData.email) throw new BadRequestError("Email is required");
-    const foundUser: IUser | null = await findByEmail(userData.email);
+    const foundUser: IUser | null = await getUserByEmail(userData.email);
     if (foundUser) throw new BadRequestError("User already registered");
 
     if (!userData.password) throw new BadRequestError("Password is required");
@@ -21,6 +22,45 @@ const createUser = async (userData: Partial<IUser>) => {
   } catch (error) {
     throw new InternalError(`${error}`);
   }
+};
+
+export const getAll = async (
+  filter: Record<string, string | number | RegExp>,
+  paginationOption: IPaginationOptions
+) => {
+  const { limit, sortField, skip, sortOrder } = paginationOption;
+
+  const sort = { [sortField]: sortOrder };
+
+  const users = await User.find(filter).limit(limit).skip(skip).sort(sort).select("-password").lean().exec();
+
+  // const total = await User.countDocuments(filter);
+  // return {
+  //   users,
+  //   total,
+  //   totalPage: Math.ceil(+total / limit) * 1,
+  //   currentPage: page,
+  //   hasNextPage: users.length === limit * 1,
+  //   hasPreviousPage: page > 1,
+  //   nextPage: page + 1,
+  //   previousPage: page - 1,
+  //   lastPage: Math.ceil(+total / limit)
+  // };
+  return users;
+};
+
+export const getUserByEmail = async (email: string): Promise<IUser | null> => {
+  return User.findOne({ email: email }).select("-password").lean().exec();
+};
+
+export const getUserByUserId = async (userId: string): Promise<IUser | null> => {
+  if (!userId || !Number.parseInt(userId.slice(4))) throw new BadRequestError("Invalid User ID");
+
+  const user = (await User.findOne({ userId: userId }).select("").lean().exec()) as IUser;
+
+  if (!user) throw new NotFoundError(` User with id : ${userId} not found`);
+
+  return user;
 };
 
 const canEditUser = async (userId: string, userRole: string, editedData: Partial<IUser>): Promise<boolean> => {
@@ -53,55 +93,41 @@ const canEditUser = async (userId: string, userRole: string, editedData: Partial
   return false; // Default to not authorized
 };
 
-const editUser = async (editRequstData: Partial<IUser>) => {
+const editUser = async (editRequestData: Partial<IUser>) => {
   try {
-    const userId = editRequstData.userId;
-    delete editRequstData.userId;
-    if (editRequstData.password) {
-      const hashedPassword = await passwordUtils.hash(editRequstData.password);
-      editRequstData.password = hashedPassword;
+    const userId = editRequestData.userId;
+    delete editRequestData.userId;
+    if (editRequestData.password) {
+      const hashedPassword = await passwordUtils.hash(editRequestData.password);
+      editRequestData.password = hashedPassword;
     }
 
-    // console.log(editRequstData, "userId", userId);
-    const updateduser = await User.findOneAndUpdate({ userId }, editRequstData, {
+    // console.log(editRequestData, "userId", userId);
+    const updatedUser = await User.findOneAndUpdate({ userId }, editRequestData, {
       new: true
     }).select("-password");
 
-    return updateduser;
+    return updatedUser;
   } catch (e) {
     console.log(e);
     return null;
   }
 };
 
-export const findByEmail = async (email: string): Promise<IUser | null> => {
-  return User.findOne({ email: email }).select("-password").lean().exec();
-};
-
-export const findByUserId = async (userId: string): Promise<IUser | null> => {
-  if (!userId || !Number.parseInt(userId.slice(4))) throw new BadRequestError("Invalid User ID");
-
-  const user = (await User.findOne({ userId: userId }).select("").lean().exec()) as IUser;
-
-  if (!user) throw new NotFoundError(` User with id : ${userId} not found`);
-
-  return user;
-};
-
 export const updateUserById = async (userId: string, data: Record<string, string | object>) => {
-  //conftrim userId
-  const user = await findByUserId(userId);
+  //confirm userId
+  const user = await getUserByUserId(userId);
   if (!user) throw new NotFoundError("User does not exist");
 
-  const updateduser = await User.findOneAndUpdate({ userId }, data, {
+  const updatedUser = await User.findOneAndUpdate({ userId }, data, {
     new: true
   }).select("-password");
 
-  return updateduser;
+  return updatedUser;
 };
 
-export const deleteByuserId = async (userId: string): Promise<IUser | null> => {
-  const user: IUser | null = await findByUserId(userId);
+export const deleteByUserId = async (userId: string): Promise<IUser | null> => {
+  const user: IUser | null = await getUserByUserId(userId);
   // //console.log(user);
   if (!user) throw new BadRequestError("Invalid User / User does exist");
 
@@ -114,8 +140,8 @@ export const deleteByuserId = async (userId: string): Promise<IUser | null> => {
   return deletedUser;
 };
 
-export const restoreByuserId = async (userId: string): Promise<IUser | null> => {
-  const user: IUser | null = await findByUserId(userId);
+export const restoreByUserId = async (userId: string): Promise<IUser | null> => {
+  const user: IUser | null = await getUserByUserId(userId);
   // //console.log(user);
   if (!user) throw new BadRequestError("Invalid User / User does exist");
 
@@ -179,11 +205,12 @@ export const userDataRestructure = (reqUserData: ReqUserBodyData): Partial<IUser
 };
 
 export default {
-  findByEmail,
-  findByUserId,
+  getAll,
+  getUserByEmail,
+  getUserByUserId,
   updateUserById,
-  deleteByuserId,
-  restoreByuserId,
+  deleteByUserId,
+  restoreByUserId,
   sanitizeData,
   createUser,
   canEditUser,

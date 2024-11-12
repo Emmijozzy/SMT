@@ -30,9 +30,7 @@ function ViewUser() {
   let content;
 
   if (user) {
-    const {
-      socialLinks: { whatsappLink, facebookLink, linkedInLink },
-    } = user;
+    const { socialLinks } = user;
 
     content = (
       <div className="container transition-all">
@@ -65,13 +63,13 @@ function ViewUser() {
               <DetailsContainer tableRows={tableRows} />
               <div className="flex w-full items-center  border-base-content">
                 <div className="flex gap-4 ml-auto mr-2 mt-2">
-                  <a aria-label="Whatsapp" href={whatsappLink} className="cursor-pointer">
+                  <a aria-label="Whatsapp" href={socialLinks?.whatsappLink || "https://"} target="_blank" className="cursor-pointer">
                     <WhatsAppIcon className="w-7 h-7" />
                   </a>
-                  <a aria-label="Facebook" href={facebookLink} className="cursor-pointer">
+                  <a aria-label="Facebook" href={socialLinks?.facebookLink || "https://"} target="_blank" className="cursor-pointer">
                     <FacebookIcon className="w-7 h-7" />
                   </a>
-                  <a aria-label="LinkedIn" href={linkedInLink} className="cursor-pointer">
+                  <a aria-label="LinkedIn" href={socialLinks?.linkedInLink || "https://"}target="_blank" className="cursor-pointer">
                     <LinkedInIcon className="w-7 h-7" />
                   </a>
                 </div>

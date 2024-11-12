@@ -78,7 +78,7 @@ export class ValidationError extends ApiError {
   }
 }
 
-export class TokenExpiresErro extends ApiError {
+export class TokenExpiresError extends ApiError {
   constructor(message = "Token expired", stack?: string, fileName?: string) {
     super(Status.FORBIDDEN, message, stack, fileName);
   }

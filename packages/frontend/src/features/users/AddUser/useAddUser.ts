@@ -18,6 +18,7 @@ const initialValues: User = {
   phoneNo: "+234",
   role: "team_member",
   team: "",
+  teamId: "",
   location: "",
   whatsappLink: "",
   facebookLink: "",

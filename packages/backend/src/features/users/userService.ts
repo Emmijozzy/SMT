@@ -1,71 +1,70 @@
-/* eslint-disable no-extra-boolean-cast */
-/* eslint-disable no-prototype-builtins */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { IUser } from "../../features/auth/authModel";
 import { BadRequestError, InternalError, NotFoundError } from "../../utils/ApiError";
-import { IUser, User } from "../auth/authModel";
 import { IPaginationOptions } from "../../utils/getPaginationOptions";
 import passwordUtils from "../../utils/passwordUtils";
-// import userValidation from "./userValidation";
 import { IProfileToUpdate } from "./userInterface";
-import userService from "../../service/userService";
+import { UserRepository } from "./userRepository";
 
-// const { userProfileUpdateSchema } = userValidation;
+export class UserService {
+  private userRepository: UserRepository;
 
-//Todo: validation of the various data each role should provided before update is allowed
-
-export default class UserService {
-  static async getProfile(user: Partial<IUser>) {
-    const data = (await User.find({ userId: user.userId }).select("-password").lean().exec()) as unknown as IUser[];
-
-    const profileData = data[0];
-
-    if (!profileData.userId) throw new InternalError("Error while fetching profile");
-
-    return profileData;
+  constructor() {
+    this.userRepository = new UserRepository();
   }
 
-  static async getAll(filter: Record<string, string | number | RegExp>, paginationObption: IPaginationOptions) {
-    const { limit, sortField, skip, sortOrder } = paginationObption;
+  public async createUser(userData: Partial<IUser>) {
+    try {
+      if (!userData.email) throw new BadRequestError("Email is required");
+      const foundUser = await this.userRepository.findByEmail(userData.email);
+      if (foundUser) throw new BadRequestError("User already registered");
 
-    const sort = { [sortField]: sortOrder };
+      if (!userData.password) throw new BadRequestError("Password is required");
+      const hashedPassword = await passwordUtils.hash(userData.password);
 
-    const users = await User.find(filter).limit(limit).skip(skip).sort(sort).select("-password").lean().exec();
-
-    // const total = await User.countDocuments(filter);
-    // return {
-    //   users,
-    //   total,
-    //   totalPage: Math.ceil(+total / limit) * 1,
-    //   currentPage: page,
-    //   hasNextPage: users.length === limit * 1,
-    //   hasPreviousPage: page > 1,
-    //   nextPage: page + 1,
-    //   previousPage: page - 1,
-    //   lastPage: Math.ceil(+total / limit)
-    // };
-    return users;
+      const user = await this.userRepository.create({
+        ...userData,
+        password: hashedPassword
+      });
+      return user;
+    } catch (error) {
+      throw new InternalError(`${error}`);
+    }
   }
 
-  static async getUserById(userId: string) {
-    const user = (await userService.findByUserId(userId)) as Partial<IUser>;
-
-    delete user.password;
-
+  public async getUserById(userId: string) {
+    const user = await this.userRepository.findById(userId);
+    if (!user) throw new NotFoundError(`User with id: ${userId} not found`);
     return user;
   }
 
-  static async updateProfile(userId: string, profileToUpdate: IProfileToUpdate) {
+  public async getUserByEmail(email: string) {
+    return await this.userRepository.findByEmail(email);
+  }
+
+  public async getAllUsers(filter: Record<string, string | number | RegExp>, paginationOption: IPaginationOptions) {
+    return await this.userRepository.findAll(filter, paginationOption);
+  }
+
+  public async updateUserById(userId: string, data: IUser) {
+    const user = await this.userRepository.findById(userId);
+    if (!user) throw new NotFoundError("User does not exist");
+
+    return await this.userRepository.updateById(userId, data);
+  }
+
+  public async updateProfile(userId: string, profileToUpdate: IProfileToUpdate) {
     const canUpdate = ["email", "phoneNo", "location", "whatsappLink", "facebookLink", "linkedInLink"];
 
-    const user = (await userService.findByUserId(userId)) as IUser;
+    const user = (await this.getUserById(userId)) as IUser;
     if (!user.userId) throw new NotFoundError(` User with id : ${userId} not found`);
 
     if (!Object.keys(profileToUpdate).every((data) => canUpdate.includes(data)))
-      throw new BadRequestError("Unathorized data Update request");
+      throw new BadRequestError("Unauthorized data Update request");
 
     const { phoneNo, email, location, whatsappLink, facebookLink, linkedInLink } = profileToUpdate;
 
-    const payload = {
+    const payload: Partial<IUser> = {
+      ...user,
       email,
       phone_no: phoneNo,
       location,
@@ -76,67 +75,49 @@ export default class UserService {
       }
     };
 
-    const updatedProfile = userService.updateUserById(userId, payload);
+    const updatedProfile = this.updateUserById(userId, payload as IUser);
 
     if (!updatedProfile) throw new InternalError("Error updating profile");
     return updatedProfile;
   }
 
-  static async changePassword(userId: string, { oldPassword, newPassword }: Record<string, string>) {
-    if (oldPassword == newPassword) throw new BadRequestError("Old and new password can not be the same");
+  public async deleteUserById(userId: string) {
+    const user = await this.userRepository.findById(userId);
+    if (!user) throw new BadRequestError("Invalid User / User does not exist");
 
-    const user = (await userService.findByUserId(userId)) as IUser;
+    const deletedUser = await this.userRepository.deleteById(userId);
+    if (!deletedUser?.del_flg) throw new InternalError("Fatal Error deleting user");
 
-    const match = await passwordUtils.compare(oldPassword, user);
+    return deletedUser;
+  }
 
+  public async restoreUserById(userId: string) {
+    const user = await this.userRepository.findById(userId);
+    if (!user) throw new BadRequestError("Invalid User / User does not exist");
+
+    const restoredUser = await this.userRepository.restoreById(userId);
+    if (restoredUser?.del_flg) throw new InternalError("Fatal Error restoring user");
+
+    return restoredUser;
+  }
+
+  public async changePassword(userId: string, { oldPassword, newPassword }: Record<string, string>) {
+    if (oldPassword === newPassword) throw new BadRequestError("Old and new password cannot be the same");
+
+    const user = await this.userRepository.findUserWithPasswordById(userId);
+    if (!user) throw new NotFoundError("User does not exist");
+
+    const match = await passwordUtils.compare(oldPassword, user.password);
     if (!match) throw new BadRequestError("Invalid old password");
 
     const hashedPassword = await passwordUtils.hash(newPassword);
-
-    const updatedUser = await userService.updateUserById(userId, { password: hashedPassword });
-
-    if (!updatedUser) throw new InternalError("Error in changing password");
-
-    return updatedUser;
+    return await this.userRepository.updateById(userId, { password: hashedPassword });
   }
 
-  static async canEditUser(userId: string, userRole: string, editedData: Partial<IUser>): Promise<boolean> {
-    const targetUserId = editedData.id;
+  public async outrightDeleteUserById(userId: string) {
+    const user = await this.userRepository.findById(userId);
+    if (!user) throw new BadRequestError("Invalid User / User does not exist");
 
-    // Implement authorization checks based on role and edited data
-    if (userRole === "admin") {
-      // Admin can edit all personal data except specific properties (excluding targetUserId)
-      const restrictedProps = [""]; // Assuming other properties for admins to not edit
-      return userId === targetUserId || !Object.keys(editedData).some((key) => restrictedProps.includes(key));
-    } else if (userRole === "manager") {
-      // Manager can edit all properties except specific ones (excluding targetUserId)
-      const restrictedProps = ["team", "role", "permissions", "del_flg"];
-      const restrictedForOthers = ["team", "role", "profilePic", "permissions", "password"]; // Restricted for non-managers
-      return (
-        (userId === targetUserId && !restrictedProps.some((key) => editedData.hasOwnProperty(key))) ||
-        !restrictedForOthers.some((key) => editedData.hasOwnProperty(key))
-      );
-    } else if (userRole === "team_member") {
-      // Team member can only edit specific properties with a value and no others
-      const allowedProps = ["email", "profilePicUrl"];
-      return (
-        userId === targetUserId &&
-        allowedProps.every((key) => editedData.hasOwnProperty(key)) &&
-        !Object.keys(editedData).some((key) => !allowedProps.includes(key))
-      );
-    }
-
-    return false; // Default to not authorized
-  }
-
-  static async editUser(editRequstData: Partial<IUser>) {
-    const userId = editRequstData.userId;
-    delete editRequstData.userId;
-
-    const updateduser = await User.findOneAndUpdate({ userId }, editRequstData, {
-      new: true
-    }).select("-password");
-
-    return updateduser;
+    return await this.userRepository.outrightDeleteById(userId);
   }
 }

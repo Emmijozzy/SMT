@@ -1,4 +1,4 @@
-import mongoose, { Model, Schema, Document } from "mongoose";
+import mongoose, { Document, Model, Schema } from "mongoose";
 
 export interface IUser extends Document {
   userId: string;
@@ -79,15 +79,18 @@ const userSchema = new Schema<IUser>(
     socialLinks: {
       whatsappLink: {
         type: String,
-        description: "The Whatapp Link of the user"
+        description: "The Whatsapp Link of the user",
+        default: "https://"
       },
       facebookLink: {
         type: String,
-        description: "The whatapp Link of the user"
+        description: "The facebook Link of the user",
+        default: "https://"
       },
       linkedInLink: {
         type: String,
-        description: "The LinkedIn Link of the user"
+        description: "The LinkedIn Link of the user",
+        default: "https://"
       }
     },
     role: {

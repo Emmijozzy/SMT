@@ -6,6 +6,7 @@ interface ReqUserBodyData {
   phoneNo: string;
   role: "team_member" | "manager" | "admin";
   team: string;
+  teamId: string;
   location: string;
   whatsappLink: string;
   facebookLink: string;

@@ -1,12 +1,12 @@
 /* eslint-disable indent */
 /* eslint-disable @typescript-eslint/indent */
 import { NextFunction, Response } from "express";
-import tokenUtils from "../utils/tokenUtils";
 import { IUser } from "features/auth/authModel";
 import { ExtendedRequest } from "../features/users/userInterface";
+import { AccessError, ApiError, BadTokenError } from "../utils/ApiError";
+import errResponse from "../utils/ErrorResponse";
 import logger from "../utils/logger";
-import { AccessError, ApiError, AuthFailureError, BadTokenError, InternalError } from "../utils/ApiError";
-import errResponse from "../utils/errorResponse";
+import tokenUtils from "../utils/tokenUtils";
 
 const authMiddleware =
   (...requiredRoles: string[]) =>

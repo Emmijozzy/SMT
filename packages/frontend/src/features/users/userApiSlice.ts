@@ -3,11 +3,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { createEntityAdapter } from "@reduxjs/toolkit";
 import { apiSlice } from "../../app/api/apislice";
+import { changeStatus } from "../../shared/Slice/statusSlice";
+import log from "../../shared/utils/log";
+import { addAlert } from "../alerts/AlertSlice";
 import User, { IUser, ReqError } from "./userInterface";
 import { saveProfile } from "./userProfileSlice";
-import log from "../../shared/utils/log";
-import { changeStatus } from "../../shared/Slice/statusSlice";
-import { addAlert } from "../alerts/AlertSlice";
 
 interface ResData {
   data: IUser[];
@@ -85,6 +85,11 @@ export const userApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: { ...userData },
       }),
+      invalidatesTags: [
+        { type: "User" as const, id: "LIST" as const },
+        { type: "Team" as const, id: "LIST" as const },
+        { type: "Teams" as const, id: "LIST" as const },
+      ],
     }),
 
     updateUserProfile: build.mutation({
@@ -102,7 +107,11 @@ export const userApiSlice = apiSlice.injectEndpoints({
         method: "PATCH",
         body: { ...credentials },
       }),
-      invalidatesTags: [{ type: "User" as const, id: "LIST" as const }],
+      invalidatesTags: [
+        { type: "User" as const, id: "LIST" as const },
+        { type: "Team" as const, id: "LIST" as const },
+        { type: "Teams" as const, id: "LIST" as const },
+      ],
     }),
 
     deleteUser: build.mutation({

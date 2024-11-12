@@ -58,7 +58,7 @@ export default class TeamController implements IController {
 
   private getTeam = asyncHandler(async (req: Request, res: Response) => {
     const id = req.query.id;
-    console.log(id);
+    // console.log(id);
     if (!id) throw new BadRequestError("Team ID is required");
 
     const team = await this._teamService.getTeamById(id as string);
@@ -100,7 +100,7 @@ export default class TeamController implements IController {
 
   private deleteTeam = asyncHandler(async (req: Request, res: Response) => {
     const id = req.query.id;
-    console.log(id);
+    // console.log(id);
     if (!id) throw new BadRequestError("Team ID is required");
     const deletedTeam = await this._teamService.deleteTeamById(id as string);
     if (!deletedTeam) throw new InternalError("Error deleting team");

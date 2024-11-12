@@ -3,7 +3,7 @@ import { Router, Request, Response } from "express";
 import asyncHandler from "../../utils/asyncHandler";
 import { AuthFailureError, BadRequestError } from "../../utils/ApiError";
 import { IUser } from "./authModel";
-import UserService from "./authService";
+import AuthService from "./authService";
 import authSchema from "./authValidation";
 import validationMiddleware from "../../middleware/validationMiddleware";
 import successResponse from "../../utils/successResponse";
@@ -11,13 +11,14 @@ import successResponse from "../../utils/successResponse";
 export default class Auth implements IController {
   public path = "/auth";
   public router = Router();
-  private service = UserService;
+  private authService: AuthService;
 
   constructor() {
-    this.initiatlizeRouter();
+    this.authService = new AuthService();
+    this.initializeRouter();
   }
 
-  private initiatlizeRouter(): void {
+  private initializeRouter(): void {
     this.router.post("/register", validationMiddleware(authSchema.registrationSchema), this.register);
     this.router.post("/login", validationMiddleware(authSchema.loginSchema), this.login);
     this.router.get("/refresh", this.refresh);
@@ -31,7 +32,7 @@ export default class Auth implements IController {
       throw new BadRequestError("Missing user data");
     }
 
-    const userResponse: IUser | Error = await this.service.register(firstName, lastName, email, password);
+    const userResponse: IUser | Error = await this.authService.register(firstName, lastName, email, password);
     if (userResponse instanceof Error) {
       res.status(500).json({ error: "Failed to register user" });
       throw new Error(`Error registering user:${userResponse.message}`);
@@ -51,7 +52,7 @@ export default class Auth implements IController {
       throw new BadRequestError("Missing user data");
     }
 
-    const { accessToken, refreshToken } = await this.service.login(userId, password);
+    const { accessToken, refreshToken } = await this.authService.login(userId, password);
 
     res.cookie("jwt", refreshToken, {
       httpOnly: true,
@@ -73,7 +74,7 @@ export default class Auth implements IController {
 
     const refreshToken = cookies.jwt;
 
-    const accessToken = await this.service.refresh(refreshToken);
+    const accessToken = await this.authService.refresh(refreshToken);
 
     res.json({ accessToken });
   });

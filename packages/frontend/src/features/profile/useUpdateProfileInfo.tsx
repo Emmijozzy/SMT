@@ -29,7 +29,7 @@ const defaultValue = {
 const useUpdateProfileInfo = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [updateProfile, { isSuccess }] = useUpdateUserProfileMutation();
+  const [updateProfile, { isSuccess, isError }] = useUpdateUserProfileMutation();
 
   let userProfile: Partial<IUser> = useSelector((state: RootState) => state.userProfile)
     .userProfile as unknown as IUser;
@@ -65,14 +65,19 @@ const useUpdateProfileInfo = () => {
           linkedInLink: values.linkedInLink || "",
         };
         const resData = (await updateProfile({ ...payload })) as ResData;
-        // console.log(resData.data.message);
-        const resMessage = resData.data.message;
+        if (Object.keys(resData)[0] === "error" || isError) {
+          const resError = resData.error as ResData;
+          throw new Error(resError.data.message);
+        }
+        const resMessage = resData.data?.message;
         dispatch(saveProfile(resData.data.data));
         dispatch(addAlert({ message: resMessage, type: "success" }));
+        dispatch(setLoader(false));
         // setResData(data);
       } catch (e) {
         const error = e as Error;
         dispatch(setLoader(false));
+        dispatch(addAlert({ message: error.message, type: "error" }));
         log("error", "Update profile Error", error.message, error.stack as string);
       } finally {
         setIsSubmitting(false);

@@ -45,20 +45,6 @@ function ProfileEditForm({ handleShowEdit }: Props) {
 
       <div className="flex flex-col flex-nowrap text-base-content">
         <InputField2
-          label="FirstName"
-          placeholder="Enter your firstname"
-          value={values.firstName || ""}
-          name="firstName"
-          disabled
-        />
-        <InputField2
-          label="LastName"
-          placeholder="Enter your lastname"
-          value={values.LastName || ""}
-          name="lastName"
-          disabled
-        />
-        <InputField2
           label="Email"
           placeholder="Enter your email"
           value={values.email || ""}
@@ -67,7 +53,6 @@ function ProfileEditForm({ handleShowEdit }: Props) {
           name="email"
           type="email"
         />
-        <InputField2 label="Dept." placeholder="Enter your department" value="Web Development" name="team" disabled />
         <InputField2
           label="Phone"
           placeholder="Enter your phone"

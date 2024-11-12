@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { IUser } from "../features/auth/authModel";
-import { BadTokenError, InternalError, TokenExpiresErro } from "./ApiError";
+import { BadTokenError, InternalError, TokenExpiresError } from "./ApiError";
 
 export const createAccessToken = (foundUser: Partial<IUser>): string => {
   return jwt.sign({ user: foundUser }, process.env.ACCESS_TOKEN_SECRET as jwt.Secret, { expiresIn: "5m" });
@@ -25,7 +25,7 @@ export const verifyAccessToken = async (token: string): Promise<jwt.VerifyErrors
   } catch (err: unknown) {
     if (err instanceof jwt.JsonWebTokenError) {
       if (err.message == "jwt expired") {
-        throw new TokenExpiresErro();
+        throw new TokenExpiresError();
       }
       throw new BadTokenError(err.message);
     } else {
@@ -49,7 +49,7 @@ export const verifyRefreshToken = async (token: string): Promise<jwt.VerifyError
   } catch (err) {
     if (err instanceof jwt.JsonWebTokenError) {
       if (err.message == "jwt expired") {
-        throw new TokenExpiresErro();
+        throw new TokenExpiresError();
       }
       throw new BadTokenError(err.message);
     } else {

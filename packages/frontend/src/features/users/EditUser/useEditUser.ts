@@ -18,7 +18,7 @@ function useEditUser(userId: string) {
 
   const user = useSelector((state: RootState) => usersSelectors.selectById(state, userId));
 
-  console.log(user);
+  // console.log(user);
 
   const {
     // fullName,
@@ -28,10 +28,11 @@ function useEditUser(userId: string) {
     email,
     role,
     team,
+    teamId,
     // createdAt: joined,
     phone_no: phoneNo,
     location,
-    socialLinks: { whatsappLink, facebookLink, linkedInLink },
+    socialLinks,
     permissions: {
       can_create_tasks: canCreateTasks,
       can_edit_tasks: canEditTasks,
@@ -53,10 +54,11 @@ function useEditUser(userId: string) {
     phoneNo: `${phoneNo}`,
     role,
     team,
+    teamId,
     location,
-    whatsappLink,
-    facebookLink,
-    linkedInLink,
+    whatsappLink: socialLinks?.whatsappLink ?? "https://",
+    facebookLink: socialLinks?.facebookLink ?? "https://",
+    linkedInLink: socialLinks?.linkedInLink ?? "https://",
     canCreateTasks,
     canEditTasks,
     canDeleteTasks,

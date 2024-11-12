@@ -65,7 +65,7 @@ export default class TeamRepository {
 
   async getTeamById(teamId: string): Promise<ITeam> {
     try {
-      const team = await Team.find({ teamId })
+      const team = await Team.findOne({ teamId })
         .populate({
           path: "tasks",
           model: "Task",
@@ -78,7 +78,18 @@ export default class TeamRepository {
         })
         .exec();
       if (!team) throw new Error(`Team ${teamId} not found`);
-      return team[0];
+      return team;
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error("Error fetching team by id", error);
+      throw new InternalError("Failed to fetch team by id.  ERROR: " + error.message + " ", error.stack, __filename);
+    }
+  }
+  async findTeamById(teamId: string): Promise<ITeam> {
+    try {
+      const team = await Team.findOne({ teamId }).exec();
+      if (!team) throw new Error(`Team ${teamId} not found`);
+      return team;
     } catch (err: unknown) {
       const error = err as Error;
       console.error("Error fetching team by id", error);
@@ -107,6 +118,35 @@ export default class TeamRepository {
       const error = err as Error;
       console.error("Error deleting team by id", error);
       throw new InternalError("Failed to delete team by id.  ERROR: " + error.message + " ", error.stack, __filename);
+    }
+  }
+
+  async addUserIDToTeam(teamId: string, userId: string): Promise<ITeam | null> {
+    try {
+      // console.log(teamId, "teamId");
+      const updatedTeam = await Team.findOneAndUpdate({ teamId }, { $push: { members: userId } }, { new: true });
+      if (!updatedTeam) throw new Error(`Team ${teamId} not found or can be updated`);
+      return updatedTeam;
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error("Error adding user to team", error);
+      throw new InternalError("Failed to add user to team.  ERROR: " + error.message + " ", error.stack, __filename);
+    }
+  }
+
+  async removeUserIDFromTeam(teamId: string, userId: string): Promise<ITeam | null> {
+    try {
+      const updatedTeam = await Team.findOneAndUpdate({ teamId }, { $pull: { members: userId } }, { new: true });
+      if (!updatedTeam) throw new Error(`Team ${teamId} not found or can be updated`);
+      return updatedTeam;
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error("Error removing user from team", error);
+      throw new InternalError(
+        "Failed to remove user from team.  ERROR: " + error.message + " ",
+        error.stack,
+        __filename
+      );
     }
   }
 }
