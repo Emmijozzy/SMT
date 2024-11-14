@@ -6,7 +6,11 @@ import { setTeams, teamSelectors } from "../teamSlice";
 import { setTotalRows } from "./teamTableSlice";
 
 const useTeamTable = () => {
-  const { data, isLoading, isSuccess, isError, error } = useGetTeamsQuery();
+  const { data, isLoading, isSuccess, isError, error } = useGetTeamsQuery(undefined, {
+    pollingInterval: 60000,
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
+  });
   const [totalTeam, setTotalTeam] = useState<string[]>();
   // const [searchTeam, setSearchTeam] = useState<string>();
 

@@ -97,9 +97,7 @@ function EditTaskDetails({ handleEditTaskDetails, taskId }: Props) {
         {renderInputField("Title", "title")}
         {renderInputField("Description", "description", "text", "textarea")}
         {/* {renderSelect("Team", "responsibleTeam", ["developer", "UI/UX", "Analyst"])} */}
-        {renderSelect("teamId", "responsibleTeam", [], [
-          ...teams.map((team) => [team.teamId, team.name]),
-        ] as string[][])}
+        {renderSelect("team", "responsibleTeam", [], [...teams.map((team) => [team.teamId, team.name])] as string[][])}
         <div className="grid grid-cols-2 gap-4">
           {renderInputField("Start Date", "startDate", "date")}
           {renderInputField("Due Date", "dueDate", "date")}

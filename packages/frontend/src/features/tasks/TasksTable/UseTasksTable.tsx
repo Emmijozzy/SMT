@@ -5,7 +5,11 @@ import { setTasks } from "../tasksSlice";
 import { setTotalRows } from "./tasksTableSlice";
 
 function UseTasksTable() {
-  const { data, isLoading, isSuccess, isError, error } = useGetTasksQuery();
+  const { data, isLoading, isSuccess, isError, error } = useGetTasksQuery(undefined, {
+    pollingInterval: 60000,
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
+  });
   const dispatch = useDispatch();
   const memoizedData = useMemo(() => data, [data]);
 

@@ -15,7 +15,7 @@ const taskSchema = Yup.object().shape({
     .max(250, "Description must be at most 250 character"),
   assignedTo: Yup.array().of(Yup.string().trim()),
   responsibleTeam: Yup.string()
-    .trim()
+    .optional()
     .when("managerTask", (managerTask, schema) => {
       const manTask = managerTask as unknown as boolean;
       return manTask !== true ? schema.required("Team is required") : schema.notRequired();

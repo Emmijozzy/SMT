@@ -4,13 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../../../../app/store";
 import log from "../../../../shared/utils/log";
+import { toSentenceCase } from "../../../../shared/utils/toSentenceCase";
 import { addAlert } from "../../../alerts/AlertSlice";
 import { setLoader } from "../../../loading/loaderSlice";
 import { useUpdateTaskMutation } from "../../tasksApiSlice";
 import taskSchema from "../../taskSchema";
 import { ITask } from "../../tasksInterface";
 import { tasksSelectors } from "../../tasksSlice";
-import { toSentenceCase } from "../../../../shared/utils/toSentenceCase";
 
 const defaultValue = {
   taskId: "",
@@ -36,13 +36,13 @@ const useEditTaskDetails = (taskId: string) => {
 
   const getTask = useSelector((state: RootState) => tasksSelectors.selectById(state, taskId)) as ITask;
 
-  const task = getTask || defaultValue;
+  const task: ITask = getTask || defaultValue;
 
   const initialValues = {
     taskId: task.taskId,
     title: task.title,
     description: task.description,
-    responsibleTeam: task.responsibleTeam,
+    responsibleTeam: typeof task.responsibleTeam === "object" ? task.responsibleTeam.teamId : task.responsibleTeam,
     priority: task.priority,
     managerTask: task.managerTask,
     managerId: task.managerId,
@@ -59,7 +59,7 @@ const useEditTaskDetails = (taskId: string) => {
       setIsSubmitting(true);
       dispatch(setLoader(true));
       try {
-        const payload = {
+        const payload: ITask = {
           taskId: values.taskId,
           title: values.title,
           description: toSentenceCase(values.description),
@@ -71,9 +71,9 @@ const useEditTaskDetails = (taskId: string) => {
           status: values.status.toLowerCase(),
           dueDate: values.dueDate,
           // createdDate: values.createdDate,
-        } as ITask;
+        };
 
-        console.log(payload);
+        // console.log(payload);
 
         await updateTask({ ...payload });
         dispatch(setLoader(false));
@@ -103,5 +103,4 @@ const useEditTaskDetails = (taskId: string) => {
     values,
   };
 };
-
 export default useEditTaskDetails;
