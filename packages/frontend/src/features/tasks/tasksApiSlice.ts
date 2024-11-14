@@ -82,7 +82,13 @@ export const tasksApiSlice = apiSlice.injectEndpoints({
         method: "PUT",
         body: { ...taskData },
       }),
-      invalidatesTags: (_result, _error, arg) => [{ type: "Tasks", id: arg.taskId }],
+      invalidatesTags: (_result, _error, arg) => [
+        { type: "Tasks", id: arg.taskId },
+        { type: "Teams" as const, id: "LIST" as const },
+        { type: "Team" as const },
+        { type: "Tasks" as const, id: "LIST" as const },
+        { type: "Users" as const, id: "LIST" as const },
+      ],
     }),
 
     deleteTask: build.mutation({

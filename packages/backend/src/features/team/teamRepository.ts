@@ -149,4 +149,32 @@ export default class TeamRepository {
       );
     }
   }
+
+  async addTaskIDToTeam(teamId: string, taskId: string): Promise<ITeam | null> {
+    try {
+      const updatedTeam = await Team.findOneAndUpdate({ teamId }, { $push: { tasks: taskId } }, { new: true });
+      if (!updatedTeam) throw new Error(`Team ${teamId} not found or can be updated`);
+      return updatedTeam;
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error("Error adding task to team", error);
+      throw new InternalError("Failed to add task to team.  ERROR: " + error.message + " ", error.stack, __filename);
+    }
+  }
+
+  async removeTaskIDFromTeam(teamId: string, taskId: string): Promise<ITeam | null> {
+    try {
+      const updatedTeam = await Team.findOneAndUpdate({ teamId }, { $pull: { tasks: taskId } }, { new: true });
+      if (!updatedTeam) throw new Error(`Team ${teamId} not found or can be updated`);
+      return updatedTeam;
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error("Error removing task from team", error);
+      throw new InternalError(
+        "Failed to remove task from team.  ERROR: " + error.message + " ",
+        error.stack,
+        __filename
+      );
+    }
+  }
 }

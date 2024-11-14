@@ -1,25 +1,28 @@
 import { Request, Response, Router } from "express";
-import { Task, TaskPayload } from "features/task/tasksInterface";
 import { ExtendedRequest } from "features/users/userInterface";
 import IController from "../../../Interface/controller";
 import authMiddleware from "../../../middleware/authMiddleware";
 import validationMiddleware from "../../../middleware/validationMiddleware";
-import { ENUM_USER_ROLES } from "../../users/enumUserRoles";
-import { ITask } from "../model/task";
-import taskSchema from "../taskSchema";
-
-import TasksServices from "../../../service/taskService"; // Corrected typo
-import { AuthFailureError, BadRequestError, InternalError, NotFoundError } from "../../../utils/ApiError";
+import { AuthFailureError, BadRequestError, InternalError } from "../../../utils/ApiError";
 import asyncHandler from "../../../utils/asyncHandler";
 import filtersToMongooseQuery from "../../../utils/filtersToMongooseQuery";
 import getPaginationOptions from "../../../utils/getPaginationOptions";
 import successResponse from "../../../utils/successResponse";
+import { ENUM_USER_ROLES } from "../../users/enumUserRoles";
+import { ITask } from "../model/task";
+import { TaskOrchestrator } from "../services/taskOrchestrator";
+import { TaskService } from "../services/taskService";
+import taskSchema from "../taskSchema";
 
 export default class TasksAdminController implements IController {
   public path = "/tasks_admin";
   public router = Router();
+  private taskService: TaskService;
+  private taskOrchestrator: TaskOrchestrator;
 
   constructor() {
+    this.taskService = new TaskService();
+    this.taskOrchestrator = new TaskOrchestrator();
     this.initializeRouter();
   }
 
@@ -35,9 +38,8 @@ export default class TasksAdminController implements IController {
 
   private createTask = asyncHandler(async (req: Request, res: Response) => {
     const { title, description, responsibleTeam, priority, dueDate, managerTask, managerId, startDate } = req.body;
-    if (!title.trim() || !description.trim() || !responsibleTeam || !dueDate)
-      throw new BadRequestError("Incomplete data provided");
-    const task = await TasksServices.createTask({
+
+    const task = await this.taskOrchestrator.createTask({
       title,
       description,
       responsibleTeam,
@@ -71,7 +73,10 @@ export default class TasksAdminController implements IController {
       ...pagination,
       sortField: pagination.sortField || "taskId"
     });
-    const result = await TasksServices.getAll(filters, paginationOptions);
+
+    const populateOptions = [{ path: "responsibleTeam", model: "Team", foreignField: "teamId", select: "name teamId" }];
+
+    const result = await this.taskService.getAll(filters, paginationOptions, populateOptions);
 
     if (!result || typeof result !== "object") throw new InternalError("Fatal Error fetching tasks");
 
@@ -83,10 +88,8 @@ export default class TasksAdminController implements IController {
 
   private getTaskById = asyncHandler(async (req: Request, res: Response) => {
     const taskId = req.query.taskId as string;
-
-    if (!taskId) throw new BadRequestError("Task ID is required");
-
-    const result = await TasksServices.getTaskById(taskId);
+    const populateOptions = [{ path: "responsibleTeam", model: "Team", foreignField: "teamId", select: "name teamId" }];
+    const result = await this.taskService.getTaskById(taskId, populateOptions);
 
     successResponse(res, {
       data: result,
@@ -95,60 +98,8 @@ export default class TasksAdminController implements IController {
   });
 
   private updateTask = asyncHandler(async (req: Request, res: Response) => {
-    const {
-      taskId,
-      title,
-      description,
-      assignedTo,
-      responsibleTeam,
-      status,
-      managerTask,
-      managerId,
-      priority,
-      startDate,
-      dueDate
-    } = req.body as Task;
-
-    if (!taskId) throw new BadRequestError("Task ID is required");
-
-    const task = (await TasksServices.getTaskById(taskId)) as ITask;
-    if (!task) throw new NotFoundError("Task not found");
-
-    const taskPayload: TaskPayload = {
-      ...task,
-
-      title: title || task.title,
-      description: description || task.description,
-      priority: priority || task.priority,
-      dueDate: dueDate ? new Date(dueDate).toISOString() : new Date(task.dueDate).toISOString(),
-      startDate: startDate ? new Date(startDate).toISOString() : new Date(task.startDate).toISOString()
-    };
-
-    // Use enum for task statuses
-    if (status === "not started" || status === "in progress" || status === "completed" || status === "closed") {
-      taskPayload.status = status;
-    }
-
-    if (assignedTo && assignedTo.length !== task.assignedTo.length) {
-      taskPayload.assignedTo = assignedTo;
-    }
-
-    if (responsibleTeam !== task.responsibleTeam) {
-      taskPayload.responsibleTeam = responsibleTeam;
-    }
-
-    if (managerTask !== task.managerTask) {
-      if (managerTask && !managerId) {
-        throw new BadRequestError("Manager ID is required");
-      }
-
-      taskPayload.subTasks = [];
-      taskPayload.assignedTo = [];
-      taskPayload.managerId = managerId || "";
-      taskPayload.managerTask = managerTask;
-    }
-
-    const result = await TasksServices.updateTaskById(taskPayload);
+    const RequestTaskData = req.body as Partial<ITask>;
+    const result = await this.taskOrchestrator.updateTask(RequestTaskData);
 
     successResponse(res, {
       data: result,
@@ -163,7 +114,7 @@ export default class TasksAdminController implements IController {
 
     const { deleteTaskId } = req.body as { deleteTaskId: string };
     if (!deleteTaskId) throw new BadRequestError("Task ID is required");
-    const deleteTaskData = await TasksServices.deleteTaskById(deleteTaskId);
+    const deleteTaskData = await this.taskService.deleteTaskById(deleteTaskId);
 
     successResponse(res, {
       data: {
@@ -182,7 +133,7 @@ export default class TasksAdminController implements IController {
     const { restoreTaskId } = req.body as { restoreTaskId: string };
     if (!restoreTaskId) throw new BadRequestError("Task ID is required");
 
-    const restoreTaskData = await TasksServices.restoreTaskById(restoreTaskId);
+    const restoreTaskData = await this.taskService.restoreTaskById(restoreTaskId);
 
     successResponse(res, {
       data: {

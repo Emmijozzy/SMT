@@ -79,7 +79,7 @@ const ViewTaskDetail: React.FC<Props> = React.memo(({ task, handleEditTaskDetail
                       <p className="text-justify">{description}</p>
                     </div>
                   </TaskDetailRow>
-                  <TaskDetailRow label="Team" value={responsibleTeam} />
+                  <TaskDetailRow label="Team" value={responsibleTeam && responsibleTeam.name} />
                   <TaskDetailRow label="Status">
                     <div className="flex gap-2 items-center">
                       <StatusIndicator status={status} />

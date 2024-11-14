@@ -4,8 +4,11 @@ import ArrowBackSharpIcon from "@mui/icons-material/ArrowBackSharp";
 import SaveAsIcon from "@mui/icons-material/SaveAs";
 import { FormikErrors } from "formik";
 import { useMemo } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../app/store";
 import InputField3 from "../../../../shared/components/InputField3";
 import Select from "../../../../shared/components/Select";
+import { teamSelectors } from "../../../teams/teamSlice";
 import { ITask } from "../../tasksInterface";
 import useEditTaskDetails from "../hooks/useEditTaskDetails";
 
@@ -20,6 +23,8 @@ function EditTaskDetails({ handleEditTaskDetails, taskId }: Props) {
   const { handleChange, handleSubmit, errors, values } = useEditTaskDetails(taskId);
   const taskValues = values as ITask;
   const taskErrors = errors as FormikErrors<ITask>;
+
+  const teams = useSelector((state: RootState) => teamSelectors.selectAll(state));
 
   const errorExist = useMemo(() => Object.keys(errors).length > 0, [errors]);
 
@@ -44,7 +49,12 @@ function EditTaskDetails({ handleEditTaskDetails, taskId }: Props) {
     />
   );
 
-  const renderSelect = <K extends keyof ITask>(label: string, name: K, options: string[]) => (
+  const renderSelect = <T extends keyof ITask>(
+    label: string,
+    name: T,
+    options: string[],
+    teamsOptions: string[][] = [],
+  ) => (
     <Select
       label={label}
       name={name}
@@ -53,6 +63,7 @@ function EditTaskDetails({ handleEditTaskDetails, taskId }: Props) {
       handleChange={handleChange}
       options={options}
       labelClass="w-14"
+      teamsOptions={teamsOptions}
       className="border-b-[1px] border-base-content/40 h-13 text-sm gap-9 "
     />
   );
@@ -85,7 +96,10 @@ function EditTaskDetails({ handleEditTaskDetails, taskId }: Props) {
         {renderInputField("Task Id", "taskId")}
         {renderInputField("Title", "title")}
         {renderInputField("Description", "description", "text", "textarea")}
-        {renderSelect("Team", "responsibleTeam", ["developer", "UI/UX", "Analyst"])}
+        {/* {renderSelect("Team", "responsibleTeam", ["developer", "UI/UX", "Analyst"])} */}
+        {renderSelect("teamId", "responsibleTeam", [], [
+          ...teams.map((team) => [team.teamId, team.name]),
+        ] as string[][])}
         <div className="grid grid-cols-2 gap-4">
           {renderInputField("Start Date", "startDate", "date")}
           {renderInputField("Due Date", "dueDate", "date")}

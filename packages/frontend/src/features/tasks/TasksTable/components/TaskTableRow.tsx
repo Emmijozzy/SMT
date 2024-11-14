@@ -30,7 +30,7 @@ function TaskTableRow<T extends ITask>({ data }: Props<T>) {
             </div>
           </td>
           <td className="border-t-0 px-4align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2 capitalize">
-            <span>{responsibleTeam}</span>
+            <span>{responsibleTeam && responsibleTeam?.name}</span>
           </td>
           <td className="border-t-0 w-12 px-4align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2 capitalize ">
             <div className="flex items-center gap-1">

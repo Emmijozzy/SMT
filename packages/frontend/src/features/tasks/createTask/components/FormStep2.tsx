@@ -1,10 +1,11 @@
 import { ChangeEvent } from "react";
 import { useSelector } from "react-redux";
-import ToggleSwitch from "../../../../shared/components/ToggleSwitch";
-import Select from "../../../../shared/components/Select";
-import { ITask } from "../../tasksInterface";
 import { RootState } from "../../../../app/store";
+import Select from "../../../../shared/components/Select";
+import ToggleSwitch from "../../../../shared/components/ToggleSwitch";
+import { teamSelectors } from "../../../teams/teamSlice";
 import { usersSelectors } from "../../../users/userSlice";
+import { ITask } from "../../tasksInterface";
 
 type Props = {
   onNext: () => void;
@@ -17,6 +18,8 @@ function FormStep2({ onNext, onPrevious, values, handleChange }: Props) {
     (user) => user.role === "manager",
   );
 
+  const teams = useSelector((state: RootState) => teamSelectors.selectAll(state));
+
   return (
     <div>
       <div className="w-full px-2">
@@ -24,9 +27,8 @@ function FormStep2({ onNext, onPrevious, values, handleChange }: Props) {
           name="responsibleTeam"
           label="Team"
           placeholder="Select responsible team"
-          options={["developer", "UI/UX", "Analyst"]}
+          teamsOptions={teams && (teams.map((team) => [team.teamId, team.name]) as string[][])}
           className="gap-[1.6rem] pt-2"
-          value={values.responsibleTeam}
           handleChange={handleChange}
         />
         <ToggleSwitch

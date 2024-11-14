@@ -3,7 +3,10 @@ export interface ITask {
   title: string;
   description: string;
   assignedTo?: string[];
-  responsibleTeam: string;
+  responsibleTeam: {
+    name: string;
+    teamId: string;
+  };
   status: "not started" | "in progress" | "completed" | "closed";
   managerTask: boolean;
   managerId: string;
