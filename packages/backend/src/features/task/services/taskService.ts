@@ -106,4 +106,16 @@ export class TaskService {
 
     return restoredTask;
   }
+
+  public async outrightDeleteById(taskId: string): Promise<ITask | null> {
+    try {
+      const deletedTask = await this.taskRepository.outrightDeleteById(taskId);
+      if (!deletedTask) throw new InternalError(`Error deleting task ${taskId}`);
+      return deletedTask;
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error("Error fetching teams", error);
+      throw new InternalError("Failed to delete task.  ERROR: " + error.message + " ", error.stack, __filename);
+    }
+  }
 }

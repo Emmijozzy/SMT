@@ -1,4 +1,5 @@
 /* eslint-disable no-void */
+import { ChangeEvent, useState } from "react";
 import { FaTrashRestore } from "react-icons/fa";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,10 +8,11 @@ import { RootState } from "../../../app/store";
 import ResData from "../../../shared/interface/resdata";
 import log from "../../../shared/utils/log";
 import { addAlert } from "../../alerts/AlertSlice";
-import { useDeleteTaskMutation, useRestoreTaskMutation } from "../tasksApiSlice";
+import { useDeleteTaskMutation, useOutrightDeleteTaskMutation, useRestoreTaskMutation } from "../tasksApiSlice";
 import { getShowModal, getTaskId, setCloseModal } from "./deleteTaskSlice";
 
 function DeleteTask() {
+  const [outrightDelete, setOutrightDelete] = useState(false);
   const forDelete = useSelector((state: RootState) => state.deleteTask.forDelete);
   const showModal = useSelector(getShowModal);
   const taskId = useSelector(getTaskId);
@@ -18,18 +20,33 @@ function DeleteTask() {
   const navigate = useNavigate();
 
   const [deleteTask, { isError: isDelError, isLoading: isDelLoading }] = useDeleteTaskMutation();
+  const [outrightDeleteTask, { isError: isOutDelError, isLoading: isOutDelLoading }] = useOutrightDeleteTaskMutation();
   const [restoreTask, { isError: isResError, isLoading: isResLoading }] = useRestoreTaskMutation();
+
+  const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setOutrightDelete(event.target.checked);
+  };
 
   const handleDelete = () => {
     const taskDelete = async () => {
+      let resMessage: string;
       try {
-        const resData = (await deleteTask({ deleteTaskId: taskId })) as ResData;
-        if (Object.keys(resData)[0] === "error" || isDelError) {
-          const resError = resData.error as ResData;
-          throw new Error(resError.data.message);
+        if (outrightDelete) {
+          const resData = (await outrightDeleteTask({ deleteTaskId: taskId })) as ResData;
+          if (Object.keys(resData)[0] === "error" || isOutDelError) {
+            const resError = resData.error as ResData;
+            throw new Error(resError.data.message);
+          }
+          resMessage = resData.data.message;
+        } else {
+          const resData = (await deleteTask({ deleteTaskId: taskId })) as ResData;
+          if (Object.keys(resData)[0] === "error" || isDelError) {
+            const resError = resData.error as ResData;
+            throw new Error(resError.data.message);
+          }
+          resMessage = resData.data.message;
         }
 
-        const resMessage = resData.data.message;
         dispatch(addAlert({ message: resMessage, type: "success" }));
         dispatch(setCloseModal());
         navigate("/dash/tasks");
@@ -97,13 +114,26 @@ function DeleteTask() {
                 <span className="block text-lg font-bold uppercase">{taskId} ?</span>
               </p>
             </div>
+            <div className="ml-6 ">
+              <label htmlFor="outrightDelete" className="text-error flex md:flex-row items-center gap-1">
+                <input
+                  id="outrightDelete"
+                  className="dark:border-white-400/20 bg-black dark:scale-100 transition-all duration-500 ease-in-out dark:hover:scale-110 dark:checked:scale-100 w-5 h-5"
+                  name="outrightDelete"
+                  checked={outrightDelete}
+                  onChange={handleCheckboxChange}
+                  type="checkbox"
+                />
+                <span className="font-bold text-sm text-error px-2">Outright delete</span>
+              </label>
+            </div>
             <div className="py-2 mt-2 text-center space-x-1 md:block">
               <button
                 type="button"
                 className="bg-error hover:bg-transparent px-5 py-2 text-sm shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-red-500 hover:border-red-500 text-error-content hover:text-red-500 rounded-full transition ease-in duration-300"
                 onClick={forDelete ? handleDelete : handleRestore}
               >
-                {isDelLoading || isResLoading ? "Loading.." : "Confirm"}
+                {isOutDelLoading || isDelLoading || isResLoading ? "Loading.." : "Confirm"}
               </button>
             </div>
           </div>

@@ -89,4 +89,20 @@ export class TaskOrchestrator {
       throw new InternalError("Failed to update task.  ERROR: " + error.message + " ", error.stack, __filename);
     }
   }
+
+  public async outrightDeleteTaskById(taskId: string): Promise<ITask | null> {
+    try {
+      const task = await this.taskService.getTaskById(taskId);
+      if (!task) throw new NotFoundError("Task not found");
+      const deletedTask = await this.taskService.outrightDeleteById(taskId);
+      const taskRemoved = await this.TeamService.removeTaskFromTeam(task.responsibleTeam, task.taskId);
+      if (!deletedTask || !taskRemoved) throw new InternalError("Error deleting task");
+      console.log("Task deleted successfully");
+      return deletedTask;
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error("Error deleting task", error);
+      throw new InternalError("Failed to delete task ERROR: " + error.message + " ", error.stack, __filename);
+    }
+  }
 }

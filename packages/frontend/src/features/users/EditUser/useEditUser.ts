@@ -86,16 +86,16 @@ function useEditUser(userId: string) {
         const resData = (await updateUser({ ...values })) as ResData;
         // console.log(resData);
         if (Object.keys(resData)[0] === "error" || isError) {
-          const resError = resData.error as ResData;
-          throw new Error(resError.data.message);
+          const resError = resData?.error as ResData;
+          throw new Error(resError?.data.message);
         }
-        const resMessage = resData.data.message;
+        const resMessage = resData?.data.message;
         dispatch(addAlert({ message: resMessage, type: "success" }));
         navigate("/dash/users");
       } catch (e) {
         const err = e as Error;
-        dispatch(addAlert({ message: err.message, type: "error" }));
-        log("error", "Change password Error", err.message, err.stack as string);
+        dispatch(addAlert({ message: err?.message, type: "error" }));
+        log("error", "Change password Error", err?.message, err?.stack as string);
       } finally {
         setIsSubmitting(false);
         dispatch(setLoader(false));

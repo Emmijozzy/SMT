@@ -34,6 +34,7 @@ export default class TasksAdminController implements IController {
 
     this.router.patch("/delete", authMiddleware(ENUM_USER_ROLES.ADMIN), this.deleteTask);
     this.router.patch("/restore", authMiddleware(ENUM_USER_ROLES.ADMIN), this.restoreTask);
+    this.router.delete("/outright_delete/", authMiddleware(ENUM_USER_ROLES.ADMIN), this.outrightDeleteTask);
   };
 
   private createTask = asyncHandler(async (req: Request, res: Response) => {
@@ -141,6 +142,23 @@ export default class TasksAdminController implements IController {
         restoreTaskData
       },
       message: "Task restored successfully."
+    });
+  });
+
+  private outrightDeleteTask = asyncHandler(async (req: ExtendedRequest, res: Response) => {
+    const requestUserRole = req.user?.userRole;
+    if (!requestUserRole) throw new InternalError("Unauthorized");
+    if (requestUserRole !== "admin") throw new AuthFailureError("Unauthorized");
+    const { deleteTaskId } = req.body as { deleteTaskId: string };
+    if (!deleteTaskId) throw new BadRequestError("Task ID is required");
+    const deleteTaskData = await this.taskOrchestrator.outrightDeleteTaskById(deleteTaskId);
+    if (!deleteTaskData) throw new InternalError("Fatal Error deleting task");
+    successResponse(res, {
+      data: {
+        taskId: deleteTaskData?.taskId,
+        deleteTaskData
+      },
+      message: "Task deleted permanently."
     });
   });
 }

@@ -108,6 +108,15 @@ export const tasksApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: [{ type: "Tasks" as const, id: "LIST" as const }],
     }),
+
+    outrightDeleteTask: build.mutation({
+      query: (credentials: Record<string, string>) => ({
+        url: "/tasks_admin/outright_delete",
+        method: "DELETE",
+        body: { ...credentials },
+      }),
+      invalidatesTags: [{ type: "Tasks" as const, id: "LIST" as const }],
+    }),
   }),
 });
 
@@ -117,4 +126,5 @@ export const {
   useUpdateTaskMutation,
   useDeleteTaskMutation,
   useRestoreTaskMutation,
+  useOutrightDeleteTaskMutation,
 } = tasksApiSlice;

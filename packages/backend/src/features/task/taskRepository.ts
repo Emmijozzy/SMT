@@ -62,4 +62,8 @@ export class TaskRepository {
   public async restoreById(taskId: string) {
     return await Task.findOneAndUpdate({ taskId }, { del_flg: false }, { new: true }).lean().exec();
   }
+
+  public async outrightDeleteById(taskId: string) {
+    return await Task.findOneAndDelete({ taskId }).exec();
+  }
 }
