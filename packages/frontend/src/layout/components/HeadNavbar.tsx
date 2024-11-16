@@ -1,21 +1,21 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useClickOutside } from "@mantine/hooks";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SearchIcon from "@mui/icons-material/Search";
 import SettingsIcon from "@mui/icons-material/Settings";
-import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import { Typography } from "@mui/material";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import MenuIcon from "@mui/icons-material/Menu";
-import { useClickOutside } from "@mantine/hooks";
-import Avartar from "../../shared/components/Avartar";
-import Breadcrumbs from "./Breadcrumbs";
+import { Link } from "react-router-dom";
 import { RootState } from "../../app/store";
 import { IUser } from "../../features/users/userInterface";
+import Avartar from "../../shared/components/Avartar";
 import { setSettingBar, setSidebar } from "../layoutSlice";
+import Breadcrumbs from "./Breadcrumbs";
 
 // type Props = {};
 
@@ -23,6 +23,9 @@ function HeadNavbar() {
   const [showAddNav, setAddNav] = useState(false);
 
   const userProfile = useSelector((state: RootState) => state.userProfile.userProfile) as IUser;
+
+  console.log(userProfile);
+
   const ref = useClickOutside(() => {
     console.log("ref");
     setAddNav(false);
@@ -80,11 +83,11 @@ function HeadNavbar() {
         <div className="">{userProfile.fullName && <Avartar name={userProfile.fullName} />}</div>
         <div className=" ml-5 hidden md:flex flex-col">
           {userProfile.fullName && <h6 className="h6 text-sm">{userProfile.fullName}</h6>}
-          {
-            /* userProfile.teamId && */ <p className="text-[0.65rem] leading-3 text-base-content/40 uppercase font-bold">
-              Web Developer
+          {userProfile.team && (
+            <p className="text-[0.65rem] leading-3 text-base-content/40 uppercase font-bold">
+              {userProfile.team} <span className="text-base-content"> - {userProfile.role}</span>
             </p>
-          }
+          )}
           {userProfile.userId && (
             <p className="text-[0.6rem] leading-3 text-base-content/40 uppercase">{userProfile.userId}</p>
           )}
@@ -100,15 +103,15 @@ function HeadNavbar() {
           >
             <div className="flex flex-col md:hidden mb-2">
               {userProfile.fullName && <h6 className="h6 text-sm pb-1">{userProfile.fullName}</h6>}
-              {
-                /* userProfile.teamId && */ <p className="text-[0.65rem] leading-3 text-base-content/40 uppercase font-bold">
-                  Web Developer
+              {userProfile.team && (
+                <p className="text-[0.65rem] leading-3 text-base-content/40 uppercase font-bold">
+                  {userProfile.team} <span className="text-base-content"> - {userProfile.role}</span>
                 </p>
-              }
+              )}
               {userProfile.userId && (
                 <p className="text-[0.6rem] leading-3 text-base-content/40 uppercase mb-2">{userProfile.userId}</p>
               )}
-              <hr className="h-px bg-transparent bg-base-content/40" />
+              <hr className="h-px bg-base-content/40" />
             </div>
             <ul className="">
               <li className="">
