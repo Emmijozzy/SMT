@@ -1,23 +1,19 @@
+/* eslint-disable indent */
 /* eslint-disable import/no-cycle */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { createEntityAdapter } from "@reduxjs/toolkit";
+
 import { apiSlice } from "../../app/api/apislice";
 import { changeStatus } from "../../shared/Slice/statusSlice";
 import log from "../../shared/utils/log";
 import { addAlert } from "../alerts/AlertSlice";
 import User, { IUser, ReqError } from "./userInterface";
 import { saveProfile } from "./userProfileSlice";
+import { setUsers } from "./userSlice";
 
 interface ResData {
   data: IUser[];
 }
-
-export const usersAdapter = createEntityAdapter({
-  selectId: (user: IUser) => user.userId,
-});
-
-export const initialState = usersAdapter.getInitialState({});
 
 export const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (build) => ({
@@ -48,7 +44,6 @@ export const userApiSlice = apiSlice.injectEndpoints({
     getUsers: build.query({
       query: (query) => {
         const filteredQuery = query as Record<string, string>;
-
         if (typeof filteredQuery == "object") {
           const stringifyQuery = JSON.stringify(filteredQuery);
           // console.log(stringifyQuery);
@@ -70,13 +65,27 @@ export const userApiSlice = apiSlice.injectEndpoints({
           _id: user.userId,
         }));
 
-        return usersAdapter.setAll(initialState, users);
-        // return users;
+        return users;
+      },
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(setUsers(data));
+        } catch (e: unknown) {
+          const error = e as Error;
+          log("error", "UserApi getUser Error", error.message, error.stack as string);
+        }
       },
       providesTags: (result) =>
-        result?.ids
-          ? [{ type: "User" as const, id: "LIST" as const }, ...result.ids.map((id) => ({ type: "User" as const, id }))]
-          : [{ type: "User" as const, id: "LIST" as const }],
+        result
+          ? [
+              ...result.map((user) => ({
+                type: "User" as const,
+                id: user.userId || "UNKNOWN", // Fallback in case taskId is undefined
+              })),
+              { type: "Users", id: "LIST" },
+            ]
+          : [{ type: "Users", id: "LIST" }],
     }),
 
     createUser: build.mutation({
@@ -104,13 +113,15 @@ export const userApiSlice = apiSlice.injectEndpoints({
     updateUser: build.mutation({
       query: (credentials) => ({
         url: "/user_admin/update",
-        method: "PATCH",
+        method: "PUT",
         body: { ...credentials },
       }),
-      invalidatesTags: [
-        { type: "User" as const, id: "LIST" as const },
-        { type: "Team" as const, id: "LIST" as const },
+      invalidatesTags: (_result, _error, arg) => [
+        { type: "User", id: arg.userId },
         { type: "Teams" as const, id: "LIST" as const },
+        { type: "Team" as const },
+        { type: "Tasks" as const, id: "LIST" as const },
+        { type: "Users" as const, id: "LIST" as const },
       ],
     }),
 

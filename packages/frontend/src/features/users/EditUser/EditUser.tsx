@@ -1,7 +1,7 @@
 import ArrowBackSharpIcon from "@mui/icons-material/ArrowBackSharp";
 // import Button2 from "../../../shared/components/Button2";
 import { useDispatch } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { addAlert } from "../../alerts/AlertSlice";
 import UserForm from "../components/UserForm";
 import useEditUser from "./useEditUser";
@@ -12,6 +12,10 @@ function EditUser() {
   const { handleSubmit, handleBlur, handleChange, errors, values, isSubmitting } = useEditUser(userId);
 
   const dispatch = useDispatch();
+
+  const handleGoBack = () => {
+    window.history.back();
+  };
 
   const handleFormValidation = () => {
     const errorsArr = Object.values(errors);
@@ -28,12 +32,10 @@ function EditUser() {
           <button
             type="button"
             aria-label="Edit User"
-            // onClick={() => handleShowEdit()}
+            onClick={() => handleGoBack()}
             className="cursor-pointe ml-auto hover:text-base-content/40"
           >
-            <Link to="/dash/users">
-              <ArrowBackSharpIcon className="w-8 h-8" />
-            </Link>
+            <ArrowBackSharpIcon className="w-8 h-8" />
           </button>
         </div>
       </div>

@@ -56,18 +56,22 @@ function TableBody({ userId }: Props) {
             </div>
             <div className="flex flex-col justify-center">
               <h6 className="mb-0 text-sm leading-normal text-base-content/80 capitalize">{fullName}</h6>
-              <p className="mb-0 text-xs leading-tight text-base-content/50">{email}</p>
+              <p className="mb-0 text-xs leading-tight text-base-content/50">{userId}</p>
             </div>
           </div>
         </td>
         <td className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
-          <p className="mb-0 text-xs font-semibold leading-tigh text-base-content/80 capitalize">
+          <p className="mb-0 text-xs font-semibold leading-tight text-base-content/80 capitalize">{email}</p>{" "}
+          {/* *TODO - Add to status to the table */}
+        </td>
+        <td className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
+          <p className="mb-0 text-xs font-semibold leading-tight text-base-content/80 capitalize">
             {role.replace("_", " ")}
           </p>
           <p className="mb-0 text-xs leading-tight text-base-content/50 capitalize">{team}</p>
         </td>
         <td className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
-          <p className="mb-0 text-xs font-semibold leading-tigh text-base-content/80 capitalize">active</p>{" "}
+          <p className="mb-0 text-xs font-semibold leading-tight text-base-content/80 capitalize">active</p>{" "}
           {/* *TODO - Add to status to the table */}
         </td>
         <td className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">

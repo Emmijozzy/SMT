@@ -7,8 +7,6 @@ export const taskAdapter = createEntityAdapter({
   selectId: (task: ITask) => task.taskId as string,
 });
 
-export const initialState = taskAdapter.getInitialState({});
-
 const tasksSlice = createSlice({
   name: "tasks",
   initialState: taskAdapter.getInitialState(),

@@ -18,6 +18,7 @@ function Prefetch() {
     dispatch(clearAlert());
 
     store.dispatch(userApiSlice.util.prefetch("getUserProfile", "user", { force: true }));
+    store.dispatch(userApiSlice.util.prefetch("getUsers", undefined, { force: true }));
     store.dispatch(tasksApiSlice.util.prefetch("getTasks", undefined, { force: true }));
     store.dispatch(teamApiSlice.util.prefetch("getTeams", undefined, { force: true }));
   }, [dispatch]);

@@ -43,13 +43,13 @@ function UserForm({
         </div>
       </div>
 
-      <div className="absolute container w-full left-0 bottom-[-6rem]  flex justify-center gap-4">
+      <div className="absolute container w-full left-0 flex justify-center gap-4">
         <button
           type="submit"
           className="px-4 py-2 button text-center text-base-content border transition-all bg-base-300 hover:scale-[105%] hover:shadow-lg hover:shadow-base-300 hover:bg-base-content hover:text-base-300  rounded-lg cursor-pointer ease-in"
           onClick={handleFormValidation}
         >
-          {isSubmitting ? "Loading..." : "Save"}
+          {isSubmitting ? "Loading..." : "Send"}
         </button>
       </div>
     </form>

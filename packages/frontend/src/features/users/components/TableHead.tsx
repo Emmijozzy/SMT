@@ -5,6 +5,9 @@ function TableHead() {
         <th className="px-6 py-3 font-bold text-left uppercase align-middle text-md border-b-solid tracking-none whitespace-nowrap text-base-content/70 ">
           Details
         </th>
+        <th className="px-6 py-3 font-bold text-left uppercase align-middle text-md border-b-solid tracking-none whitespace-nowrap text-base-content/70 ">
+          Email
+        </th>
         <th className="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent shadow-none text-md border-b-solid tracking-none whitespace-nowrap text-base-content/70">
           Function
         </th>

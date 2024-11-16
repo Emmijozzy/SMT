@@ -64,7 +64,7 @@ function TeamTaskRow<T extends ITask>({ data }: Props<T>) {
             <span>{daysLeft}</span>
           </td>
           <td className="border-t-0 max-w-20 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2 text-right">
-            <Link to={`${taskId as string}`} className="flex view justify-between ">
+            <Link to={`../../../dash/tasks/${taskId as string}`} className="flex view justify-between ">
               <GrView className="h-6 w-6 text-base-content/70 hover:text-secondary cursor-pointer" />
             </Link>
           </td>

@@ -51,7 +51,7 @@ const useFilteredQuery = () => {
         );
         if (isSuccess && !isLoading) {
           // console.log(data);
-          setSearchedUserId(data.ids);
+          setSearchedUserId(data.map((user) => user.userId));
         } else if (isError) {
           const resError = error as ErrorMessage;
           dispatch(addAlert({ message: resError?.data?.message, type: "error" }));

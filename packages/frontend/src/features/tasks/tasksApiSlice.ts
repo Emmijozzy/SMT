@@ -32,7 +32,6 @@ export const tasksApiSlice = apiSlice.injectEndpoints({
     getTasks: build.query<TaskResponse, void>({
       query: (query) => {
         const filteredQuery = query as unknown as Record<string, string>;
-
         if (typeof filteredQuery == "object") {
           const stringifyQuery = JSON.stringify(filteredQuery);
           return {
@@ -68,7 +67,7 @@ export const tasksApiSlice = apiSlice.injectEndpoints({
         result
           ? [
               ...result.map((task) => ({
-                type: "Tasks" as const,
+                type: "Task" as const,
                 id: task.taskId || "UNKNOWN", // Fallback in case taskId is undefined
               })),
               { type: "Tasks", id: "LIST" },
@@ -83,7 +82,7 @@ export const tasksApiSlice = apiSlice.injectEndpoints({
         body: { ...taskData },
       }),
       invalidatesTags: (_result, _error, arg) => [
-        { type: "Tasks", id: arg.taskId },
+        { type: "Task", id: arg.taskId },
         { type: "Teams" as const, id: "LIST" as const },
         { type: "Team" as const },
         { type: "Tasks" as const, id: "LIST" as const },

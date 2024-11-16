@@ -27,6 +27,10 @@ function ViewUser() {
       ]
     : [];
 
+  const handleGoBack = () => {
+    window.history.back();
+  };
+
   let content;
 
   if (user) {
@@ -45,11 +49,14 @@ function ViewUser() {
                   </button>
                 </Link>
               )}
-              <Link to="/dash/users">
-                <button type="button" aria-label="Edit User" className="cursor-pointer hover:text-base-content/40">
-                  <ArrowBackSharpIcon className="w-8 h-8" />
-                </button>
-              </Link>
+              <button
+                type="button"
+                aria-label="Edit User"
+                onClick={handleGoBack}
+                className="cursor-pointer hover:text-base-content/40"
+              >
+                <ArrowBackSharpIcon className="w-8 h-8" />
+              </button>
             </nav>
           </div>
 
@@ -63,13 +70,31 @@ function ViewUser() {
               <DetailsContainer tableRows={tableRows} />
               <div className="flex w-full items-center  border-base-content">
                 <div className="flex gap-4 ml-auto mr-2 mt-2">
-                  <a aria-label="Whatsapp" href={socialLinks?.whatsappLink || "https://"} target="_blank" className="cursor-pointer">
+                  <a
+                    aria-label="Whatsapp"
+                    href={socialLinks?.whatsappLink || "https://"}
+                    target="_blank"
+                    className="cursor-pointer"
+                    rel="noreferrer"
+                  >
                     <WhatsAppIcon className="w-7 h-7" />
                   </a>
-                  <a aria-label="Facebook" href={socialLinks?.facebookLink || "https://"} target="_blank" className="cursor-pointer">
+                  <a
+                    aria-label="Facebook"
+                    href={socialLinks?.facebookLink || "https://"}
+                    target="_blank"
+                    className="cursor-pointer"
+                    rel="noreferrer"
+                  >
                     <FacebookIcon className="w-7 h-7" />
                   </a>
-                  <a aria-label="LinkedIn" href={socialLinks?.linkedInLink || "https://"}target="_blank" className="cursor-pointer">
+                  <a
+                    aria-label="LinkedIn"
+                    href={socialLinks?.linkedInLink || "https://"}
+                    target="_blank"
+                    className="cursor-pointer"
+                    rel="noreferrer"
+                  >
                     <LinkedInIcon className="w-7 h-7" />
                   </a>
                 </div>

@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, ChangeEvent } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useGetUsersQuery } from "../userApiSlice";
-import { setUsers } from "../userSlice";
+import { setUsers, usersSelectors } from "../userSlice";
 import useFilteredQuery from "./useFilteredQuery";
+import { RootState } from "../../../app/store";
 
 const useUserTable = () => {
   const [rowPerPage, setRowPerPage] = useState(5);
@@ -29,12 +30,14 @@ const useUserTable = () => {
 
   const { handleSubmit, handleBlur, handleChange, errors, values, isSubmitting, searchedUserId } = useFilteredQuery();
 
+  const getUserIds = useSelector((state: RootState) => usersSelectors.selectIds(state));
+
   useEffect(() => {
     if (searchedUserId) {
       setUserIds(searchedUserId);
     } else if (ResUsers) {
-      dispatch(setUsers(ResUsers?.entities));
-      setUserIds(ResUsers?.ids);
+      dispatch(setUsers(ResUsers));
+      setUserIds(getUserIds);
     }
   }, [ResUsers, searchedUserId]);
 

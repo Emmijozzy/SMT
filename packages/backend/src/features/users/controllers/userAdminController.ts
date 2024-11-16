@@ -32,7 +32,7 @@ export default class UserAdminController implements IController {
       this.createUser
     );
 
-    this.router.patch(
+    this.router.put(
       "/update",
       authMiddleware(ENUM_USER_ROLES.ADMIN),
       validationMiddleware(userUpdateAdminSchema),

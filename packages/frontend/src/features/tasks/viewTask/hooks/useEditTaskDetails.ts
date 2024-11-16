@@ -1,7 +1,6 @@
 import { useFormik } from "formik";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { RootState } from "../../../../app/store";
 import log from "../../../../shared/utils/log";
 import { toSentenceCase } from "../../../../shared/utils/toSentenceCase";
@@ -32,7 +31,6 @@ const useEditTaskDetails = (taskId: string) => {
   const [updateTask, { isSuccess }] = useUpdateTaskMutation();
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const getTask = useSelector((state: RootState) => tasksSelectors.selectById(state, taskId)) as ITask;
 
@@ -68,7 +66,7 @@ const useEditTaskDetails = (taskId: string) => {
           managerTask: values.managerTask,
           managerId: values.managerId,
           startDate: values.startDate,
-          status: values.status.toLowerCase(),
+          status: values.status.toLowerCase() as "not started" | "in progress" | "completed" | "closed",
           dueDate: values.dueDate,
           // createdDate: values.createdDate,
         };
@@ -76,9 +74,8 @@ const useEditTaskDetails = (taskId: string) => {
         // console.log(payload);
 
         await updateTask({ ...payload });
-        dispatch(setLoader(false));
         dispatch(addAlert({ message: "Task updated successfully!", type: "success" }));
-        navigate("/dash/tasks/");
+        window.history.back();
       } catch (e) {
         const error = e as Error;
         dispatch(setLoader(false));
@@ -86,6 +83,7 @@ const useEditTaskDetails = (taskId: string) => {
         log("error", "Update profile Error", error.message, error.stack as string);
       } finally {
         setIsSubmitting(false);
+        dispatch(setLoader(false));
       }
       // Navigate back to tasks list after editing
       // navigate("/tasks");

@@ -1,9 +1,12 @@
 /* eslint-disable import/no-cycle */
-import { createSlice } from "@reduxjs/toolkit";
+import { createEntityAdapter, createSlice } from "@reduxjs/toolkit";
 // import { usersAdapter } from "./userApiSlice";
 import { RootState } from "../../app/store";
 import { IUser } from "./userInterface";
-import { usersAdapter } from "./userApiSlice";
+
+export const usersAdapter = createEntityAdapter({
+  selectId: (user: IUser) => user.userId,
+});
 
 const usersSlice = createSlice({
   name: "users",
