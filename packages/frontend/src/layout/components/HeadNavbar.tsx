@@ -24,8 +24,6 @@ function HeadNavbar() {
 
   const userProfile = useSelector((state: RootState) => state.userProfile.userProfile) as IUser;
 
-  console.log(userProfile);
-
   const ref = useClickOutside(() => {
     console.log("ref");
     setAddNav(false);
@@ -43,7 +41,6 @@ function HeadNavbar() {
   };
 
   const handleAddNav = () => {
-    console.log("press");
     setAddNav((pre) => !pre);
   };
 
@@ -115,7 +112,7 @@ function HeadNavbar() {
             </div>
             <ul className="">
               <li className="">
-                <Link to="/dash/profile" className="flex items-center justify-between hover:text-base-content/40">
+                <Link to="profile" className="flex items-center justify-between hover:text-base-content/40">
                   <p className="mr-3">Profile</p>
                   <AccountBoxIcon />
                 </Link>

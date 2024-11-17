@@ -71,8 +71,6 @@ const useEditTaskDetails = (taskId: string) => {
           // createdDate: values.createdDate,
         };
 
-        // console.log(payload);
-
         await updateTask({ ...payload });
         dispatch(addAlert({ message: "Task updated successfully!", type: "success" }));
         window.history.back();
@@ -85,8 +83,6 @@ const useEditTaskDetails = (taskId: string) => {
         setIsSubmitting(false);
         dispatch(setLoader(false));
       }
-      // Navigate back to tasks list after editing
-      // navigate("/tasks");
     },
   });
 

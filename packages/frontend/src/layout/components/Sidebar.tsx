@@ -1,14 +1,15 @@
-import { Typography } from "@mui/material";
-import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { useClickOutside } from "@mantine/hooks";
 import CloseIcon from "@mui/icons-material/Close";
 import LoginSharpIcon from "@mui/icons-material/LoginSharp";
-import NavItem from "./NavItem";
-import { adminroutes } from "../../shared/constants";
+import { Typography } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { RootState } from "../../app/store";
-import { setSidebar } from "../layoutSlice";
+import { getPresentUser } from "../../features/profile/userProfileSlice";
 import useLogout from "../../shared/hooks/useLogout";
+import { setSidebar } from "../layoutSlice";
+import NavItem from "./NavItem";
+import { getUserNavItem } from "../../shared/utils/getUserNavItem";
 
 function Sidebar() {
   // const [openSidenav] = useState(false);
@@ -16,6 +17,10 @@ function Sidebar() {
   const dispatch = useDispatch();
   const openSidenav = useSelector((state: RootState) => state.layout.slideBar);
   const ref = useClickOutside(() => dispatch(setSidebar(false)));
+
+  const userRole = useSelector((state: RootState) => getPresentUser(state)).role || "team_member";
+
+  const navItems = getUserNavItem(userRole);
 
   const handleSidebar = () => {
     dispatch(setSidebar(false));
@@ -44,7 +49,7 @@ function Sidebar() {
       <hr className="h-px bg-transparent bg-gradient-to-r from-transparent via-base-content/40 to-transparent" />
       <div className="m-4  h-[calc(100%-120px)]">
         <ul className="flex flex-col gap-1 h-full">
-          {adminroutes.map((route) => (
+          {navItems.map((route) => (
             <li key={route.title} className="w-full mt-2 ">
               <NavItem title={route.title} path={route.path} Icon={route.icon} />
             </li>

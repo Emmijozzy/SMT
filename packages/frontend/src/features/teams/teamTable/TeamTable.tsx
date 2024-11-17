@@ -23,7 +23,7 @@ function TeamTable() {
               type="button"
               className="w-48 px-2 py-2 button text-center text-base-100 transition-all bg-transparent shadow-inner shadow-base-300 hover:scale-[105%] hover:shadow-lg hover:shadow-base-300  rounded-lg cursor-pointer ease-in bg-gradient-to-tl from-base-content from-2% to-base-300 to-98% mx-4 "
             >
-              <Link to="/dash/teams/create_team" className="flex items-center justify-center text-xs">
+              <Link to="create_team" className="flex items-center justify-center text-xs">
                 <AddIcon className="h-8 w-8" />
                 &nbsp;&nbsp;Add New Card
               </Link>

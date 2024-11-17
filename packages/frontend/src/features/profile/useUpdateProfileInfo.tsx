@@ -4,14 +4,14 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import log from "../../shared/utils/log";
 // import { loginSchema } from "../../auth/authValidation";
-import { useUpdateUserProfileMutation } from "../users/userApiSlice";
-import { userProfileUpdateSchema } from "./profileValidation";
 import { RootState } from "../../app/store";
-import { IUser } from "../users/userInterface";
-import { setLoader } from "../loading/loaderSlice";
-import { saveProfile } from "../users/userProfileSlice";
-import { addAlert } from "../alerts/AlertSlice";
 import ResData from "../../shared/interface/resdata";
+import { addAlert } from "../alerts/AlertSlice";
+import { setLoader } from "../loading/loaderSlice";
+import { useUpdateUserProfileMutation } from "../users/userApiSlice";
+import { IUser } from "../users/userInterface";
+import { userProfileUpdateSchema } from "./profileValidation";
+import { saveProfile } from "./userProfileSlice";
 
 const defaultValue = {
   firstName: "",

@@ -7,8 +7,8 @@ import { apiSlice } from "../../app/api/apislice";
 import { changeStatus } from "../../shared/Slice/statusSlice";
 import log from "../../shared/utils/log";
 import { addAlert } from "../alerts/AlertSlice";
+import { saveProfile } from "../profile/userProfileSlice";
 import User, { IUser, ReqError } from "./userInterface";
-import { saveProfile } from "./userProfileSlice";
 import { setUsers } from "./userSlice";
 
 interface ResData {

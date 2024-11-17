@@ -1,8 +1,8 @@
 /* eslint-disable import/no-cycle */
 /* eslint-disable no-param-reassign */
 import { createSlice } from "@reduxjs/toolkit";
-import { IUser } from "./userInterface";
 import { RootState } from "../../app/store";
+import { IUser } from "../users/userInterface";
 
 interface UserProfile {
   userProfile: Partial<IUser>;
@@ -20,10 +20,13 @@ const userProfileSlice = createSlice({
       const userProfile = action.payload as IUser;
       state.userProfile = userProfile;
     },
+    removeProfile: (state) => {
+      state.userProfile = {};
+    },
   },
 });
 
-export const { saveProfile } = userProfileSlice.actions;
+export const { saveProfile, removeProfile } = userProfileSlice.actions;
 
 export default userProfileSlice.reducer;
 

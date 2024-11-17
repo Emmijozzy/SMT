@@ -1,38 +1,41 @@
-import { useEffect } from "react";
-import { Outlet } from "react-router-dom";
-// import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { store } from "../../app/store";
-import { clearStatus } from "../../shared/Slice/statusSlice";
-import { clearAlert } from "../alerts/AlertSlice";
-import { tasksApiSlice } from "../tasks/tasksApiSlice";
-import { teamApiSlice } from "../teams/teamApiSlice";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { Outlet, useNavigate } from "react-router-dom";
+import { getPresentStatus } from "../../shared/Slice/statusSlice";
+import log from "../../shared/utils/log";
+import Loader from "../loading/Loader";
 import { userApiSlice } from "../users/userApiSlice";
+import { IUser } from "../users/userInterface";
+// import { useSelector } from "react-redux";
 // import { getPresentUser } from "../users/userProfileSlice";
 
 function Prefetch() {
-  const dispatch = useDispatch();
+  const [dataLoaded, setDataLoaded] = useState(false);
+  const status = useSelector(getPresentStatus);
+  const navigate = useNavigate();
+
+  log("info", "Prefetching data...", "Prefetch");
+
+  const { data: ResponseData, isLoading } = userApiSlice.endpoints.getUserProfile.useQuery("") as {
+    data: {
+      data: Partial<IUser>;
+    };
+    isLoading: boolean;
+  };
 
   useEffect(() => {
-    dispatch(clearStatus());
-    dispatch(clearAlert());
+    if (!isLoading && ResponseData?.data) {
+      setDataLoaded(true);
+    }
+  }, [isLoading, ResponseData]);
 
-    store.dispatch(userApiSlice.util.prefetch("getUserProfile", "user", { force: true }));
-    store.dispatch(userApiSlice.util.prefetch("getUsers", undefined, { force: true }));
-    store.dispatch(tasksApiSlice.util.prefetch("getTasks", undefined, { force: true }));
-    store.dispatch(teamApiSlice.util.prefetch("getTeams", undefined, { force: true }));
-  }, [dispatch]);
-  // const { userId } = useSelector(getPresentUser);
+  if (status === "error") {
+    navigate("/login");
+  }
 
-  // console.log(userId);
-  // let content;
-  // if (!userId) {
-  //   content = <h1>Loading</h1>;
-  // } else {
-  //   content = <Outlet />;
-  // }
-
-  console.log("prefetch");
+  if (!dataLoaded || isLoading) {
+    return <Loader isLoading transparent={false} />;
+  }
 
   return <Outlet />;
 }

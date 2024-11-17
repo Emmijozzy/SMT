@@ -69,7 +69,7 @@ function UserTable() {
                 type="button"
                 className="px-2 py-2 button text-center text-base-300 transition-all bg-transparent shadow-inner shadow-base-300 hover:scale-[105%] hover:shadow-lg hover:shadow-base-300  rounded-lg cursor-pointer ease-in bg-gradient-to-tl from-base-content from-2% to-base-300 to-98%  "
               >
-                <Link to="/dash/users/add-new-user" className="flex items-center justify-center text-xs">
+                <Link to="add-new-user" className="flex items-center justify-center text-xs">
                   <AddIcon className="h-8 w-8" />
                   &nbsp;&nbsp;Add New Card
                 </Link>

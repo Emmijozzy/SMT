@@ -70,7 +70,7 @@ function TeamUserRow<T extends IUser>({ data }: Props<T>) {
           </td>
           <td aria-label="Action" className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
             <div className="flex justify-center items-center gap-5">
-              <Link to={`/dash/users/${userId}/view`}>
+              <Link to={`../../users/${userId}/view`}>
                 <GrView className="h-6 w-6 text-base-content/70 hover:text-info cursor-pointer" />
               </Link>
             </div>

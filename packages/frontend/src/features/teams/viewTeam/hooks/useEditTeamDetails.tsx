@@ -1,7 +1,6 @@
 import { useFormik } from "formik";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { RootState } from "../../../../app/store";
 import log from "../../../../shared/utils/log";
 import { addAlert } from "../../../alerts/AlertSlice";
@@ -27,7 +26,6 @@ const useEditTeamDetails = (teamId: string) => {
   const [updateTeam, { isSuccess }] = useUpdateTeamMutation();
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues,
@@ -36,24 +34,10 @@ const useEditTeamDetails = (teamId: string) => {
       setIsSubmitting(true);
       dispatch(setLoader(true));
       try {
-        // const payload = {
-        //   taskId: values.taskId,
-        //   title: values.title,
-        //   description: toSentenceCase(values.description),
-        //   responsibleTeam: values.responsibleTeam,
-        //   priority: values.priority,
-        //   managerTask: values.managerTask,
-        //   managerId: values.managerId,
-        //   startDate: values.startDate,
-        //   status: values.status.toLowerCase(),
-        //   dueDate: values.dueDate,
-        //   // createdDate: values.createdDate,
-        // } as ITask;
-
         await updateTeam({ teamId, updatedTeam: values });
         dispatch(setLoader(false));
         dispatch(addAlert({ message: "Team updated successfully!", type: "success" }));
-        navigate("/dash/teams/");
+        window.history.back();
       } catch (e) {
         const error = e as Error;
         dispatch(setLoader(false));

@@ -30,7 +30,7 @@ function TaskTableRow<T extends ITask>({ data }: Props<T>) {
             </div>
           </td>
           <td className="border-t-0 px-4align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2 capitalize">
-            <span>{responsibleTeam && responsibleTeam?.name}</span>
+            <span>{typeof responsibleTeam === "object" && responsibleTeam?.name}</span>
           </td>
           <td className="border-t-0 w-12 px-4align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2 capitalize ">
             <div className="flex items-center gap-1">
@@ -82,7 +82,6 @@ function TaskTableRow<T extends ITask>({ data }: Props<T>) {
       </tr>
     ); // Return null if task is not available
   }, [data]); // Only re-calculate when task changes
-
   return content; // Return the content of the task row, or a loading spinner if data is not available
 }
 

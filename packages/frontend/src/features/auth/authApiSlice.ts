@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { apiSlice } from "../../app/api/apislice";
-import { logOut, setCredentials } from "./authSlice";
-import { LoginData, RegisterData } from "./authInterface";
 import log from "../../shared/utils/log";
+import { LoginData, RegisterData } from "./authInterface";
+import { logOut, setCredentials } from "./authSlice";
 
 export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (build) => ({

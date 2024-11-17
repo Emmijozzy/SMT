@@ -81,10 +81,10 @@ function TableBody({ userId }: Props) {
         </td>
         <td aria-label="Action" className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
           <div className="flex justify-center items-center gap-5">
-            <Link to={`/dash/users/${userId}/Edit`}>
+            <Link to={`${userId}/Edit`}>
               <FaRegEdit className="h-6 w-6 text-base-content/70 hover:text-warning cursor-pointer" />
             </Link>
-            <Link to={`/dash/users/${userId}/view`}>
+            <Link to={`${userId}/view`}>
               <GrView className="h-6 w-6 text-base-content/70 hover:text-info cursor-pointer" />
             </Link>
             {delFlg ? (

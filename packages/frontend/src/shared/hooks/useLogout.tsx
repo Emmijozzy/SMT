@@ -2,9 +2,11 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { persistor } from "../../app/store";
+import { addAlert } from "../../features/alerts/AlertSlice";
 import { useLazyLogoutQuery } from "../../features/auth/authApiSlice";
 import ResData from "../interface/resdata";
-import { addAlert } from "../../features/alerts/AlertSlice";
+import log from "../utils/log";
 
 const useLogout = () => {
   const [logOut, { isSuccess, isError, error }] = useLazyLogoutQuery();
@@ -20,15 +22,20 @@ const useLogout = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      navigate("/login");
-      dispatch(addAlert({ message: resData?.data.message, type: "success" }));
+      Promise.all([navigate("/login"), persistor.purge(), localStorage.clear(), window.location.reload()])
+        .then(() => {
+          dispatch(addAlert({ message: resData?.data.message, type: "success" }));
+        })
+        .catch((err: Error) => {
+          log("error", "Error during logout:", err.message);
+          dispatch(addAlert({ message: "An error occurred during logout", type: "error" }));
+        });
     }
     if (isError) {
       const err = error as ResData;
       dispatch(addAlert({ message: err?.data.message, type: "error" }));
     }
-  }, [dispatch, error, isError, isSuccess, navigate]);
-
+  }, [dispatch, error, isError, isSuccess, navigate, resData]);
   return {
     handleLogOut,
   };

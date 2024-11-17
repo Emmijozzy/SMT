@@ -3,7 +3,6 @@ import { ChangeEvent, useState } from "react";
 import { FaTrashRestore } from "react-icons/fa";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { RootState } from "../../../app/store";
 import ResData from "../../../shared/interface/resdata";
 import log from "../../../shared/utils/log";
@@ -17,7 +16,6 @@ function DeleteTask() {
   const showModal = useSelector(getShowModal);
   const taskId = useSelector(getTaskId);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const [deleteTask, { isError: isDelError, isLoading: isDelLoading }] = useDeleteTaskMutation();
   const [outrightDeleteTask, { isError: isOutDelError, isLoading: isOutDelLoading }] = useOutrightDeleteTaskMutation();
@@ -49,7 +47,7 @@ function DeleteTask() {
 
         dispatch(addAlert({ message: resMessage, type: "success" }));
         dispatch(setCloseModal());
-        navigate("/dash/tasks");
+        window.history.back();
       } catch (e) {
         const err = e as Error;
         dispatch(addAlert({ message: err.message, type: "error" }));
@@ -71,7 +69,7 @@ function DeleteTask() {
         const resMessage = resData.data.message;
         dispatch(addAlert({ message: resMessage, type: "success" }));
         dispatch(setCloseModal());
-        navigate("/dash/tasks/");
+        window.history.back();
       } catch (e) {
         const err = e as Error;
         dispatch(addAlert({ message: err.message, type: "error" }));

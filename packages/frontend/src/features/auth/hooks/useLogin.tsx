@@ -56,7 +56,7 @@ const useLogin = () => {
         if (accessToken) {
           dispatch(setCredentials(accessToken));
         }
-        navigate("/dash");
+        navigate("/auth");
       }
       if (isError && resData && resData.error && resData.error.data && resData.error.data.message) {
         dispatch(addAlert({ message: resData.error.data.message, type: "error" }));

@@ -3,10 +3,9 @@
 import ArrowBackSharpIcon from "@mui/icons-material/ArrowBackSharp";
 // import Button2 from "../../../shared/components/Button2";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
 import { addAlert } from "../../alerts/AlertSlice";
-import useAddUser from "./useAddUser";
 import UserForm from "../components/UserForm";
+import useAddUser from "./useAddUser";
 
 function AddUser() {
   const { handleSubmit, handleBlur, handleChange, errors, values, isSubmitting } = useAddUser();
@@ -20,6 +19,10 @@ function AddUser() {
     });
   };
 
+  const handleBack = () => {
+    window.history.back();
+  };
+
   return (
     <div className="container transition-all">
       <div className="w-full flex flex-col md:flex-row-reverse md:justify-between">
@@ -28,12 +31,10 @@ function AddUser() {
           <button
             type="button"
             aria-label="Edit User"
-            // onClick={() => handleShowEdit()}
+            onClick={() => handleBack()}
             className="cursor-pointe ml-auto hover:text-base-content/40"
           >
-            <Link to="/dash/users">
-              <ArrowBackSharpIcon className="w-8 h-8" />
-            </Link>
+            <ArrowBackSharpIcon className="w-8 h-8" />
           </button>
         </div>
       </div>

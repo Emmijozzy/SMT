@@ -1,7 +1,6 @@
 import { useFormik } from "formik";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import ResData from "../../../shared/interface/resdata";
 import log from "../../../shared/utils/log";
 import { toSentenceCase } from "../../../shared/utils/toSentenceCase";
@@ -29,7 +28,6 @@ const useCreateTask = () => {
   const [createTask, { isSuccess, isError }] = useCreateTaskMutation();
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues,
@@ -51,7 +49,7 @@ const useCreateTask = () => {
         }
         const resMessage = resData.data.message;
         dispatch(addAlert({ message: resMessage, type: "success" }));
-        navigate("/dash/tasks");
+        window.history.back();
       } catch (e) {
         const err = e as Error;
         dispatch(addAlert({ message: err.message, type: "error" }));
