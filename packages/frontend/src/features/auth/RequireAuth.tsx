@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getPresentStatus } from "../../shared/Slice/statusSlice";
 import log from "../../shared/utils/log";
 import Loader from "../loading/Loader";
@@ -11,7 +11,7 @@ import { IUser } from "../users/userInterface";
 
 function RequireAuth() {
   const status = useSelector(getPresentStatus);
-  const location = useLocation();
+  // const location = useLocation();
   const navigate = useNavigate();
   const { data: ResponseData, isLoading } = userApiSlice.endpoints.getUserProfile.useQuery("") as {
     data: {
@@ -31,7 +31,7 @@ function RequireAuth() {
       case "team_member":
         return "/team_member/dash";
       default:
-        return "/login";
+        return "/auth";
     }
   };
 
@@ -42,14 +42,14 @@ function RequireAuth() {
     }
   }, [ResponseData, isLoading, navigate]);
 
-  if (status === "error") {
-    return <Navigate to="/login" state={{ from: location }} replace />;
-  }
+  // if (status === "error") {
+  //   log("error", "User not authorized", "RequireAuth");
+  //   return <Navigate to="/login" state={{ from: location }} replace />;
+  // }
 
   if (status === "loading" || status === "" || isLoading) {
     return <Loader isLoading transparent={false} />;
   }
-  return !ResponseData.data?.role ? <Navigate to="/login" replace /> : <Outlet />;
 }
 
 export default RequireAuth;

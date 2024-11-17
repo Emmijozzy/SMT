@@ -1,9 +1,9 @@
 import ArrowBackSharpIcon from "@mui/icons-material/ArrowBackSharp";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import { RootState } from "../../../app/store";
 import InputField3 from "../../../shared/components/InputField3";
 import Select from "../../../shared/components/Select";
+import { handleBack } from "../../../shared/utils/handleBack";
 import { IUser } from "../../users/userInterface";
 import { usersSelectors } from "../../users/userSlice";
 import useCreateTeam from "./useCreateTeam";
@@ -19,10 +19,13 @@ function CreateTeam() {
       <div className="w-full flex flex-col bg-base-100">
         <div className="w-full order-1 flex justify-between">
           <h2 className="h6 font-bold capitalize">Add New Team</h2>
-          <button type="button" aria-label="Edit User" className="cursor-pointe ml-auto hover:text-base-content/40">
-            <Link to="/dash/teams">
-              <ArrowBackSharpIcon className="w-8 h-8" />
-            </Link>
+          <button
+            type="button"
+            aria-label="Edit User"
+            onClick={handleBack}
+            className="cursor-pointe ml-auto hover:text-base-content/40"
+          >
+            <ArrowBackSharpIcon className="w-8 h-8" />
           </button>
         </div>
         <div className="w-full order-2">

@@ -1,11 +1,11 @@
 import ArrowBackSharpIcon from "@mui/icons-material/ArrowBackSharp";
 import EditIcon from "@mui/icons-material/Edit";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import { RootState } from "../../../../app/store";
+import DetailsContainer from "../../../../shared/components/DetailsContainer";
 import { usersSelectors } from "../../../users/userSlice";
 import { ITeam } from "../../teamInterface";
-import DetailsContainer from "../../../../shared/components/DetailsContainer";
+import { handleBack } from "../../../../shared/utils/handleBack";
 
 type Props = {
   team: ITeam;
@@ -37,11 +37,14 @@ function ViewTeamDetails({ team, handleEditTeamDetails }: Props) {
             >
               <EditIcon className="w-7 h-7 hover:text-warning" />
             </button>
-            <Link to="/dash/teams">
-              <button type="button" aria-label="Back to tasks" className="cursor-pointer hover:text-base-content/40">
-                <ArrowBackSharpIcon className="w-12 h-8" />
-              </button>
-            </Link>
+            <button
+              type="button"
+              aria-label="Back to tasks"
+              onClick={handleBack}
+              className="cursor-pointer hover:text-base-content/40"
+            >
+              <ArrowBackSharpIcon className="w-12 h-8" />
+            </button>
           </nav>
         </div>
         <DetailsContainer tableRows={tableRows} />

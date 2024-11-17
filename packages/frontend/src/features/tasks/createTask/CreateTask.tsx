@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable indent */
-import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import ArrowBackSharpIcon from "@mui/icons-material/ArrowBackSharp";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
+import { handleBack } from "../../../shared/utils/handleBack";
+import { addAlert } from "../../alerts/AlertSlice";
 import FormStep1 from "./components/FormStep1";
 import FormStep2 from "./components/FormStep2";
 import FormStep3 from "./components/FormStep3";
 import useCreateTask from "./useCreateTask";
-import { addAlert } from "../../alerts/AlertSlice";
 
 type Direction = "left" | "right" | "";
 
@@ -71,12 +71,10 @@ function CreateTask() {
           <button
             type="button"
             aria-label="Edit User"
-            // onClick={() => handleShowEdit()}
+            onClick={() => handleBack()}
             className="cursor-pointe ml-auto hover:text-base-content/40"
           >
-            <Link to="/dash/tasks">
-              <ArrowBackSharpIcon className="w-8 h-8" />
-            </Link>
+            <ArrowBackSharpIcon className="w-8 h-8" />
           </button>
         </div>
       </div>
