@@ -10,13 +10,12 @@ interface Layout {
 
 // const layoutData = JSON.parse(localStorage.getItem("layout") || "") as Layout;
 
-const initialState: Layout = (JSON.parse(localStorage.getItem("layout") || "{}") as Layout) || {
+const initialState: Layout = (JSON.parse(localStorage.getItem("layout") || "null") as Layout) || {
   slideBar: false,
   settingBar: false,
   themes: "system",
   selectColor: "bg-pink-gradient",
 };
-
 const layoutSlice = createSlice({
   name: "Layout",
   initialState,

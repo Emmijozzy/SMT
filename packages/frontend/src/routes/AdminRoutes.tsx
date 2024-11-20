@@ -2,7 +2,7 @@ import { lazy } from "react";
 import { Route } from "react-router-dom";
 import RequireAdminRoute from "../features/auth/RequireAdminRoute";
 import Layout from "../layout/Layout";
-import { LazyComponent } from "./LazyWrapper";
+import { LazyComponent2 } from "./LazyWrapper2";
 
 const Dashboard = lazy(() => import("../features/Dashboard/Dashboard"));
 const Users = lazy(() => import("../features/users/Users"));
@@ -26,124 +26,124 @@ export const AdminRoutes = (
       <Route
         index
         element={
-          <LazyComponent>
+          <LazyComponent2>
             <Dashboard />
-          </LazyComponent>
+          </LazyComponent2>
         }
       />
       <Route
         path="users"
         element={
-          <LazyComponent>
+          <LazyComponent2>
             <Users />
-          </LazyComponent>
+          </LazyComponent2>
         }
       >
         <Route
           index
           element={
-            <LazyComponent>
+            <LazyComponent2>
               <UserTable />
-            </LazyComponent>
+            </LazyComponent2>
           }
         />
         <Route
           path="add-new-user"
           element={
-            <LazyComponent>
+            <LazyComponent2>
               <AddUser />
-            </LazyComponent>
+            </LazyComponent2>
           }
         />
         <Route
           path=":userId/view"
           element={
-            <LazyComponent>
+            <LazyComponent2>
               <ViewUser />
-            </LazyComponent>
+            </LazyComponent2>
           }
         />
         <Route
           path=":userId/edit"
           element={
-            <LazyComponent>
+            <LazyComponent2>
               <EditUser />
-            </LazyComponent>
+            </LazyComponent2>
           }
         />
       </Route>
       <Route
         path="tasks"
         element={
-          <LazyComponent>
+          <LazyComponent2>
             <Tasks />
-          </LazyComponent>
+          </LazyComponent2>
         }
       >
         <Route
           index
           element={
-            <LazyComponent>
+            <LazyComponent2>
               <TasksTable />
-            </LazyComponent>
+            </LazyComponent2>
           }
         />
         <Route
           path="create_task"
           element={
-            <LazyComponent>
+            <LazyComponent2>
               <CreateTask />
-            </LazyComponent>
+            </LazyComponent2>
           }
         />
         <Route
           path=":taskId"
           element={
-            <LazyComponent>
+            <LazyComponent2>
               <ViewTask />
-            </LazyComponent>
+            </LazyComponent2>
           }
         />
       </Route>
       <Route
         path="teams"
         element={
-          <LazyComponent>
+          <LazyComponent2>
             <Teams />
-          </LazyComponent>
+          </LazyComponent2>
         }
       >
         <Route
           index
           element={
-            <LazyComponent>
+            <LazyComponent2>
               <TeamTable />
-            </LazyComponent>
+            </LazyComponent2>
           }
         />
         <Route
           path="create_team"
           element={
-            <LazyComponent>
+            <LazyComponent2>
               <CreateTeam />
-            </LazyComponent>
+            </LazyComponent2>
           }
         />
         <Route
           path=":teamId"
           element={
-            <LazyComponent>
+            <LazyComponent2>
               <ViewTeam />
-            </LazyComponent>
+            </LazyComponent2>
           }
         />
       </Route>
       <Route
         path="profile"
         element={
-          <LazyComponent>
+          <LazyComponent2>
             <Profile />
-          </LazyComponent>
+          </LazyComponent2>
         }
       />
     </Route>
