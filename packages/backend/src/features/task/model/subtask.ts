@@ -1,22 +1,22 @@
 import mongoose, { Document, Schema } from "mongoose";
-import { Task, ITask } from "./task";
+import { ITask, Task } from "./task";
 
 interface ISubtask extends Document {
-  subTaskId: string;
+  subtaskId: string;
   taskId: string;
   title: string;
   description?: string;
   status?: "not started" | "in progress" | "completed" | "closed";
-  createdBy: mongoose.Types.ObjectId;
-  lastModifiedBy: mongoose.Types.ObjectId;
-  assignedTo: mongoose.Types.ObjectId;
-  collaborators: mongoose.Types.ObjectId[];
+  createdBy: string;
+  lastModifiedBy: string;
+  assignedTo: string;
+  collaborators: string[];
   createdAt: Date;
   updatedAt: Date;
 }
 
 const subtaskSchema = new Schema<ISubtask>({
-  subTaskId: {
+  subtaskId: {
     type: String,
     required: true,
     unique: true
@@ -41,27 +41,33 @@ const subtaskSchema = new Schema<ISubtask>({
     required: true
   },
   createdBy: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     required: true,
-    ref: "User"
+    ref: "User",
+    path: "userId"
   },
   lastModifiedBy: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     required: true,
-    ref: "User"
+    ref: "User",
+    path: "userId"
   },
   assignedTo: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: "User",
+    path: "userId",
     required: true
   },
-  collaborators: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true
-    }
-  ],
+  collaborators: {
+    type: [
+      {
+        type: String,
+        ref: "User",
+        path: "userId"
+      }
+    ],
+    default: []
+  },
   createdAt: {
     type: Date,
     default: Date.now
@@ -89,10 +95,10 @@ subtaskSchema.pre<ISubtask>("save", async function (next) {
   });
 
   if (existingSubtask) {
-    subtaskCounter = parseInt(existingSubtask.subTaskId.slice(-2)) + 1; // Get last two digits
+    subtaskCounter = parseInt(existingSubtask.subtaskId.slice(-2)) + 1; // Get last two digits
   }
 
-  this.subTaskId = `${taskIdBase}${subtaskCounter.toString().padStart(3, "0")}`;
+  this.subtaskId = `${taskIdBase}${subtaskCounter.toString().padStart(3, "0")}`;
   next();
 });
 
@@ -100,7 +106,7 @@ subtaskSchema.post<ISubtask>("save", async function () {
   const task = await Task.findOne<ITask>({ taskId: this.taskId.toString() });
   if (task) {
     task.assignedTo.push(this.assignedTo);
-    task.subTasks.push(new mongoose.Types.ObjectId(this.subTaskId)); // Use 'new' to create ObjectId
+    task.subtasks.push(this.subtaskId); // Use 'new' to create ObjectId
     await task.save();
   }
 });

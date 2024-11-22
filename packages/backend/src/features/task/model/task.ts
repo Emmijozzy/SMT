@@ -15,7 +15,7 @@ export interface ITask extends Document {
   createdAt: Date;
   updatedAt: Date;
   del_flg: boolean;
-  subTasks: string[];
+  subtasks: string[];
 }
 
 // Define a type guard function
@@ -90,13 +90,16 @@ const taskSchema = new Schema<ITask>({
     type: Boolean,
     default: false
   },
-  subTasks: [
-    {
-      type: String,
-      ref: "Subtask",
-      path: "subTaskId"
-    }
-  ]
+  subtasks: {
+    type: [
+      {
+        type: String,
+        ref: "Subtask",
+        path: "subtaskId"
+      }
+    ],
+    default: []
+  }
 });
 
 export const Task: Model<ITask> = mongoose.model<ITask>("Task", taskSchema);

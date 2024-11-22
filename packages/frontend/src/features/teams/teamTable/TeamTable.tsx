@@ -1,10 +1,10 @@
 import AddIcon from "@mui/icons-material/Add";
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
-import Pagination from "../../tasks/TasksTable/components/Pagination";
 import TableHead from "./components/TableHead";
 import TeamTableRow from "./components/TeamTableRow";
 import useTeamTable from "./useTeamTable";
+import Pagination from "./components/Pagination";
 
 function TeamTable() {
   const { filteredTeam, totalTeam } = useTeamTable();

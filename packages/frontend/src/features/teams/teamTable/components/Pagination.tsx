@@ -4,7 +4,7 @@
 import { useEffect, ChangeEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../app/store";
-import { setCurrentPage, setRowsPerPage } from "../tasksTableSlice";
+// import { setCurrentPage, setRowsPerPage } from "../tasksTableSlice";
 import getPageNumbers from "../../../../shared/utils/getRoleNumbers";
 
 type Props = {
@@ -13,30 +13,30 @@ type Props = {
 };
 
 function Pagination({ totalRows, rowsPerPageOptions = [5, 10, 15, 20] }: Props) {
-  const rowsPerPage = useSelector((state: RootState) => state.taskTable.pagination.rowsPerPage);
-  const currentPage = useSelector((state: RootState) => state.taskTable.pagination.currentPage);
+  const rowsPerPage = 5;
+  const currentPage = 1;
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   // Calculate total pages
   const totalPages = Math.ceil(totalRows / rowsPerPage);
 
-  useEffect(() => {
-    if (currentPage > totalPages) {
-      dispatch(setCurrentPage(1));
-    }
-  }, [rowsPerPage, totalPages, currentPage, dispatch]);
+  // useEffect(() => {
+  //   if (currentPage > totalPages) {
+  //     dispatch(setCurrentPage(1));
+  //   }
+  // }, [rowsPerPage, totalPages, currentPage, dispatch]);
 
   const pageNumbers = getPageNumbers(totalPages, currentPage);
 
   const handleRowsPerPageChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const newRowsPerPage = Number(event.target.value);
-    dispatch(setRowsPerPage(newRowsPerPage));
-    dispatch(setCurrentPage(1)); // Reset to the first page when rows per page changes
+    // const newRowsPerPage = Number(event.target.value);
+    // dispatch(setRowsPerPage(newRowsPerPage));
+    // dispatch(setCurrentPage(1)); // Reset to the first page when rows per page changes
   };
 
   const handlePageChange = (page: number) => {
-    dispatch(setCurrentPage(page));
+    // dispatch(setCurrentPage(page));
   };
 
   // console.log(pageNumbers, currentPage);

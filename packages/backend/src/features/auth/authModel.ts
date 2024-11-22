@@ -23,6 +23,7 @@ export interface IUser extends Document {
     can_edit_users: boolean;
     can_assign_roles: boolean;
   };
+  subtasks: string[];
   socialLinks: {
     whatsappLink: string;
     facebookLink: string;
@@ -122,6 +123,17 @@ const userSchema = new Schema<IUser>(
         can_assign_roles: false //Admin
       },
       description: "The permissions assigned to the user."
+    },
+    subtasks: {
+      type: [
+        {
+          type: String,
+          ref: "subtask",
+          path: "subTaskId"
+        }
+      ],
+      default: [],
+      description: "The subtasks assigned to the user."
     },
     del_flg: {
       type: Boolean,

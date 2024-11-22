@@ -75,7 +75,7 @@ export class TaskOrchestrator {
           throw new BadRequestError("Manager ID is required");
         }
 
-        taskPayload.subTasks = [];
+        taskPayload.subtasks = [];
         taskPayload.assignedTo = [];
         taskPayload.managerId = managerId || "";
         taskPayload.managerTask = managerTask;

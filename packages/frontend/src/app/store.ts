@@ -9,7 +9,6 @@ import loaderReducer from "../features/loading/loaderSlice";
 import userProfileReducer from "../features/profile/userProfileSlice";
 import deleteTaskReducer from "../features/tasks/deleteTask/deleteTaskSlice";
 import tasksReducer from "../features/tasks/tasksSlice";
-import tasksTableReducer from "../features/tasks/TasksTable/tasksTableSlice";
 import teamReducer from "../features/teams/teamSlice";
 import teamTableReducer from "../features/teams/teamTable/teamTableSlice";
 import deleteUserReducer from "../features/users/DeleteUser/DeleteUserSlice";
@@ -33,7 +32,6 @@ const rootReducer = combineReducers({
   users: usersReducer,
   deleteUser: deleteUserReducer,
   deleteTask: deleteTaskReducer,
-  taskTable: tasksTableReducer,
   tasks: tasksReducer,
   teams: teamReducer,
   teamTable: teamTableReducer,
@@ -52,7 +50,6 @@ export interface RootState {
   userTable: ReturnType<typeof userTableReducer>;
   users: ReturnType<typeof usersReducer>;
   deleteUser: ReturnType<typeof deleteUserReducer>;
-  taskTable: ReturnType<typeof tasksTableReducer>;
   tasks: ReturnType<typeof tasksReducer>;
   deleteTask: ReturnType<typeof deleteTaskReducer>;
   teams: ReturnType<typeof teamReducer>;

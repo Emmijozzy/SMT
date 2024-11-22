@@ -2,7 +2,6 @@ import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { useGetTasksQuery } from "../tasksApiSlice";
 import { setTasks } from "../tasksSlice";
-import { setTotalRows } from "./tasksTableSlice";
 
 function UseTasksTable() {
   const { data, isLoading, isSuccess, isError, error } = useGetTasksQuery(undefined, {
@@ -16,7 +15,6 @@ function UseTasksTable() {
   useEffect(() => {
     if (memoizedData) {
       dispatch(setTasks(memoizedData));
-      dispatch(setTotalRows(memoizedData.length));
     }
   }, [memoizedData, dispatch]);
 
