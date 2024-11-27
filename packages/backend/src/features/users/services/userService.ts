@@ -120,4 +120,22 @@ export class UserService {
 
     return await this.userRepository.outrightDeleteById(userId);
   }
+
+  public async addSubtaskId(userId: string, subtaskId: string) {
+    const user = await this.userRepository.findById(userId);
+    if (!user) throw new NotFoundError("User does not exist");
+    const updatedUser = await this.userRepository.updateById(userId, { subtasks: [...user.subtasks, subtaskId] });
+    if (!updatedUser) throw new InternalError("Error adding subtask to user");
+    return updatedUser;
+  }
+
+  public async removeSubtaskId(userId: string, subtaskId: string) {
+    const user = await this.userRepository.findById(userId);
+    if (!user) throw new NotFoundError("User does not exist");
+    const updatedUser = await this.userRepository.updateById(userId, {
+      subtasks: user.subtasks.filter((id) => id !== subtaskId)
+    });
+    if (!updatedUser) throw new InternalError("Error removing subtask from user");
+    return updatedUser;
+  }
 }

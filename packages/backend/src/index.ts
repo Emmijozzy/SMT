@@ -7,6 +7,8 @@ import TasksAdminController from "./features/task/controllers/tasksAdminControll
 import TeamController from "./features/team/teamController";
 import UserAdminController from "./features/users/controllers/userAdminController";
 import UserController from "./features/users/controllers/userController";
+import BackRunController from "./features/backRun/backRunController";
+import SubtaskController from "./features/subtask/subtaskController";
 
 const app = new App(
   [
@@ -15,7 +17,9 @@ const app = new App(
     new UserController(),
     new UserAdminController(),
     new TasksAdminController(),
-    new TeamController()
+    new SubtaskController(),
+    new TeamController(),
+    new BackRunController()
   ],
   port
 );

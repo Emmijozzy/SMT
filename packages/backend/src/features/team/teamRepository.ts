@@ -100,7 +100,7 @@ export default class TeamRepository {
   async updateTeamById(teamId: string, team: IUpdateTeam): Promise<ITeam | null> {
     try {
       const updatedTeam = await Team.findOneAndUpdate({ teamId }, team, { new: true });
-      if (!updatedTeam) throw new Error(`Team ${teamId} not found or can be updated`);
+      if (!updatedTeam) throw new Error(`Team ${teamId} not found or can't be updated`);
       return updatedTeam;
     } catch (err: unknown) {
       const error = err as Error;
@@ -125,7 +125,7 @@ export default class TeamRepository {
     try {
       // console.log(teamId, "teamId");
       const updatedTeam = await Team.findOneAndUpdate({ teamId }, { $push: { members: userId } }, { new: true });
-      if (!updatedTeam) throw new Error(`Team ${teamId} not found or can be updated`);
+      if (!updatedTeam) throw new Error(`Team ${teamId} not found or can't be updated`);
       return updatedTeam;
     } catch (err: unknown) {
       const error = err as Error;
@@ -137,7 +137,7 @@ export default class TeamRepository {
   async removeUserIDFromTeam(teamId: string, userId: string): Promise<ITeam | null> {
     try {
       const updatedTeam = await Team.findOneAndUpdate({ teamId }, { $pull: { members: userId } }, { new: true });
-      if (!updatedTeam) throw new Error(`Team ${teamId} not found or can be updated`);
+      if (!updatedTeam) throw new Error(`Team ${teamId} not found or can't be updated`);
       return updatedTeam;
     } catch (err: unknown) {
       const error = err as Error;
@@ -153,7 +153,7 @@ export default class TeamRepository {
   async addTaskIDToTeam(teamId: string, taskId: string): Promise<ITeam | null> {
     try {
       const updatedTeam = await Team.findOneAndUpdate({ teamId }, { $push: { tasks: taskId } }, { new: true });
-      if (!updatedTeam) throw new Error(`Team ${teamId} not found or can be updated`);
+      if (!updatedTeam) throw new Error(`Team ${teamId} not found or can't be updated`);
       return updatedTeam;
     } catch (err: unknown) {
       const error = err as Error;
@@ -172,6 +172,34 @@ export default class TeamRepository {
       console.error("Error removing task from team", error);
       throw new InternalError(
         "Failed to remove task from team.  ERROR: " + error.message + " ",
+        error.stack,
+        __filename
+      );
+    }
+  }
+
+  async addSubtaskIDToTeam(teamId: string, subtaskId: string): Promise<ITeam | null> {
+    try {
+      const updatedTeam = await Team.findOneAndUpdate({ teamId }, { $push: { subtasks: subtaskId } }, { new: true });
+      if (!updatedTeam) throw new Error(`Team ${teamId} not found or can't be updated`);
+      return updatedTeam;
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error("Error adding subtask to team", error);
+      throw new InternalError("Failed to add subtask to team.  ERROR: " + error.message + " ", error.stack, __filename);
+    }
+  }
+
+  async removeSubtaskIdFromTeam(teamId: string, subtaskId: string): Promise<ITeam | null> {
+    try {
+      const updatedTeam = await Team.findOneAndUpdate({ teamId }, { $pull: { subtasks: subtaskId } }, { new: true });
+      if (!updatedTeam) throw new Error(`Team ${teamId} not found or can't be updated`);
+      return updatedTeam;
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error("Error removing subtask from team", error);
+      throw new InternalError(
+        "Failed to remove subtask from team.  ERROR: " + error.message + " ",
         error.stack,
         __filename
       );

@@ -118,4 +118,39 @@ export class TaskService {
       throw new InternalError("Failed to delete task.  ERROR: " + error.message + " ", error.stack, __filename);
     }
   }
+
+  public async addSubtaskId(taskId: string, subtaskId: string): Promise<ITask> {
+    try {
+      const task = await this.getTaskById(taskId);
+      if (!task) throw new NotFoundError(`Task with id: ${taskId} not found`);
+      if (!task.subtasks.includes(subtaskId)) {
+        task.subtasks.push(subtaskId);
+        const updatedTask = await this.updateTaskById(taskId, task);
+        if (!updatedTask) throw new InternalError("Error adding subtask");
+        return updatedTask;
+      }
+      return task;
+    } catch (err: unknown) {
+      const error = err as Error;
+      throw new InternalError(`Error adding subtask: ${error.message}`);
+    }
+  }
+
+  public async removeSubtaskId(taskId: string, subtaskId: string): Promise<ITask> {
+    try {
+      const task = await this.getTaskById(taskId);
+      if (!task) throw new NotFoundError(`Task with id: ${taskId} not found`);
+      const subtaskIndex = task.subtasks.indexOf(subtaskId);
+      if (subtaskIndex !== -1) {
+        task.subtasks.splice(subtaskIndex, 1);
+        const updatedTask = await this.updateTaskById(taskId, task);
+        if (!updatedTask) throw new InternalError("Error adding subtask");
+        return updatedTask;
+      }
+      return task;
+    } catch (err: unknown) {
+      const error = err as Error;
+      throw new InternalError(`Error removing subtask: ${error.message}`);
+    }
+  }
 }

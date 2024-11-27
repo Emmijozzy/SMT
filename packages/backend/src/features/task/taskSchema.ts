@@ -6,7 +6,7 @@ const taskSchema = Yup.object().shape({
     .trim()
     .required("Title is required")
     .min(5, "Title must be at least 5 character")
-    .max(20, "Title must be at most 20 character"),
+    .max(50, "Title must be at most 50 character"),
   description: Yup.string()
     .trim()
     .required("Description is required")

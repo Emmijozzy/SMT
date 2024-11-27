@@ -184,4 +184,50 @@ export default class TeamService {
       throw new InternalError("Failed to remove task from team. ERROR: " + error.message, error.stack, __filename);
     }
   }
+
+  async addSubtaskToTeam(teamId: string, subtaskId: string): Promise<boolean> {
+    try {
+      const team = await this.teamRepository.findTeamById(teamId);
+      if (!team) {
+        throw new NotFoundError("Team not found");
+      }
+      const ifSubtaskExists = team.tasks?.find((task) => task === subtaskId);
+      if (ifSubtaskExists) {
+        throw new BadRequestError("Task already exists in the team");
+      }
+      const updatedTeam = await this.teamRepository.addSubtaskIDToTeam(teamId, subtaskId);
+      if (updatedTeam) {
+        return true;
+      } else {
+        throw new InternalError("Failed to add task to team");
+      }
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error(error.message);
+      throw new InternalError("Failed to add task to team. ERROR: " + error.message, error.stack, __filename);
+    }
+  }
+
+  async removeSubtaskFromTeam(teamId: string, subtaskId: string): Promise<boolean> {
+    try {
+      const team = await this.teamRepository.findTeamById(teamId);
+      if (!team) {
+        throw new NotFoundError("Team not found");
+      }
+      const ifSubtaskExists = team.subtasks?.find((task) => task === subtaskId);
+      if (!ifSubtaskExists) {
+        throw new BadRequestError("Task does not exist in the team");
+      }
+      const updatedTeam = await this.teamRepository.removeSubtaskIdFromTeam(teamId, subtaskId);
+      if (updatedTeam) {
+        return true;
+      } else {
+        throw new InternalError("Failed to remove task from team");
+      }
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error(error.message);
+      throw new InternalError("Failed to remove task from team. ERROR: " + error.message, error.stack, __filename);
+    }
+  }
 }

@@ -8,7 +8,7 @@ export interface ITeam extends Document {
   members?: string[]; // Array of ObjectIds referencing User documents
   managerId?: string; // Array of ObjectIds referencing Project documents (optional)
   tasks?: string[];
-  subTasks?: string[];
+  subtasks?: string[];
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -41,7 +41,7 @@ const teamSchema = new Schema<ITeam>({
       path: "taskId" // Path to the task ID in the Task model
     }
   ],
-  subTasks: [
+  subtasks: [
     {
       type: String,
       ref: "Subtask",

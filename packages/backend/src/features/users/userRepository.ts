@@ -21,11 +21,30 @@ export class UserRepository {
   public async findAll(filter: Record<string, string | number | RegExp>, paginationOption: IPaginationOptions) {
     const { limit, sortField, skip, sortOrder } = paginationOption;
     const sort = { [sortField]: sortOrder };
-    return await User.find(filter).limit(limit).skip(skip).sort(sort).select("-password").lean().exec();
+    return await User.find(filter)
+      .limit(limit)
+      .skip(skip)
+      .sort(sort)
+      .select("-password")
+      .populate({
+        path: "subtasks",
+        model: "Subtask",
+        foreignField: "subtaskId"
+      })
+      .lean()
+      .exec();
   }
 
   public async updateById(userId: string, data: IUser | Record<string, string | object>) {
-    return await User.findOneAndUpdate({ userId }, data, { new: true }).select("-password").lean().exec();
+    return await User.findOneAndUpdate({ userId }, data, { new: true })
+      .select("-password")
+      .populate({
+        path: "subtasks",
+        model: "Subtask",
+        foreignField: "subtaskId"
+      })
+      .lean()
+      .exec();
   }
 
   public async deleteById(userId: string) {
