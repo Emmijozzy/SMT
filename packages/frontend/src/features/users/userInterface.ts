@@ -54,6 +54,27 @@ export interface IUser {
     facebookLink: string;
     linkedInLink: string;
   };
+  subtasks:
+    | [
+        {
+          subtaskId: string;
+          taskId: string;
+          title: string;
+          team: string;
+          description?: string;
+          status?: "not started" | "completed" | "closed";
+          priority: "low" | "medium" | "high";
+          createdBy: string;
+          lastModifiedBy: string;
+          assignee: string;
+          comments: string[];
+          collaborators: string[];
+          dueDate: Date;
+          createdAt: Date;
+          updatedAt: Date;
+        },
+      ]
+    | string;
   del_flg: boolean;
   createdAt: string;
   updatedAt: string;

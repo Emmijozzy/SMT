@@ -75,7 +75,15 @@ export default class TasksAdminController implements IController {
       sortField: pagination.sortField || "taskId"
     });
 
-    const populateOptions = [{ path: "responsibleTeam", model: "Team", foreignField: "teamId", select: "name teamId" }];
+    const populateOptions = [
+      { path: "responsibleTeam", model: "Team", foreignField: "teamId", select: "name teamId" },
+      {
+        path: "assignedTo",
+        model: "User",
+        foreignField: "userId",
+        select: "userId fullName profilePicUrl email phone_no team"
+      }
+    ];
 
     const result = await this.taskService.getAll(filters, paginationOptions, populateOptions);
 

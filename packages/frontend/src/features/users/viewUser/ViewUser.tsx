@@ -9,9 +9,11 @@ import { Link, useParams } from "react-router-dom";
 import { RootState } from "../../../app/store";
 import DetailsContainer from "../../../shared/components/DetailsContainer";
 import { usersSelectors } from "../userSlice";
+import useRole from "../hooks/useRole";
 
 function ViewUser() {
   const { userId = "" } = useParams<{ userId: string }>();
+  const userRole = useRole();
 
   const user = useSelector((state: RootState) => usersSelectors.selectById(state, userId));
 
@@ -42,7 +44,7 @@ function ViewUser() {
           <div className="w-full flex justify-between px-4">
             <h6 className="h6">User Details</h6>
             <nav className="flex items-center gap-2">
-              {!user.del_flg && (
+              {userRole === "admin" && !user.del_flg && (
                 <Link to={`../${userId}/edit`}>
                   <button type="button" aria-label="Edit User" className="cursor-pointer">
                     <EditIcon className="w-7 h-7" />

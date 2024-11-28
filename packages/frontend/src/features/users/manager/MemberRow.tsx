@@ -11,20 +11,19 @@ type Props<T> = {
 function MemberRow<T extends IUser>({ data }: Props<T>) {
   const content = useMemo(() => {
     if (data) {
-      const {
-        fullName,
-        userId,
-        profilePicUrl: profilePic,
-        email,
-        role,
-        team,
-        createdAt: joined,
-        del_flg: delFlg,
-      } = data;
+      const { fullName, userId, profilePicUrl: profilePic, email, createdAt: joined, del_flg: delFlg, subtasks } = data;
 
       const dateJoined: string | Date = new Date(joined);
 
       const relativeTimeString = getRelativeTimeString(dateJoined);
+
+      const notStartedSubtasks = Array.isArray(subtasks)
+        ? subtasks.filter((subtask: { status?: string }) => subtask.status === "not started").length
+        : 0;
+      const completedSubtasks = Array.isArray(subtasks)
+        ? subtasks.filter((subtask: { status?: string }) => subtask.status === "completed").length
+        : 0;
+
       return (
         <tr
           className={`border-b-[1px] border-base-content/40 hover:bg-base-300 capitalize ${delFlg ? "opacity-30" : ""}`}
@@ -53,8 +52,13 @@ function MemberRow<T extends IUser>({ data }: Props<T>) {
           </td>
 
           <td className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
-            <p className="mb-0 text-xs font-semibold leading-tight text-base-content/80 capitalize">
-              {role.replace("_", " ")}
+            <p className="mb-0 text-xs font-semibold text-center leading-tight text-base-content/80 capitalize">
+              {notStartedSubtasks}
+            </p>
+          </td>
+          <td className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
+            <p className="mb-0 text-xs font-semibold text-center  leading-tight text-base-content/80 capitalize">
+              {completedSubtasks}
             </p>
           </td>
           <td className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
@@ -68,7 +72,7 @@ function MemberRow<T extends IUser>({ data }: Props<T>) {
           </td>
           <td aria-label="Action" className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
             <div className="flex justify-center items-center gap-5">
-              <Link to={`../../users/${userId}/view`}>
+              <Link to={`../users/${userId}/view`}>
                 <GrView className="h-6 w-6 text-base-content/70 hover:text-info cursor-pointer" />
               </Link>
             </div>

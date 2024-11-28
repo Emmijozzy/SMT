@@ -27,9 +27,15 @@ function MemberTable() {
         filterable: false,
       },
       {
-        label: "Role",
-        searchable: true,
-        sortable: true,
+        label: "Opened Subtask",
+        searchable: false,
+        sortable: false,
+        filterable: false,
+      },
+      {
+        label: "Completed Subtask",
+        searchable: false,
+        sortable: false,
         filterable: false,
       },
       {
@@ -54,6 +60,8 @@ function MemberTable() {
   };
 
   const MemberMasterTable = MasterTable<IUser & Record<string, unknown>>();
+
+  console.log(users);
 
   return (
     // <div className="container">

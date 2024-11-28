@@ -2,7 +2,18 @@ export interface ITask {
   taskId?: string;
   title: string;
   description: string;
-  assignedTo?: string[];
+  assignedTo?:
+    | string[]
+    | [
+        {
+          userId: string;
+          email: string;
+          fullName: string;
+          phone_no: string;
+          team: string;
+          profilePicUrl: string;
+        },
+      ];
   responsibleTeam:
     | {
         name: string;
