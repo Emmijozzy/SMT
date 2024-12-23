@@ -9,6 +9,7 @@ import { ITask } from "../../tasksInterface";
 import PriorityIndicator from "../../TasksTable/components/PriorityIndicator";
 import StatusIndicator from "../../TasksTable/components/StatusIndicator";
 import TaskDetailRow from "./TaskDetailRow";
+import useRole from "../../../users/hooks/useRole";
 
 type Props = {
   task: ITask;
@@ -16,6 +17,7 @@ type Props = {
 };
 
 const ViewTaskDetail = React.memo(({ task, handleEditTaskDetails }: Props) => {
+  const role = useRole();
   const { taskId, title, description, responsibleTeam, status, priority, dueDate, del_flg: delFlg } = task;
 
   const dispatch = useDispatch();
@@ -35,7 +37,7 @@ const ViewTaskDetail = React.memo(({ task, handleEditTaskDetails }: Props) => {
 
   const renderActionButtons = () => (
     <div className="flex items-center gap-2">
-      {!delFlg && (
+      {role === "admin" && !delFlg && (
         <button
           type="button"
           aria-label="Edit Task"
@@ -46,18 +48,20 @@ const ViewTaskDetail = React.memo(({ task, handleEditTaskDetails }: Props) => {
         </button>
       )}
 
-      <button
-        type="button"
-        aria-label={delFlg ? "Restore task" : "Delete task"}
-        className="outline-none"
-        onClick={delFlg ? handleRestore : handleDelete}
-      >
-        {delFlg ? (
-          <FaTrashRestore className="h-6 w-6 text-base-content/70 hover:text-error cursor-pointer" />
-        ) : (
-          <RiDeleteBin6Line className="h-6 w-6 text-base-content/70 hover:text-error cursor-pointer" />
-        )}
-      </button>
+      {role === "admin" && (
+        <button
+          type="button"
+          aria-label={delFlg ? "Restore task" : "Delete task"}
+          className="outline-none"
+          onClick={delFlg ? handleRestore : handleDelete}
+        >
+          {delFlg ? (
+            <FaTrashRestore className="h-6 w-6 text-base-content/70 hover:text-error cursor-pointer" />
+          ) : (
+            <RiDeleteBin6Line className="h-6 w-6 text-base-content/70 hover:text-error cursor-pointer" />
+          )}
+        </button>
+      )}
 
       <button
         type="button"

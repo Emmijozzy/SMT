@@ -3,7 +3,7 @@ import { FaTrashRestore } from "react-icons/fa";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../app/store";
-import ResData from "../../../shared/interface/resdata";
+import ResData from "../../../shared/interface/ResData";
 import log from "../../../shared/utils/log";
 import { addAlert } from "../../alerts/AlertSlice";
 import { useDeleteUserMutation, useRestoreUserMutation } from "../userApiSlice";

@@ -21,6 +21,15 @@ export interface ITask {
       }
     | string;
   status: "not started" | "in progress" | "completed" | "closed";
+  subtasks:
+    | [
+        {
+          subtaskId: string;
+          title: string;
+          status: "not started" | "in progress" | "completed" | "closed";
+        },
+      ]
+    | string;
   managerTask: boolean;
   managerId: string;
   priority: "low" | "medium" | "high";

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import log from "../../shared/utils/log";
 // import { loginSchema } from "../../auth/authValidation";
 import { RootState } from "../../app/store";
-import ResData from "../../shared/interface/resdata";
+import ResData from "../../shared/interface/ResData";
 import { addAlert } from "../alerts/AlertSlice";
 import { setLoader } from "../loading/loaderSlice";
 import { useUpdateUserProfileMutation } from "../users/userApiSlice";

@@ -15,7 +15,7 @@ import QueryUsers from "../components/QueryUsers";
 import SearchUserId from "../components/SearchUserId";
 
 function UserTable() {
-  const [showFileterd, setShowFiltered] = useState(false);
+  const [showFiltered, setShowFiltered] = useState(false);
 
   const {
     handleNextPage,
@@ -62,7 +62,7 @@ function UserTable() {
                 onClick={() => handleShowFiltered()}
                 className="h-full flex items-center mr-3"
               >
-                <ArrowDropDownIcon className={`h-14 w-14 transition ${showFileterd ? "rotate-180" : ""}`} />
+                <ArrowDropDownIcon className={`h-14 w-14 transition ${showFiltered ? "rotate-180" : ""}`} />
               </button>
               <SearchUserId handleSearchId={handleSearchId} />
               <button
@@ -76,7 +76,7 @@ function UserTable() {
               </button>
             </div>
             <QueryUsers
-              showFileterd={showFileterd}
+              showFileterd={showFiltered}
               handleChange={handleChange}
               handleSubmit={handleSubmit}
               values={values}
@@ -91,7 +91,7 @@ function UserTable() {
             <div className="flex-auto px-0 pt-0 pb-2">
               <div className="p-0 overflow-x-auto ps">
                 <RowPerPage handleRowPerPage={handleRowPerPage} />
-                <table className="items-center w-full mb-0 align-top border-gray-200 text-base-content">
+                <table className="items-center min-h-96 w-full mb-0 align-top border-gray-200 text-base-content">
                   <TableHead />
                   <tbody>{tableBodyContent}</tbody>
                 </table>

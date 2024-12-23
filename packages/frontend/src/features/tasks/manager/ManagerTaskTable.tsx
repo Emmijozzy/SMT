@@ -11,8 +11,6 @@ function ManagerTaskTable() {
   useManagerTaskTable();
   const allTasks = useSelector((state: RootState) => tasksSelectors.selectAll(state));
 
-  console.log(allTasks);
-
   const unAssignedTask = allTasks.filter((task) => task.assignedTo?.length === 0);
   const assignedTask = allTasks.filter(
     (task) => task?.assignedTo?.length !== undefined && task?.assignedTo?.length >= 1,

@@ -1,15 +1,17 @@
 import { Request, Response, Router } from "express";
 import { ENUM_USER_ROLES } from "../../features/users/enumUserRoles";
 import { ExtendedRequest } from "../../features/users/userInterface";
-import authMiddleware from "../../middleware/authMiddleware";
 import IController from "../../Interface/controller";
+import authMiddleware from "../../middleware/authMiddleware";
 import validationMiddleware from "../../middleware/validationMiddleware";
 import { BadRequestError, InternalError } from "../../utils/ApiError";
 import asyncHandler from "../../utils/asyncHandler";
+import filtersToMongooseQuery from "../../utils/filtersToMongooseQuery";
 import successResponse from "../../utils/successResponse";
 import SubtaskOrchestrator from "./subtaskOrchestrator";
 import subtaskSchema from "./subtaskSchema";
 import SubtaskService from "./subtaskService";
+import getPaginationOptions from "../../utils/getPaginationOptions";
 
 export default class SubtaskController implements IController {
   public path = "/subtask";
@@ -27,11 +29,11 @@ export default class SubtaskController implements IController {
     this.router.post(
       "/create",
       validationMiddleware(subtaskSchema.createSchema),
-      authMiddleware(ENUM_USER_ROLES.MANAGER),
+      authMiddleware(ENUM_USER_ROLES.ADMIN, ENUM_USER_ROLES.MANAGER),
       this.createSubtask
     );
     this.router.get(
-      "/",
+      "/subtasks",
       authMiddleware(ENUM_USER_ROLES.ADMIN, ENUM_USER_ROLES.MANAGER, ENUM_USER_ROLES.TEAM_MEMBER),
       this.getSubtasks
     );
@@ -53,7 +55,7 @@ export default class SubtaskController implements IController {
     this.router.put(
       "/",
       validationMiddleware(subtaskSchema.updateSchema),
-      authMiddleware(ENUM_USER_ROLES.MANAGER),
+      authMiddleware(ENUM_USER_ROLES.ADMIN, ENUM_USER_ROLES.MANAGER),
       this.updateSubtask
     );
     this.router.delete("/:subtaskId", authMiddleware(ENUM_USER_ROLES.MANAGER), this.deleteSubtask);
@@ -66,7 +68,20 @@ export default class SubtaskController implements IController {
   });
 
   private getSubtasks = asyncHandler(async (req: Request, res: Response) => {
-    const subtasks = await this.subtaskService.getSubtasks();
+    const subtaskQueryFilter = req.query.filters;
+    const paginationString = req.query.pagination as string;
+
+    const pagination = paginationString ? JSON.parse(paginationString) : {};
+    if (typeof pagination !== "object") throw new BadRequestError("Error parsing pagination");
+
+    const filter = filtersToMongooseQuery(JSON.parse(subtaskQueryFilter ? String(subtaskQueryFilter) : "{}"));
+    if (!filter) throw new BadRequestError("Invalid filter");
+    const paginationOptions = getPaginationOptions({
+      ...pagination,
+      sortField: pagination.sortField || "subtaskId"
+    });
+
+    const subtasks = await this.subtaskService.getSubtasks(filter, paginationOptions);
     successResponse(res, { data: subtasks, message: "Subtasks fetched successfully" });
   });
 

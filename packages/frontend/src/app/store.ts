@@ -1,8 +1,10 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable import/no-named-as-default */
 /* eslint-disable import/no-named-as-default-member */
 /* eslint-disable import/no-cycle */
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { persistReducer, persistStore } from "redux-persist";
+import { combineReducers, configureStore, Middleware, PayloadAction, Reducer } from "@reduxjs/toolkit";
+import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from "redux-persist";
+import { PersistPartial } from "redux-persist/es/persistReducer";
 import alertReducer from "../features/alerts/AlertSlice";
 import authReducer from "../features/auth/authSlice";
 import loaderReducer from "../features/loading/loaderSlice";
@@ -20,26 +22,6 @@ import { apiSlice } from "./api/apislice";
 import localStorageMiddleware from "./api/middleware";
 import persistConfig from "./persistConfig";
 
-const rootReducer = combineReducers({
-  [apiSlice.reducerPath]: apiSlice.reducer,
-  auth: authReducer,
-  alert: alertReducer,
-  userProfile: userProfileReducer,
-  status: statusReducer,
-  layout: layoutReducer,
-  loader: loaderReducer,
-  userTable: userTableReducer,
-  users: usersReducer,
-  deleteUser: deleteUserReducer,
-  deleteTask: deleteTaskReducer,
-  tasks: tasksReducer,
-  teams: teamReducer,
-  teamTable: teamTableReducer,
-});
-
-const persistedReducer = persistReducer(persistConfig, rootReducer);
-
-// // Define RootState interface
 export interface RootState {
   auth: ReturnType<typeof authReducer>; // Type for auth state
   alert: ReturnType<typeof alertReducer>;
@@ -56,14 +38,45 @@ export interface RootState {
   teamTable: ReturnType<typeof teamTableReducer>;
 }
 
+const rootReducer = (state: RootState | undefined, action: PayloadAction) => {
+  if (action.type === "app/resetStore") {
+    state = undefined;
+  }
+
+  return combineReducers({
+    [apiSlice.reducerPath]: apiSlice.reducer,
+    auth: authReducer,
+    alert: alertReducer,
+    userProfile: userProfileReducer,
+    status: statusReducer,
+    layout: layoutReducer,
+    loader: loaderReducer,
+    userTable: userTableReducer,
+    users: usersReducer,
+    deleteUser: deleteUserReducer,
+    deleteTask: deleteTaskReducer,
+    tasks: tasksReducer,
+    teams: teamReducer,
+    teamTable: teamTableReducer,
+  })(state, action);
+};
+const persistedReducer = persistReducer(persistConfig, rootReducer as Reducer<RootState, PayloadAction>);
+
 export const store = configureStore({
   reducer: persistedReducer,
-  middleware: (GetDefaultMiddleware) =>
-    GetDefaultMiddleware({
-      serializableCheck: false,
+  devTools: {
+    name: "MyApp",
+    trace: true,
+    traceLimit: 25,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
     })
-      .concat(apiSlice.middleware)
-      .concat(localStorageMiddleware),
+      .concat(apiSlice.middleware as unknown as Middleware<object, RootState & PersistPartial>) // Add the API middleware
+      .concat(localStorageMiddleware), // Add your custom middleware
 });
 
 export type AppDispatch = typeof store.dispatch;

@@ -40,6 +40,8 @@ const baseQuery = fetchBaseQuery({
 const baseQueryWithReactAuth = async (args: string | FetchArgs, api: BaseQueryApi, extraOptions: object) => {
   let result = await baseQuery(args, api, extraOptions);
 
+  console.log(result)
+
   if (result?.error?.status) {
     if (result?.error?.status === 403) {
       log("error", "requesting new access token with refresh token");
@@ -71,13 +73,13 @@ const baseQueryWithReactAuth = async (args: string | FetchArgs, api: BaseQueryAp
         return refreshResult;
       }
     } else if (result?.error.status === "FETCH_ERROR") {
-      api.dispatch(changeStatus("error"));
+      // api.dispatch(changeStatus("error"));
       api.dispatch(addAlert({ message: "Server Error", type: "error" }));
     } else if (result?.error.status === "TIMEOUT_ERROR") {
-      api.dispatch(changeStatus("error"));
+      // api.dispatch(changeStatus("error"));
       api.dispatch(addAlert({ message: "Timeout Error", type: "error" }));
     } else if (result?.error.status === "PARSING_ERROR") {
-      api.dispatch(changeStatus("error"));
+      // api.dispatch(changeStatus("error"));
       api.dispatch(addAlert({ message: "parsing Error", type: "error" }));
     }
   }
@@ -87,6 +89,6 @@ const baseQueryWithReactAuth = async (args: string | FetchArgs, api: BaseQueryAp
 
 export const apiSlice = createApi({
   baseQuery: baseQueryWithReactAuth,
-  tagTypes: ["User", "Users", "Task", "Tasks", "Team", "Teams"],
+  tagTypes: ["User", "Users", "Task", "Tasks", "Team", "Teams", "Subtasks", "Subtask"],
   endpoints: (_builder) => ({}),
 });

@@ -18,7 +18,7 @@ function MemberRow<T extends IUser>({ data }: Props<T>) {
       const relativeTimeString = getRelativeTimeString(dateJoined);
 
       const notStartedSubtasks = Array.isArray(subtasks)
-        ? subtasks.filter((subtask: { status?: string }) => subtask.status === "not started").length
+        ? subtasks.filter((subtask: { status?: string }) => subtask.status === "open").length
         : 0;
       const completedSubtasks = Array.isArray(subtasks)
         ? subtasks.filter((subtask: { status?: string }) => subtask.status === "completed").length

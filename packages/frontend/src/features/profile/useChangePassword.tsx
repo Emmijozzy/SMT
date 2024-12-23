@@ -4,11 +4,11 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import log from "../../shared/utils/log";
 // import { loginSchema } from "../../auth/authValidation";
+import ResData from "../../shared/interface/ResData";
+import { addAlert } from "../alerts/AlertSlice";
+import { setLoader } from "../loading/loaderSlice";
 import { useChangePasswordMutation } from "../users/userApiSlice";
 import { changedPasswordSchema } from "./profileValidation";
-import { setLoader } from "../loading/loaderSlice";
-import { addAlert } from "../alerts/AlertSlice";
-import ResData from "../../shared/interface/resdata";
 
 const initialValues = {
   oldPassword: "",

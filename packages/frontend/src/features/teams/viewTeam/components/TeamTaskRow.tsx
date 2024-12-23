@@ -45,15 +45,18 @@ function TeamTaskRow<T extends ITask>({ data }: Props<T>) {
             <div className="flex w-28">
               <AvatarGroup max={4} total={assignedTo?.length || 0}>
                 {assignedTo &&
-                  assignedTo.map((img, index) => (
-                    <span key={img}>
-                      <Avartar
-                        name="imga hdh"
-                        imgUrl={img}
-                        className={`w-[2.6rem] h-[2.6rem] rounded-full border-2 border-blueGray-50 shadow ${index === 0 ? "" : "-ml-4"}`}
-                      />
-                    </span>
-                  ))}
+                  assignedTo.map(
+                    (user, index) =>
+                      typeof user === "object" && (
+                        <span key={user.fullName}>
+                          <Avartar
+                            name={user.fullName}
+                            imgUrl={user.profilePicUrl}
+                            className={`w-[2.6rem] h-[2.6rem] rounded-full border-2 border-blueGray-50 shadow ${index === 0 ? "" : "-ml-4"}`}
+                          />
+                        </span>
+                      ),
+                  )}
               </AvatarGroup>
             </div>
           </td>
@@ -64,7 +67,7 @@ function TeamTaskRow<T extends ITask>({ data }: Props<T>) {
             <span>{daysLeft}</span>
           </td>
           <td className="border-t-0 max-w-20 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2 text-right">
-            <Link to={`../../../dash/tasks/${taskId as string}`} className="flex view justify-between ">
+            <Link to={`../../dash/tasks/${taskId as string}`} className="flex view justify-between ">
               <GrView className="h-6 w-6 text-base-content/70 hover:text-secondary cursor-pointer" />
             </Link>
           </td>

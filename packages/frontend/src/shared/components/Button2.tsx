@@ -5,7 +5,7 @@ type Props = {
   children: ReactNode;
   className?: string;
   type?: "submit" | "reset" | "button" | undefined;
-  onClick: () => void;
+  onClick?: () => void;
 };
 function Button2({ children, className, onClick, type = "button" }: Props) {
   return (
@@ -22,6 +22,7 @@ function Button2({ children, className, onClick, type = "button" }: Props) {
 Button2.defaultProps = {
   className: "",
   type: "button",
+  onClick: () => {},
 };
 
 export default Button2;

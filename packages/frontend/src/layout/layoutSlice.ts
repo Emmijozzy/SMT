@@ -17,7 +17,7 @@ const initialState: Layout = (JSON.parse(localStorage.getItem("layout") || "null
   selectColor: "bg-pink-gradient",
 };
 const layoutSlice = createSlice({
-  name: "Layout",
+  name: "layout",
   initialState,
   reducers: {
     setSidebar: (state, action) => {

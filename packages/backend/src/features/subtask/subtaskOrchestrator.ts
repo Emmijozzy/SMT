@@ -32,6 +32,7 @@ export default class SubtaskOrchestrator {
 
       await this.userService.addSubtaskId(user.userId, subtask.subtaskId);
       await this.teamService.addSubtaskToTeam(subtask.team, subtask.subtaskId);
+      await this.taskService.addUserIdToAssignedTo(task.taskId, user.userId);
       await this.taskService.addSubtaskId(task.taskId, subtask.subtaskId);
       return subtask;
     } catch (err: unknown) {
@@ -58,9 +59,11 @@ export default class SubtaskOrchestrator {
       }
 
       //check for change of assignee and perform update logic
-      if (subtaskData.assignee && subtask.assignee !== subtaskData.assignee) {
+      if (subtaskData.taskId && subtaskData.assignee && subtask.assignee !== subtaskData.assignee) {
         await this.userService.removeSubtaskId(subtask.assignee, subtask.subtaskId);
         await this.userService.addSubtaskId(subtaskData.assignee, subtask.subtaskId);
+        await this.taskService.removeUserIdFromAssignedTo(subtask.taskId, subtask.assignee);
+        await this.taskService.addUserIdToAssignedTo(subtaskData.taskId, subtaskData.assignee);
       }
 
       //check for change of task and perform update logic
@@ -88,6 +91,7 @@ export default class SubtaskOrchestrator {
       await this.userService.removeSubtaskId(subtask.assignee, subtask.subtaskId);
       await this.teamService.removeSubtaskFromTeam(subtask.team, subtask.subtaskId);
       await this.taskService.removeSubtaskId(subtask.taskId, subtask.subtaskId);
+      await this.taskService.removeUserIdFromAssignedTo(subtask.taskId, subtask.assignee);
       await this.subtaskService.deleteSubtaskById(subtaskId);
       return subtask;
     } catch (err: unknown) {

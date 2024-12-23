@@ -1,8 +1,8 @@
 // import { MouseEvent } from "react";
-import { Button, Typography, SvgIconTypeMap } from "@mui/material";
-import { NavLink, useLocation } from "react-router-dom";
+import { Button, SvgIconTypeMap, Typography } from "@mui/material";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { useSelector } from "react-redux";
+import { NavLink, useLocation } from "react-router-dom";
 import { RootState } from "../../app/store";
 
 type MuiIcon = OverridableComponent<SvgIconTypeMap<object, "svg">> & {
@@ -22,10 +22,13 @@ function NavItem({ title, path, Icon, className, onClick }: Props) {
   const selectColor = useSelector((state: RootState) => state.layout.selectColor);
 
   // const selectedColor = ((color: string) => `bg-${color}-gradient`)("red");
-  const isNavActive = (): boolean =>
-    title.toLowerCase() === "dashboard"
-      ? path === location.pathname
-      : location.pathname.toLowerCase().includes(title.toLowerCase());
+  const isNavActive = (): boolean => {
+    const normalizedTitle = title.toLowerCase();
+    const normalizedPathname = location.pathname.toLowerCase();
+    if (normalizedTitle === "dashboard" && normalizedPathname.endsWith("dash")) return true;
+    const pathNameArray = normalizedPathname.split("/");
+    return pathNameArray.includes(normalizedTitle);
+  };
 
   return (
     <NavLink to={path || ""} className={`${className || ""}`}>

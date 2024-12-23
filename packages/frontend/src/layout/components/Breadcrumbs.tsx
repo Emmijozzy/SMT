@@ -1,10 +1,11 @@
+/* eslint-disable no-nested-ternary */
 import HomeIcon from "@mui/icons-material/Home";
 import { Breadcrumbs as MUIBreadcrumbs, Link as MUILink } from "@mui/material";
 import { useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import useRole from "../../features/users/hooks/useRole";
 
-const MANAGEMENT_PAGES = ["users", "teams", "tasks"] as const;
+const MANAGEMENT_PAGES = ["users", "teams", "tasks", "subtasks"] as const;
 const BASE_CLASSES = "text-base-content/40 hover:text-base-content text-lg capitalize";
 
 function Breadcrumbs() {
@@ -19,7 +20,7 @@ function Breadcrumbs() {
       { link: "/", label: "" },
       ...pathSegments.map((path, index) => ({
         link: `../../${role as string}/${pathSegments.slice(0, index + 1).join("/")}`,
-        label: path === "dash" ? "dashboard" : path.replace(/-/g, " "),
+        label: path === "dash" ? "dashboard" : path === "subs" ? "subtasks" : path.replace(/-/g, " "),
       })),
     ];
   }, [location.pathname, role]);
@@ -55,7 +56,8 @@ function Breadcrumbs() {
     <div className="h-[5rem] flex items-center justify-center justify-self-start">
       <div className="flex flex-col">
         <h5 className="h5 font-bold capitalize">
-          {mainPage} {MANAGEMENT_PAGES.includes(mainPage as "users" | "teams" | "tasks") ? "Management" : ""}
+          {mainPage}{" "}
+          {MANAGEMENT_PAGES.includes(mainPage as "users" | "teams" | "tasks" | "subtasks") ? "Management" : ""}
         </h5>
         <MUIBreadcrumbs separator="/" aria-label="breadcrumb" className="text-base-content">
           {breadcrumbs.map(renderBreadcrumbLink)}

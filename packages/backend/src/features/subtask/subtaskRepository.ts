@@ -1,4 +1,5 @@
 import { BadRequestError, InternalError } from "../../utils/ApiError";
+import { IPaginationOptions } from "../../utils/getPaginationOptions";
 import Subtask, { ISubtask } from "./subtask";
 
 export default class SubtaskRepository {
@@ -18,9 +19,11 @@ export default class SubtaskRepository {
       }
     }
   }
-  async getSubtasks(): Promise<ISubtask[]> {
+  async getSubtasks(filter: Record<string, unknown>, paginationOption: IPaginationOptions): Promise<ISubtask[]> {
     try {
-      const subtasks = await Subtask.find({}).lean().exec();
+      const { limit, sortField, skip, sortOrder } = paginationOption;
+      const sort = { [sortField]: sortOrder };
+      const subtasks = await Subtask.find(filter).limit(limit).skip(skip).sort(sort).lean().exec();
       return subtasks;
     } catch (err: unknown) {
       const error = err as Error;

@@ -12,20 +12,70 @@ import UseTasksTable from "./UseTasksTable";
 
 const TasksTable = memo(() => {
   UseTasksTable();
-  const allTasks = useSelector((state: RootState) => tasksSelectors.selectAll(state));
+  // const allTasks = useSelector((state: RootState) => tasksSelectors.selectAll(state));
   const allTeamsName = useSelector((state: RootState) => teamSelectors.selectAll(state))?.map((team) => team.name);
   const tasksColumns = taskColumnsFactory(allTeamsName);
-  const MasterTaskTable = MasterTable<ITask & Record<string, unknown>>();
+  const allTasks = useSelector((state: RootState) => tasksSelectors.selectAll(state));
+
+  const unAssignedTask = allTasks.filter((task) => task.assignedTo?.length === 0);
+  const assignedTask = allTasks.filter(
+    (task) => task?.assignedTo?.length !== undefined && task?.assignedTo?.length >= 1,
+  );
+
+  const TaskTable = MasterTable<ITask & Record<string, unknown>>();
 
   return (
     <>
       <QueryTask />
-      <MasterTaskTable
-        name="Tasks"
-        data={allTasks as (ITask & Record<string, unknown>)[]}
-        tableHead={tasksColumns}
-        TableBody={TaskTableRow}
-      />
+      <div role="tablist" className="tabs tabs-boxed">
+        <input
+          type="radio"
+          name="my_tabs_2"
+          role="tab"
+          className="tab font-bold"
+          aria-label={`All(${allTasks.length})`}
+          defaultChecked
+        />
+        <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box">
+          <TaskTable
+            name="All Task"
+            tableHead={tasksColumns}
+            data={allTasks as (ITask & Record<string, unknown>)[]}
+            TableBody={TaskTableRow}
+          />
+        </div>
+        <input
+          type="radio"
+          name="my_tabs_2"
+          role="tab"
+          className="tab font-bold"
+          aria-label={`Unassigned (${unAssignedTask.length})`}
+        />
+        <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box">
+          <TaskTable
+            name="Unassigned Task"
+            tableHead={tasksColumns}
+            data={unAssignedTask as (ITask & Record<string, unknown>)[]}
+            TableBody={TaskTableRow}
+          />
+        </div>
+
+        <input
+          type="radio"
+          name="my_tabs_2"
+          role="tab"
+          className="tab font-bold"
+          aria-label={`Assigned (${assignedTask.length})`}
+        />
+        <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box">
+          <TaskTable
+            name="Assigned Task"
+            tableHead={tasksColumns}
+            data={assignedTask as (ITask & Record<string, unknown>)[]}
+            TableBody={TaskTableRow}
+          />
+        </div>
+      </div>
     </>
   );
 });

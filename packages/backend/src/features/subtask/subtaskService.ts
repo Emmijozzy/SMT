@@ -1,3 +1,4 @@
+import { IPaginationOptions } from "../../utils/getPaginationOptions";
 import { InternalError } from "../../utils/ApiError";
 import { ISubtask } from "./subtask";
 import SubtaskRepository from "./subtaskRepository";
@@ -26,9 +27,9 @@ export default class SubtaskService {
     }
   }
 
-  async getSubtasks(): Promise<ISubtask[]> {
+  async getSubtasks(filter: Record<string, unknown>, paginationOption: IPaginationOptions): Promise<ISubtask[]> {
     try {
-      const subtasks = await this.subtaskRepository.getSubtasks();
+      const subtasks = await this.subtaskRepository.getSubtasks(filter, paginationOption);
       if (!subtasks) throw new InternalError("Failed to fetch subtasks");
       return subtasks;
     } catch (err: unknown) {
@@ -62,7 +63,7 @@ export default class SubtaskService {
       const payload: Partial<ISubtask> = {
         title: title?.trim(),
         description: description?.trim(),
-        status: status as "not started" | "completed" | "closed" | undefined,
+        status: status as "open" | "pending" | "complete" | undefined,
         dueDate: dueDate,
         assignee: assignee?.trim(),
         lastModifiedBy: requestUserId,

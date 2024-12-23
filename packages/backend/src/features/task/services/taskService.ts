@@ -123,8 +123,8 @@ export class TaskService {
     try {
       const task = await this.getTaskById(taskId);
       if (!task) throw new NotFoundError(`Task with id: ${taskId} not found`);
-      if (!task.subtasks.includes(subtaskId)) {
-        task.subtasks.push(subtaskId);
+      if (!task?.subtasks?.includes(subtaskId)) {
+        task.subtasks?.push(subtaskId);
         const updatedTask = await this.updateTaskById(taskId, task);
         if (!updatedTask) throw new InternalError("Error adding subtask");
         return updatedTask;
@@ -151,6 +151,41 @@ export class TaskService {
     } catch (err: unknown) {
       const error = err as Error;
       throw new InternalError(`Error removing subtask: ${error.message}`);
+    }
+  }
+
+  public async addUserIdToAssignedTo(taskId: string, userId: string): Promise<ITask> {
+    try {
+      const task = await this.getTaskById(taskId);
+      if (!task) throw new NotFoundError(`Task with id: ${taskId} not found`);
+      if (!task.assignedTo.includes(userId)) {
+        task.assignedTo.push(userId);
+        const updatedTask = await this.updateTaskById(taskId, task);
+        if (!updatedTask) throw new InternalError("Error adding user to assignedTo");
+        return updatedTask;
+      }
+      return task;
+    } catch (err: unknown) {
+      const error = err as Error;
+      throw new InternalError(`Error adding user to assignedTo: ${error.message}`);
+    }
+  }
+
+  public async removeUserIdFromAssignedTo(taskId: string, userId: string): Promise<ITask> {
+    try {
+      const task = await this.getTaskById(taskId);
+      if (!task) throw new NotFoundError(`Task with id: ${taskId} not found`);
+      const userIdIndex = task.assignedTo.indexOf(userId);
+      if (userIdIndex !== -1) {
+        task.assignedTo.splice(userIdIndex, 1);
+        const updatedTask = await this.updateTaskById(taskId, task);
+        if (!updatedTask) throw new InternalError("Error removing user from assignedTo");
+        return updatedTask;
+      }
+      return task;
+    } catch (err: unknown) {
+      const error = err as Error;
+      throw new InternalError(`Error removing user from assignedTo: ${error.message}`);
     }
   }
 }

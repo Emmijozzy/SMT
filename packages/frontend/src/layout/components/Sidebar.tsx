@@ -1,15 +1,15 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import { useClickOutside } from "@mantine/hooks";
 import CloseIcon from "@mui/icons-material/Close";
-import LoginSharpIcon from "@mui/icons-material/LoginSharp";
-import { Typography } from "@mui/material";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { RootState } from "../../app/store";
 import { getPresentUser } from "../../features/profile/userProfileSlice";
 import useLogout from "../../shared/hooks/useLogout";
+import { getUserNavItem } from "../../shared/utils/getUserNavItem";
 import { setSidebar } from "../layoutSlice";
 import NavItem from "./NavItem";
-import { getUserNavItem } from "../../shared/utils/getUserNavItem";
 
 function Sidebar() {
   // const [openSidenav] = useState(false);
@@ -41,9 +41,9 @@ function Sidebar() {
           <CloseIcon className="h-8 w-8 text-base-content" />
         </button>
         <Link to="/" className="w-full text-center">
-          <Typography variant="h4" className="text-base-content font-bold text-shadow ">
+          <p className="text-base-content h4 font-bold text-shadow ">
             S<span className="text-[3rem]">T</span>M
-          </Typography>
+          </p>
         </Link>
       </div>
       <hr className="h-px bg-transparent bg-gradient-to-r from-transparent via-base-content/40 to-transparent" />
@@ -55,7 +55,16 @@ function Sidebar() {
             </li>
           ))}
           <li className="mt-auto">
-            <NavItem title="logout" Icon={LoginSharpIcon} onClick={handleLogOut} />
+            <button
+              type="button"
+              className="flex items-center justify-start whitespace-nowrap shadow-soft-xl gap-2.7 px-4 text-left rounded-lg my-0 py-2.7 capitlalize  "
+              onClick={() => handleLogOut()}
+            >
+              <div className=" flex items-center justify-center w-8 h-8 rounded-lg shadow-md  xl:p-2.5">
+                <LogoutIcon className="w-5 h-5 " />
+              </div>
+              <p className="font-sans leading-relaxed capitalize text-base-content">Logout</p>
+            </button>
           </li>
         </ul>
       </div>

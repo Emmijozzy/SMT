@@ -7,7 +7,7 @@ export interface ISubtask extends Document {
   title: string;
   team: string;
   description?: string;
-  status?: "not started" | "completed" | "closed";
+  status?: "open" | "pending" | "complete";
   priority: "low" | "medium" | "high";
   createdBy: string;
   lastModifiedBy: string;
@@ -47,9 +47,9 @@ const subtaskSchema = new Schema<ISubtask>({
   },
   status: {
     type: String,
-    enum: ["not started", "completed", "closed"],
+    enum: ["open", "pending", "complete"],
     required: true,
-    default: "not Started"
+    default: "open"
   },
   priority: {
     type: String,

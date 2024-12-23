@@ -82,7 +82,8 @@ export default class TasksAdminController implements IController {
         model: "User",
         foreignField: "userId",
         select: "userId fullName profilePicUrl email phone_no team"
-      }
+      },
+      { path: "subtasks", model: "Subtask", foreignField: "subtaskId", select: "" }
     ];
 
     const result = await this.taskService.getAll(filters, paginationOptions, populateOptions);
