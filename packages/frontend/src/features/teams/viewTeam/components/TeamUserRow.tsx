@@ -16,7 +16,7 @@ function TeamUserRow<T extends IUser>({ data }: Props<T>) {
 
   const content = useMemo(() => {
     if (data) {
-      const { fullName, userId, profilePicUrl: profilePic, email, createdAt: joined, del_flg: delFlg, subtasks } = data;
+      const { fullName, userId, profilePicUrl: profilePic, email, createdAt: joined, del_flg: delFlg } = data;
 
       const userSubtasks = allSubtasks.filter((subtask) => subtask.assignee === userId);
 
