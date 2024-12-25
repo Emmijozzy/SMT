@@ -2,21 +2,31 @@
 import { AvatarGroup } from "@mui/material";
 import { useMemo } from "react";
 import { GrView } from "react-icons/gr";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { RootState } from "../../../../app/store";
 import Avartar from "../../../../shared/components/Avartar";
 import getDaysLeft from "../../../../shared/utils/getDaysLeft";
+import { isStringArray } from "../../../../shared/utils/isStringArray";
 import { ITask } from "../../../tasks/tasksInterface";
 import Completion from "../../../tasks/TasksTable/components/Completion";
 import PriorityIndicator from "../../../tasks/TasksTable/components/PriorityIndicator";
+import { usersSelectors } from "../../../users/userSlice";
 
 type Props<T> = {
   data: T;
 };
 
 function TeamTaskRow<T extends ITask>({ data }: Props<T>) {
+  const users = useSelector((state: RootState) => usersSelectors.selectAll(state));
+
   const content = useMemo(() => {
     if (data) {
       const { title, taskId, priority, status, assignedTo, dueDate, del_flg: delFlg } = data;
+
+      const assignees: string[] = isStringArray(assignedTo) ? assignedTo : [];
+      const filteredUsers = users?.filter((user) => assignees.includes(user.userId));
+
       const daysLeft = getDaysLeft(dueDate || new Date().toDateString());
       return (
         <tr className={`relative hover:bg-base-100 ${delFlg ? "opacity-20" : ""}`}>
@@ -42,21 +52,18 @@ function TeamTaskRow<T extends ITask>({ data }: Props<T>) {
             </div>
           </td>
           <td className="border-t-0 px-4align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2">
-            <div className="flex w-28">
+            <div className="flex w-24">
               <AvatarGroup max={4} total={assignedTo?.length || 0}>
-                {assignedTo &&
-                  assignedTo.map(
-                    (user, index) =>
-                      typeof user === "object" && (
-                        <span key={user.fullName}>
-                          <Avartar
-                            name={user.fullName}
-                            imgUrl={user.profilePicUrl}
-                            className={`w-[2.6rem] h-[2.6rem] rounded-full border-2 border-blueGray-50 shadow ${index === 0 ? "" : "-ml-4"}`}
-                          />
-                        </span>
-                      ),
-                  )}
+                {filteredUsers &&
+                  filteredUsers.map((user) => (
+                    <span key={user.userId}>
+                      <Avartar
+                        name={user.fullName || ""}
+                        imgUrl={user.profilePicUrl}
+                        className="-ml-3 w-[2.6rem] h-[2.6rem] rounded-full border-2 border-blueGray-50 shadow"
+                      />
+                    </span>
+                  ))}
               </AvatarGroup>
             </div>
           </td>
@@ -80,10 +87,9 @@ function TeamTaskRow<T extends ITask>({ data }: Props<T>) {
           <span>...Loading</span>
         </td>
       </tr>
-    ); // Return null if task is not available
-  }, [data]); // Only re-calculate when task changes
+    );
+  }, [data, users]);
 
-  return content; // Return the content of the task row, or a loading spinner if data is not available
+  return content;
 }
-
 export default TeamTaskRow;

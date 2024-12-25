@@ -34,9 +34,6 @@ function SubtaskRow<T extends ISubtask>({ data }: Props<T>) {
           >
             <Assignee assignee={assignee} />
           </td>
-          <td className="max-w-32 border-t-0 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 py-1">
-            <span>{daysLeft}</span>
-          </td>
           <td className="border-t-0 w-12 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 py-1 capitalize ">
             <div className="flex items-center gap-1">
               <PriorityIndicator priority={priority} />
@@ -48,6 +45,9 @@ function SubtaskRow<T extends ISubtask>({ data }: Props<T>) {
               <div className="w-2 h-2 rounded-full bg-orange-500 mr-2 inline-block" />
               {status}
             </div>
+          </td>
+          <td className="max-w-32 border-t-0 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 py-1">
+            <span>{daysLeft}</span>
           </td>
           <td className="border-t-0 max-w-20 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 py-1 text-right">
             <Link to={`${subtaskId}`} className="flex view justify-between" aria-label={`View subtask ${title}`}>

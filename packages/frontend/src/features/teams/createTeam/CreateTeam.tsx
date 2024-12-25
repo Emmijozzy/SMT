@@ -16,7 +16,7 @@ function CreateTeam() {
 
   return (
     <div className="container mx-auto px-4">
-      <div className="w-full flex flex-col bg-base-100">
+      <div className="w-full flex flex-col bg-base-200 p-2 rounded">
         <div className="w-full order-1 flex justify-between">
           <h2 className="h6 font-bold capitalize">Add New Team</h2>
           <button
@@ -48,8 +48,8 @@ function CreateTeam() {
               inputType="textarea"
             />
             <Select
-              className="border-b-[1px] border-base-content/40 h-13 text-sm gap-4 "
-              labelClass="mr-2 lg:mr-8"
+              className="border-b-[1px] border-base-content/40 h-13 text-sm gap-4 pt-2 "
+              labelClass="mr-2 lg:mr-6"
               label="Manager"
               placeholder="Select team manager"
               usersOption={manager}

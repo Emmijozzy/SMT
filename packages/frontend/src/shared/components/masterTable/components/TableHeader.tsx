@@ -18,11 +18,15 @@ type Props = {
 };
 
 const TableHeader = memo(({ className, columns, onSort, onFilter, sortedBy }: Props) => (
-  <thead>
-    <tr>
+  <thead className="sticky top-0 z-10">
+    <tr className="overflow-hidden">
       {columns.map((column, index) => (
-        <th key={column.label} className={`${getHeaderClassName(index)} ${className || ""}`}>
-          <div className="flex items-center gap-1">
+        <th
+          key={column.label}
+          className={`${getHeaderClassName(index)} ${className || ""} sticky top-0`}
+          style={{ position: "sticky", top: 0 }}
+        >
+          <div className="flex items-center gap-1 whitespace-nowrap">
             <SortButton
               show={column.sortable || false}
               onClick={() => onSort(column.label)}

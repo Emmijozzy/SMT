@@ -46,7 +46,7 @@ function EditTeamDetails({ teamId, handleEditTeamDetails }: Props) {
       inputType={inputType}
       type={type}
       disabled={name === "teamId"}
-      className="bg-base-200"
+      className="bg-base-100"
     />
   );
 
@@ -58,42 +58,44 @@ function EditTeamDetails({ teamId, handleEditTeamDetails }: Props) {
       value={(taskValues[name] || "") as string}
       handleChange={handleChange}
       usersOption={options}
-      labelClass="w-14"
-      className="border-b-[1px] border-base-content/40 h-13 text-sm gap-9 "
+      labelClass="md:w-20"
+      className="border-b-[1px] border-base-content/40 h-13 text-sm gap-9 pt-2 "
     />
   );
 
   return (
-    <form onSubmit={handleSubmit} className="w-full p-4 bg-base-100 rounded-lg transition-all">
-      <div className="w-full flex items-center justify-between">
-        <h6 className="h6 capitalize font-bold">Edit Task Details</h6>
-        <div className="flex gap-4">
-          <button
-            disabled={errorExist}
-            type="submit"
-            aria-label="Save Task"
-            className={`cursor-pointer hover:text-base-content/40 ${errorExist ? "text-base-content/40" : ""}`}
-          >
-            <SaveAsIcon className="w-8 h-8" />
-          </button>
-          <button
-            type="button"
-            aria-label="Go Back"
-            onClick={handleEditTeamDetails}
-            className="cursor-pointer hover:text-base-content/40"
-          >
-            <ArrowBackSharpIcon className="w-8 h-8" />
-          </button>
+    <div className="container">
+      <form onSubmit={handleSubmit} className="w-full p-4 bg-base-200 rounded-lg transition-all">
+        <div className="w-full flex items-center justify-between">
+          <h6 className="h6 capitalize font-bold">Edit Team Details</h6>
+          <div className="flex gap-4">
+            <button
+              disabled={errorExist}
+              type="submit"
+              aria-label="Save Task"
+              className={`cursor-pointer hover:text-base-content/40 ${errorExist ? "text-base-content/40" : ""}`}
+            >
+              <SaveAsIcon className="w-8 h-8" />
+            </button>
+            <button
+              type="button"
+              aria-label="Go Back"
+              onClick={handleEditTeamDetails}
+              className="cursor-pointer hover:text-base-content/40"
+            >
+              <ArrowBackSharpIcon className="w-8 h-8" />
+            </button>
+          </div>
         </div>
-      </div>
 
-      <div className="flex flex-col flex-nowrap text-base-content">
-        {renderInputField("Team ID", "teamId")}
-        {renderInputField("Name", "name")}
-        {renderInputField("Description", "description", "", "textarea")}
-        {renderSelect("Manager", "managerId", [...managerOptions])}
-      </div>
-    </form>
+        <div className="flex flex-col flex-nowrap text-base-content">
+          {renderInputField("Team ID", "teamId")}
+          {renderInputField("Name", "name")}
+          {renderInputField("Description", "description", "", "textarea")}
+          {renderSelect("Manager", "managerId", [...managerOptions])}
+        </div>
+      </form>
+    </div>
   );
 }
 

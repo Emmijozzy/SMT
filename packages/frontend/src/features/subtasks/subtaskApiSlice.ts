@@ -1,7 +1,9 @@
 /* eslint-disable indent */
 import { apiSlice } from "../../app/api/apislice";
 import { Result } from "../../shared/interface/Result";
+import log from "../../shared/utils/log";
 import { ISubtask } from "./subtaskInterface";
+import { setSubtasks } from "./subtaskSlice";
 
 type SubtaskResponse = ISubtask[];
 
@@ -36,6 +38,15 @@ export const subtaskApiSlice = apiSlice.injectEndpoints({
         }));
 
         return subtasks;
+      },
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(setSubtasks(data));
+        } catch (e: unknown) {
+          const error = e as Error;
+          log("error", "TeamApi getTeam Error", error.message, error.stack as string);
+        }
       },
       providesTags: (result) =>
         result

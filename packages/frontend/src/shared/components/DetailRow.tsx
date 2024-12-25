@@ -9,7 +9,7 @@ function DetailRow({ label, value, className }: Props) {
     <tr
       className={`w-full grid gridTemplateColumn text-[16px] leading-6 border-b-[1px] border-base-content/10 px-4 ${className || ""} `}
     >
-      <td className="font-bold">
+      <td className="font-bold capitalize">
         <strong>{label}:</strong>
       </td>
       <td>

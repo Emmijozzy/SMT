@@ -1,44 +1,41 @@
 import { TableHeaderProps } from "../../../../shared/components/masterTable/MasterTable";
 
-const userColumnFactory = (teamNames: string[]) => {
+const userColumnFactory = () => {
   const teamUserColumn: TableHeaderProps = {
     className: "",
     columns: [
       {
-        label: "name",
+        label: "Name",
         searchable: true,
         sortable: true,
         filterable: false,
       },
       {
-        label: "email",
+        label: "Email",
         searchable: true,
         sortable: true,
         filterable: false,
       },
       {
-        label: "team",
+        label: "Opened Subtask",
+        searchable: false,
+        sortable: false,
+        filterable: false,
+      },
+      {
+        label: "Completed Subtask",
+        searchable: false,
+        sortable: false,
+        filterable: false,
+      },
+      {
+        label: "Status",
         searchable: false,
         sortable: true,
         filterable: true,
-        filterOptions: [...teamNames],
       },
       {
-        label: "role",
-        searchable: false,
-        sortable: true,
-        filterable: true,
-        filterOptions: ["team_member", "manager", "admin"],
-      },
-      {
-        label: "status",
-        searchable: false,
-        sortable: true,
-        filterable: true,
-        filterOptions: ["active", "inactive"],
-      },
-      {
-        label: "joined",
+        label: "Joined",
         searchable: false,
         sortable: true,
         filterable: false,

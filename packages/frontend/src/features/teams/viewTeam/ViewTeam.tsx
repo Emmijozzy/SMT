@@ -25,9 +25,7 @@ function ViewTeam() {
 
   const getTeam = useSelector((state: RootState) => teamSelectors.selectById(state, teamId || "")) as ITeam;
 
-  const allTeamsName = useSelector((state: RootState) => teamSelectors.selectAll(state))?.map((team) => team.name);
-
-  const teamUserColumns = userColumnFactory([...allTeamsName]);
+  const teamUserColumns = userColumnFactory();
 
   const TeamTaskTable = MasterTable<ITask & Record<string, unknown>>();
   const TeamUserTable = MasterTable<IUser & Record<string, unknown>>();

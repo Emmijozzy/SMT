@@ -3,12 +3,13 @@ import { useDispatch } from "react-redux";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { store } from "../../app/store";
 import { clearStatus } from "../../shared/Slice/statusSlice";
+import log from "../../shared/utils/log";
 import { addAlert, clearAlert } from "../alerts/AlertSlice";
 import { tasksApiSlice } from "../tasks/tasksApiSlice";
 import { teamApiSlice } from "../teams/teamApiSlice";
 import useRole from "../users/hooks/useRole";
 import { userApiSlice } from "../users/userApiSlice";
-import log from "../../shared/utils/log";
+import { subtaskApiSlice } from "../subtasks/subtaskApiSlice";
 
 function RequireAdminRoute() {
   const isAdmin = useRole() === "admin";
@@ -24,8 +25,8 @@ function RequireAdminRoute() {
     store.dispatch(userApiSlice.util.prefetch("getUsers", undefined, { force: true }));
     store.dispatch(tasksApiSlice.util.prefetch("getTasks", undefined, { force: true }));
     store.dispatch(teamApiSlice.util.prefetch("getTeams", undefined, { force: true }));
+    store.dispatch(subtaskApiSlice.util.prefetch("getSubtasks", undefined, { force: true }));
   }, [dispatch]);
-
   let content;
   if (isAdmin) {
     content = <Outlet />;

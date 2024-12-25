@@ -1,30 +1,36 @@
 import { useMemo } from "react";
 import { GrView } from "react-icons/gr";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { RootState } from "../../../../app/store";
 import Avartar from "../../../../shared/components/Avartar";
 import getRelativeTimeString from "../../../../shared/utils/getRelativeTimeString";
+import { subtasksSelectors } from "../../../subtasks/subtaskSlice";
 import { IUser } from "../../../users/userInterface";
 
 type Props<T> = {
   data: T;
 };
 function TeamUserRow<T extends IUser>({ data }: Props<T>) {
+  const allSubtasks = useSelector((state: RootState) => subtasksSelectors.selectAll(state));
+
   const content = useMemo(() => {
     if (data) {
-      const {
-        fullName,
-        userId,
-        profilePicUrl: profilePic,
-        email,
-        role,
-        team,
-        createdAt: joined,
-        del_flg: delFlg,
-      } = data;
+      const { fullName, userId, profilePicUrl: profilePic, email, createdAt: joined, del_flg: delFlg, subtasks } = data;
+
+      const userSubtasks = allSubtasks.filter((subtask) => subtask.assignee === userId);
 
       const dateJoined: string | Date = new Date(joined);
 
       const relativeTimeString = getRelativeTimeString(dateJoined);
+
+      const notStartedSubtasks = Array.isArray(userSubtasks)
+        ? userSubtasks.filter((subtask: { status?: string }) => subtask.status === "open").length
+        : 0;
+      const completedSubtasks = Array.isArray(userSubtasks)
+        ? userSubtasks.filter((subtask: { status?: string }) => subtask.status === "completed").length
+        : 0;
+
       return (
         <tr
           className={`border-b-[1px] border-base-content/40 hover:bg-base-300 capitalize ${delFlg ? "opacity-30" : ""}`}
@@ -51,12 +57,15 @@ function TeamUserRow<T extends IUser>({ data }: Props<T>) {
           <td className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
             <p className="mb-0 text-xs font-semibold leading-tight text-base-content/80 capitalize">{email}</p>{" "}
           </td>
+
           <td className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
-            <p className="mb-0 text-xs leading-tight text-base-content/50 capitalize">{team}</p>
+            <p className="mb-0 text-xs font-semibold text-center leading-tight text-base-content/80 capitalize">
+              {notStartedSubtasks}
+            </p>
           </td>
           <td className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
-            <p className="mb-0 text-xs font-semibold leading-tight text-base-content/80 capitalize">
-              {role.replace("_", " ")}
+            <p className="mb-0 text-xs font-semibold text-center  leading-tight text-base-content/80 capitalize">
+              {completedSubtasks}
             </p>
           </td>
           <td className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
@@ -70,7 +79,7 @@ function TeamUserRow<T extends IUser>({ data }: Props<T>) {
           </td>
           <td aria-label="Action" className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
             <div className="flex justify-center items-center gap-5">
-              <Link to={`../../dash/users/${userId}/view`}>
+              <Link to={`../users/${userId}/view`}>
                 <GrView className="h-6 w-6 text-base-content/70 hover:text-info cursor-pointer" />
               </Link>
             </div>

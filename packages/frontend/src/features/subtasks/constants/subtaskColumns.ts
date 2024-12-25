@@ -16,12 +16,6 @@ export const subtaskColumns: TableHeaderProps = {
       filterable: false,
     },
     {
-      label: "due",
-      searchable: false,
-      sortable: true,
-      filterable: false,
-    },
-    {
       label: "priority",
       searchable: false,
       sortable: true,
@@ -34,6 +28,12 @@ export const subtaskColumns: TableHeaderProps = {
       sortable: true,
       filterable: true,
       filterOptions: ["open", "pending", "complete"],
+    },
+    {
+      label: "due",
+      searchable: false,
+      sortable: true,
+      filterable: false,
     },
     {
       label: "",

@@ -18,6 +18,7 @@ import usersReducer from "../features/users/userSlice";
 import userTableReducer from "../features/users/userTableSlice";
 import layoutReducer from "../layout/layoutSlice";
 import statusReducer from "../shared/Slice/statusSlice";
+import subtaskReducer from "../features/subtasks/subtaskSlice";
 import { apiSlice } from "./api/apislice";
 import localStorageMiddleware from "./api/middleware";
 import persistConfig from "./persistConfig";
@@ -36,6 +37,7 @@ export interface RootState {
   deleteTask: ReturnType<typeof deleteTaskReducer>;
   teams: ReturnType<typeof teamReducer>;
   teamTable: ReturnType<typeof teamTableReducer>;
+  subtasks: ReturnType<typeof subtaskReducer>;
 }
 
 const rootReducer = (state: RootState | undefined, action: PayloadAction) => {
@@ -58,6 +60,7 @@ const rootReducer = (state: RootState | undefined, action: PayloadAction) => {
     tasks: tasksReducer,
     teams: teamReducer,
     teamTable: teamTableReducer,
+    subtasks: subtaskReducer,
   })(state, action);
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer as Reducer<RootState, PayloadAction>);
