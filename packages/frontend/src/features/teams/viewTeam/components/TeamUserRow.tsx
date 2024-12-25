@@ -95,7 +95,7 @@ function TeamUserRow<T extends IUser>({ data }: Props<T>) {
         </td>
       </tr>
     );
-  }, [data]);
+  }, [allSubtasks, data]);
 
   return content;
 }
