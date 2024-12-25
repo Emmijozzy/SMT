@@ -27,17 +27,24 @@ function UserForm({
   return (
     <form onSubmit={handleSubmit}>
       <div role="tablist" className="tabs tabs-boxed">
-        <input type="radio" name="my_tabs_2" role="tab" className="tab h-10 " aria-label="Details" defaultChecked />
+        <input
+          type="radio"
+          name="my_tabs_2"
+          role="tab"
+          className="w-24 tab h-10 font-bold"
+          aria-label="Details"
+          defaultChecked
+        />
         <div role="tabpanel" className="tab-content bg-base-200 px-2 pb-4">
           <UserDetailsForm handleChange={handleChange} errors={errors} values={values} />
         </div>
 
-        <input type="radio" name="my_tabs_2" role="tab" className="tab h-10" aria-label="Permissions" />
+        <input type="radio" name="my_tabs_2" role="tab" className="w-32 tab h-10 font-bold" aria-label="Permissions" />
         <div role="tabpanel" className="tab-content bg-base-200 px-2 pb-4">
           <UserPermissionForm handleBlur={handleBlur} handleChange={handleChange} values={values} />
         </div>
 
-        <input type="radio" name="my_tabs_2" role="tab" className="tab h-10" aria-label="Password" />
+        <input type="radio" name="my_tabs_2" role="tab" className="w-28 tab h-10 font-bold" aria-label="Password" />
         <div role="tabpanel" className="tab-content bg-base-200 px-2 pb-4">
           <Password handleChange={handleChange} errors={errors} values={values} />
         </div>

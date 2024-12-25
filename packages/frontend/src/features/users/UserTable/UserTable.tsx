@@ -89,7 +89,7 @@ function UserTable() {
         <div className="w-full" style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
           <div className="relative flex flex-col min-w-0 break-words bg-base-200 shadow-xl shadow-base-300 rounded-2xl">
             <div className="flex-auto px-0 pt-0 pb-2">
-              <div className="p-0 overflow-x-auto ps">
+              <div className="p-0 overflow-x-auto ps scrollbar-thin scrollbar-thumb-base-content/30 scrollbar-track-base-300 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
                 <RowPerPage handleRowPerPage={handleRowPerPage} />
                 <table className="items-center min-h-96 w-full mb-0 align-top border-gray-200 text-base-content">
                   <TableHead />

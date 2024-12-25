@@ -24,7 +24,7 @@ function Layout() {
   }, [theme]);
 
   return (
-    <div className="relative overflow-hidden left-0 top-0 flex min-h-screen min-w-[100vw] bg-base-200">
+    <div className="relative overflow-hidden left-0 top-0 flex min-h-screen min-w-[100vw] bg-base-200 scrollbar">
       <Alerts />
       <Loader isLoading={isLoading} transparent />
       <Sidebar />

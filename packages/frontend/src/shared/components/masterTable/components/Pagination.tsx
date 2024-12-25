@@ -45,7 +45,7 @@ function Pagination({
   // console.log(pageNumbers, currentPage);
 
   return (
-    <div className="w-full flex items-center justify-between my-2 px-2 box-border gap-4 flex-grow whitespace-nowrap overflow-auto">
+    <div className="w-full flex items-center justify-between my-2 px-2 box-border gap-4 flex-grow whitespace-nowrap overflow-auto scrollbar-thin scrollbar-thumb-base-content/30 scrollbar-track-base-300 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
       <div className="flex items-center space-x-2">
         <label htmlFor="rowsPerPage" className="text-sm font-medium text-base-content/80">
           Rows per page:

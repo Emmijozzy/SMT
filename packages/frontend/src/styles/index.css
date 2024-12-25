@@ -1,6 +1,27 @@
 @import url("https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600&display=swap");
 
 @tailwind base;
+html {
+	scroll-behavior: smooth;
+	word-break: break-word;
+}
+
+::selection {
+  color: oklch(var(--pc));
+  background: oklch(var(--p));
+}
+
+::-webkit-scrollbar-track {
+  background: oklch(var(--p)) !important;
+  border-radius: 50px !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: oklch(var(--s)) !important;
+  border-radius: 50px !important;
+}
+
+
 @tailwind components;
 @tailwind utilities;
 
@@ -14,9 +35,23 @@
   min-height: 50vh;
 }
 
+* {
+	/* scrollbar-color: oklch(var(--s)) oklch(var(--p)) !important; */
+  scrollbar-width: thin;
+  scrollbar-arrow-color: #ba4969 !important;
+  scrollbar-face-color: #ba4969 !important;
+  scrollbar-track-color: #ba4969 !important;
+  scrollbar-arrow-color: #ba4969 !important;
+  scrollbar-base-color: #ba4969 !important;
+  scrollbar-3dlight-color: #ba4969 !important;
+  scrollbar-highlight-color: #f3ec78 !important;
+  scrollbar-darkshadow-color: #ba4969 !important;
+  scrollbar-shadow-color: #7928ca !important;
+}
+
 @layer base {
   body {
-    @apply font-sans text-base;
+    @apply font-sans text-base scrollbar;
   }
 
   .font-outline-2 {
@@ -192,3 +227,5 @@ hr {
 .animate-bounce {
   animation: bounce 1s infinite;
 }
+
+

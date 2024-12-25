@@ -31,7 +31,7 @@ function Select({
     <div
       className={`relative w-full flex text-lg border-b-2 border-base-content items-center justify-between  ${className || ""}`}
     >
-      <span className={`font-bold capitalize ${labelClass}`}>{label}:</span>
+      <span className={`font-bold capitalize whitespace-nowrap ${labelClass}`}>{label}:</span>
       <div className={`w-full bg-base-100 rounded-t-md ${disabled ? "bg-base-200 cursor-not-allowed" : ""}`}>
         <select
           name={name}

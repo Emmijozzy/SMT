@@ -97,7 +97,7 @@ function MasterTable<T extends Record<string, unknown>>() {
               </div>
             </div>
 
-            <div className="block w-full overflow-x-auto">
+            <div className="block w-full overflow-x-auto  scrollbar-thin scrollbar-thumb-base-content/30 scrollbar-track-base-300 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
               <div className="relative w-full min-h-80 flex flex-col justify-between">
                 <table className="items-center w-full bg-transparent border-collapse">
                   <TableHeader
@@ -114,14 +114,14 @@ function MasterTable<T extends Record<string, unknown>>() {
                   </tbody>
                 </table>
               </div>
-              <Pagination
-                totalRows={processedData.length}
-                rowsPerPage={rowsPerPage}
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-                setRowsPerPage={setRowsPerPage}
-              />
             </div>
+            <Pagination
+              totalRows={processedData.length}
+              rowsPerPage={rowsPerPage}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              setRowsPerPage={setRowsPerPage}
+            />
           </div>
         </div>
       </div>

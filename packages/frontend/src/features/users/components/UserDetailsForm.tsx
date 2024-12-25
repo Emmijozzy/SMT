@@ -38,7 +38,7 @@ function UserDetailsForm({ handleChange, values, errors, disabled }: Props) {
   ) => (
     <Select
       className="lg:w-[49%] border-b-[1px] border-base-content/40 h-13 text-sm gap-9 "
-      labelClass="mr-2 lg:mr-8"
+      labelClass="w-14 md:w-[15%]"
       label={label}
       placeholder={`Select ${label}`}
       options={options}
