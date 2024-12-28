@@ -2,7 +2,7 @@
 import React from "react";
 
 type Props = {
-  status: "not started" | "in progress" | "completed" | "closed";
+  status: "not started" | "open" | "in progress" | "completed" | "closed";
 };
 
 function StatusIndicator({ status }: Props) {
@@ -10,6 +10,16 @@ function StatusIndicator({ status }: Props) {
 
   switch (status.toLowerCase()) {
     case "not started":
+      svgContent = (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="10" fill="#FFA500" />
+          <text x="12" y="16" textAnchor="middle" fill="#FFFFFF" fontSize="10" fontWeight="bold">
+            ?
+          </text>
+        </svg>
+      );
+      break;
+    case "open":
       svgContent = (
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="12" cy="12" r="10" fill="#FFA500" />

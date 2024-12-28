@@ -7,7 +7,7 @@ const addSubtaskSchema = Yup.object().shape({
     .trim()
     .required("Title is required")
     .min(5, "Title must be at least 5 charater")
-    .max(20, "Title must be at most 20 charater"),
+    .max(50, "Title must be at most 20 charater"),
   description: Yup.string()
     .trim()
     .required("Description is required")

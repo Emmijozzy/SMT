@@ -2,6 +2,7 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../app/store";
+import ResData from "../../../../shared/interface/ResData";
 import log from "../../../../shared/utils/log";
 import { toSentenceCase } from "../../../../shared/utils/toSentenceCase";
 import { addAlert } from "../../../alerts/AlertSlice";
@@ -28,7 +29,7 @@ const defaultValue = {
 const useEditTaskDetails = (taskId: string) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [updateTask, { isSuccess }] = useUpdateTaskMutation();
+  const [updateTask, { isSuccess, isError }] = useUpdateTaskMutation();
 
   const dispatch = useDispatch();
 
@@ -58,6 +59,7 @@ const useEditTaskDetails = (taskId: string) => {
       dispatch(setLoader(true));
       try {
         const payload: ITask = {
+          ...getTask,
           taskId: values.taskId,
           title: values.title,
           description: toSentenceCase(values.description),
@@ -71,8 +73,14 @@ const useEditTaskDetails = (taskId: string) => {
           // createdDate: values.createdDate,
         };
 
-        await updateTask({ ...payload });
-        dispatch(addAlert({ message: "Task updated successfully!", type: "success" }));
+        const resData = (await updateTask({ ...payload })) as ResData;
+        // console.log(resData);
+        if (Object.keys(resData)[0] === "error" || isError) {
+          const resError = resData.error as ResData;
+          throw new Error(resError.data.message);
+        }
+        const resMessage = resData.data.message;
+        dispatch(addAlert({ message: resMessage, type: "success" }));
         window.history.back();
       } catch (e) {
         const error = e as Error;

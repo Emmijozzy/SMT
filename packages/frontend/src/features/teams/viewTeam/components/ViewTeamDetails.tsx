@@ -26,7 +26,7 @@ function ViewTeamDetails({ team, handleEditTeamDetails }: Props) {
   return (
     <div className="container transition-all">
       <div className="w-full flex flex-col bg-base-200 rounded-lg py-2 overflow-hidden">
-        <div className="w-full flex justify-between px-4">
+        <div className="w-full flex justify-between px-2">
           <h6 className="h6">Details</h6>
           <nav className="flex items-center gap-2">
             <button

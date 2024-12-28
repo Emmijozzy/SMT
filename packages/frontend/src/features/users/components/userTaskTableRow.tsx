@@ -47,7 +47,7 @@ function UserTaskTableRow<T extends ISubtask>({ data }: Props<T>) {
           </td>
           <td aria-label="Action" className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
             <div className="flex justify-center items-center gap-5">
-              <Link to={`../users/${subtaskId}/view`}>
+              <Link to={`../../dash/subtasks/${subtaskId}`}>
                 <GrView className="h-6 w-6 text-base-content/70 hover:text-info cursor-pointer" />
               </Link>
             </div>

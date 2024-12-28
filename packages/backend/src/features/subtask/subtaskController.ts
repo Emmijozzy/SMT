@@ -7,11 +7,11 @@ import validationMiddleware from "../../middleware/validationMiddleware";
 import { BadRequestError, InternalError } from "../../utils/ApiError";
 import asyncHandler from "../../utils/asyncHandler";
 import filtersToMongooseQuery from "../../utils/filtersToMongooseQuery";
+import getPaginationOptions from "../../utils/getPaginationOptions";
 import successResponse from "../../utils/successResponse";
 import SubtaskOrchestrator from "./subtaskOrchestrator";
 import subtaskSchema from "./subtaskSchema";
 import SubtaskService from "./subtaskService";
-import getPaginationOptions from "../../utils/getPaginationOptions";
 
 export default class SubtaskController implements IController {
   public path = "/subtask";
@@ -58,7 +58,11 @@ export default class SubtaskController implements IController {
       authMiddleware(ENUM_USER_ROLES.ADMIN, ENUM_USER_ROLES.MANAGER),
       this.updateSubtask
     );
-    this.router.delete("/:subtaskId", authMiddleware(ENUM_USER_ROLES.MANAGER), this.deleteSubtask);
+    this.router.delete(
+      "/:subtaskId",
+      authMiddleware(ENUM_USER_ROLES.ADMIN, ENUM_USER_ROLES.MANAGER),
+      this.deleteSubtask
+    );
   }
 
   private createSubtask = asyncHandler(async (req: ExtendedRequest, res: Response) => {

@@ -42,7 +42,7 @@ const updateSchema = Yup.object().shape({
   status: Yup.string()
     .trim()
     .oneOf(
-      ["not started", "completed", "closed"],
+      ["open", "pending", "completed"],
       "Invalid Task Status, status cam either be: Not Started, In Progress, Completed or Closed"
     )
     .required("Status is required"),

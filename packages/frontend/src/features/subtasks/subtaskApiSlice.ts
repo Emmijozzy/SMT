@@ -72,19 +72,27 @@ export const subtaskApiSlice = apiSlice.injectEndpoints({
       ],
     }),
     updateSubtask: build.mutation({
-      query: (data) => ({
-        url: "/subtask/create",
+      query: (data: Partial<ISubtask>) => ({
+        url: "/subtask",
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: ["Subtask"],
+      invalidatesTags: (_result, _error, arg: ISubtask) => [
+        { type: "Subtask", id: arg?.subtaskId },
+        { type: "Subtasks" as const, id: "LIST" as const },
+        { type: "Tasks" as const, id: "LIST" as const },
+      ],
     }),
-    deleteSubtask: build.mutation({
-      query: (id) => ({
-        url: `/subtask/subtask/${id}`,
+    deleteSubtask: build.mutation<unknown, string>({
+      query: (id: string) => ({
+        url: `/subtask/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Subtask"],
+      invalidatesTags: (_result, _error, arg) => [
+        { type: "Subtask", id: arg },
+        { type: "Subtasks" as const, id: "LIST" as const },
+        { type: "Tasks" as const, id: "LIST" as const },
+      ],
     }),
   }),
 });

@@ -87,6 +87,104 @@ html {
   } */
 }
 
+.ql-editor {
+  @apply min-h-[100px] text-base-content text-base border border-base-300  bg-base-200 rounded !important;
+}
+
+.custom-quill-container .ql-toolbar {
+  @apply rounded-t bg-base-300 border border-base-200 !important;
+}
+
+.custom-quill-container .ql-container {
+  @apply border border-base-300  bg-base-100 rounded-b !important;
+}
+
+/* Container for the comment */
+.comment {
+  @apply font-sans text-sm text-base-content leading-relaxed p-4 bg-base-200 rounded-lg mb-4;
+}
+
+/* Headings */
+.comment h1,
+.comment h2,
+.comment h3,
+.comment h4,
+.comment h5,
+.comment h6 {
+  @apply font-bold text-base-content  my-4;
+}
+
+.comment h1 { @apply text-2xl; }
+.comment h2 { @apply text-xl; }
+.comment h3 { @apply text-lg; }
+.comment h4 { @apply text-base; }
+.comment h5 { @apply text-sm; }
+.comment h6 { @apply text-xs; }
+
+/* Paragraphs */
+.comment p {
+  @apply mb-3;
+}
+
+/* Bold text */
+.comment strong {
+  @apply font-bold text-base-content ;
+}
+
+/* Italic text */
+.comment em {
+  @apply italic;
+}
+
+/* Links */
+.comment a {
+  @apply text-blue-600 underline;
+}
+
+.comment a:hover {
+  @apply text-blue-800;
+}
+
+/* Unordered lists */
+.comment ul {
+  @apply list-disc mb-3 ml-5;
+}
+
+/* Ordered lists (numbered lists) */
+.comment ol {
+  @apply list-decimal mb-3 ml-5;
+}
+
+/* List items */
+.comment li {
+  @apply mb-2;
+}
+
+/* Blockquotes */
+.comment blockquote {
+  @apply mb-3 py-2 px-4 bg-base-100 border-l-4 border-base-300 text-base-content/70 italic;
+}
+
+/* Code blocks */
+.comment pre {
+  @apply mb-3 p-2 bg-base-100 border border-base-200 rounded-md font-mono text-sm text-base-content/80 overflow-x-auto;
+}
+
+/* Inline code */
+.comment code {
+  @apply font-mono text-sm bg-base-100 px-1 rounded-md text-base-content/80;
+}
+
+/* Images */
+.comment img {
+  @apply max-w-full h-auto my-3 rounded-md;
+}
+
+/* Timestamp */
+.comment .timestamp {
+  @apply text-xs text-base-content/50 mt-3;
+}
+
 .gradient-text_orange {
   background-image: linear-gradient(to top, #f3ec78, #af4261);
   background-clip: text;
@@ -227,5 +325,8 @@ hr {
 .animate-bounce {
   animation: bounce 1s infinite;
 }
+
+
+
 
 

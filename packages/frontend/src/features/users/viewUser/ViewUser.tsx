@@ -8,13 +8,13 @@ import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { RootState } from "../../../app/store";
-import DetailsContainer from "../../../shared/components/DetailsContainer";
 import MasterTable, { TableHeaderProps } from "../../../shared/components/masterTable/MasterTable";
 import { useGetSubtasksQuery } from "../../subtasks/subtaskApiSlice";
 import { ISubtask } from "../../subtasks/subtaskInterface";
 import UserTaskTableRow from "../components/userTaskTableRow";
 import useRole from "../hooks/useRole";
 import { usersSelectors } from "../userSlice";
+import DetailsContainer from "../../../shared/components/DetailsContainer";
 
 function ViewUser() {
   const { userId = "" } = useParams<{ userId: string }>();
@@ -89,7 +89,7 @@ function ViewUser() {
       <>
         <div className="container transition-all">
           <div className="w-full flex flex-col bg-base-200 rounded-lg py-2 overflow-hidden">
-            <div className="w-full flex justify-between px-4">
+            <div className="w-full flex justify-between px-2">
               <h6 className="h6">User Details</h6>
               <nav className="flex items-center gap-2">
                 {userRole === "admin" && !user.del_flg && (
