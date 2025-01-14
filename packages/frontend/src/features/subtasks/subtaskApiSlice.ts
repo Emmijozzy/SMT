@@ -45,7 +45,7 @@ export const subtaskApiSlice = apiSlice.injectEndpoints({
           dispatch(setSubtasks(data));
         } catch (e: unknown) {
           const error = e as Error;
-          log("error", "TeamApi getTeam Error", error.message, error.stack as string);
+          log("error", "Subtask Api Error", error.message, error.stack as string);
         }
       },
       providesTags: (result) =>
@@ -69,6 +69,7 @@ export const subtaskApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: [
         { type: "Subtasks" as const, id: "LIST" as const },
         { type: "Tasks" as const, id: "LIST" as const },
+        { type: "Teams" as const, id: "LIST" as const },
       ],
     }),
     updateSubtask: build.mutation({

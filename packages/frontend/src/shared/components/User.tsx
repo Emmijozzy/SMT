@@ -18,7 +18,7 @@ function User({ userId, index }: Props) {
       <Avartar
         name={fullName || ""}
         imgUrl={img}
-        className={`w-[2.6rem] h-[2.6rem] rounded-full border-2 border-blueGray-50 shadow ${index === 0 ? "" : "-ml-4"}`}
+        className={`w-[2rem] h-[2rem] rounded-full border-2 border-blueGray-50 shadow ${index === 0 ? "" : "-ml-4"}`}
       />
     );
   }

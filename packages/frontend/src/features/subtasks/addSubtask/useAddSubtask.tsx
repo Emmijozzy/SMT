@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import ResData from "../../../shared/interface/ResData";
+import ResData from "../../../shared/interface/resData";
 import log from "../../../shared/utils/log";
 import { addAlert } from "../../alerts/AlertSlice";
 import { setLoader } from "../../loading/loaderSlice";
@@ -37,10 +37,10 @@ function useAddSubtask() {
           ...values,
           dueDate: values.dueDate,
         };
-        const resData = (await addSubtask(payload)) as ResData;
+        const resData = (await addSubtask(payload)) as ResData<ISubtask>;
         if (Object.keys(resData)[0] === "error" || isError) {
-          const resError = resData.error as ResData;
-          throw new Error(resError.data.message);
+          const resError = resData.error;
+          throw new Error(resError?.data?.message);
         }
         const resMessage = resData.data.message;
         dispatch(addAlert({ message: resMessage, type: "success" }));

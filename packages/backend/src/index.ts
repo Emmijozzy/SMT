@@ -3,6 +3,7 @@ import App from "./app";
 import { port } from "./config";
 import AuthController from "./features/auth/authController";
 import BackRunController from "./features/backRun/backRunController";
+import CommentController from "./features/comment/commentController";
 import SubtaskController from "./features/subtask/subtaskController";
 import TaskController from "./features/task/controllers/taskController";
 import TasksAdminController from "./features/task/controllers/tasksAdminController";
@@ -19,7 +20,8 @@ const app = new App(
     new TasksAdminController(),
     new SubtaskController(),
     new TeamController(),
-    new BackRunController()
+    new BackRunController(),
+    new CommentController()
   ],
   port
 );

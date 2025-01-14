@@ -4,7 +4,7 @@ export interface ISubtask {
   title: string;
   team: string;
   description?: string;
-  status?: "open" | "pending" | "complete";
+  status?: "open" | "not started" | "completed" | "closed" | "in progress";
   priority: "low" | "medium" | "high";
   createdBy: string;
   lastModifiedBy: string;

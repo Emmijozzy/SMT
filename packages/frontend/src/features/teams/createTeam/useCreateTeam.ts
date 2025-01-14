@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import ResData from "../../../shared/interface/ResData";
+import ResData from "../../../shared/interface/resData";
 import log from "../../../shared/utils/log";
 import { toSentenceCase } from "../../../shared/utils/toSentenceCase";
 import { addAlert } from "../../alerts/AlertSlice";

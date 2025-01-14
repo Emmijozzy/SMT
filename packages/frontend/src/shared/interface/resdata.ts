@@ -1,10 +1,12 @@
-import { IUser } from "../../features/users/userInterface";
-
-interface ResData {
-  error?: ResData;
+interface ResData<T> {
+  error?: {
+    data: {
+      message: string;
+    };
+  };
   data: {
     message: string;
-    data: IUser;
+    data: T | T[];
   };
 }
 

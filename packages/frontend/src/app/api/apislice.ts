@@ -3,11 +3,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { BaseQueryApi, FetchArgs, createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { RootState } from "../store";
-import { setCredentials } from "../../features/auth/authSlice";
-import log from "../../shared/utils/log";
-import { changeStatus } from "../../shared/Slice/statusSlice";
 import { addAlert } from "../../features/alerts/AlertSlice";
+import { setCredentials } from "../../features/auth/authSlice";
+import { changeStatus } from "../../shared/Slice/statusSlice";
+import log from "../../shared/utils/log";
+import type { RootState } from "../store";
 
 interface SuccessData {
   accessToken: string;
@@ -39,8 +39,6 @@ const baseQuery = fetchBaseQuery({
 
 const baseQueryWithReactAuth = async (args: string | FetchArgs, api: BaseQueryApi, extraOptions: object) => {
   let result = await baseQuery(args, api, extraOptions);
-
-  console.log(result)
 
   if (result?.error?.status) {
     if (result?.error?.status === 403) {
@@ -89,6 +87,6 @@ const baseQueryWithReactAuth = async (args: string | FetchArgs, api: BaseQueryAp
 
 export const apiSlice = createApi({
   baseQuery: baseQueryWithReactAuth,
-  tagTypes: ["User", "Users", "Task", "Tasks", "Team", "Teams", "Subtasks", "Subtask"],
+  tagTypes: ["User", "Users", "Task", "Tasks", "Team", "Teams", "Subtasks", "Subtask", "Comment", "Comments"],
   endpoints: (_builder) => ({}),
 });

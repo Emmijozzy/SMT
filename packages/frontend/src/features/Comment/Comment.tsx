@@ -1,15 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { memo } from "react";
-import { CommentType } from "./commentInterface";
-import SingleComment from "./component/SingleCommentProps";
+import { CommentData, CommentType } from "./commentInterface";
+import SingleComment from "./component/SingleComment";
 
 interface CommentProps {
   comments: CommentType[];
-  onReply: (commentId: string) => void;
-  onEdit: (commentId: string) => void;
-  onDelete: (commentId: string) => void;
+  onEdit: (commentData: CommentData) => Promise<void>;
+  isEditing: boolean;
+  onDelete: (commentId: string) => Promise<void>;
+  isDeleting: boolean;
 }
 
-const Comment = memo(({ comments, onReply, onEdit, onDelete }: CommentProps) => {
+const Comment = memo(({ comments, onEdit, isEditing, onDelete, isDeleting }: CommentProps) => {
   if (!comments?.length) {
     return (
       <div className="mt-4 bg-base-100 rounded-lg p-4">
@@ -28,9 +30,10 @@ const Comment = memo(({ comments, onReply, onEdit, onDelete }: CommentProps) => 
         <SingleComment
           key={comment.commentId}
           comment={comment}
-          onReply={onReply}
           onEdit={onEdit}
+          isEditing={isEditing}
           onDelete={onDelete}
+          isDeleting={isDeleting}
         />
       ))}
     </div>

@@ -144,11 +144,11 @@ export default class SubtaskService {
     }
   }
 
-  async addCommentId(commentId: string, subtaskId: string): Promise<ISubtask | null> {
+  async addCommentId(subtaskId: string, commentId: string): Promise<ISubtask | null> {
     try {
       const subtask = await this.subtaskRepository.getSubtaskById(subtaskId);
       if (!subtask) throw new InternalError("Failed to fetch subtask");
-      const comment = await this.subtaskRepository.addCommentId(commentId, subtaskId);
+      const comment = await this.subtaskRepository.addCommentId(subtaskId, commentId);
       if (!comment) throw new InternalError("Failed to add comment");
       return comment;
     } catch (err: unknown) {
@@ -157,11 +157,11 @@ export default class SubtaskService {
       throw new InternalError("Failed to add comment ERR:" + error.message, "", __filename);
     }
   }
-  async removeCommentId(commentId: string, subtaskId: string): Promise<ISubtask | null> {
+  async removeCommentId(subtaskId: string, commentId: string): Promise<ISubtask | null> {
     try {
       const subtask = await this.subtaskRepository.getSubtaskById(subtaskId);
       if (!subtask) throw new InternalError("Failed to fetch subtask");
-      const comment = await this.subtaskRepository.removeCommentId(commentId, subtaskId);
+      const comment = await this.subtaskRepository.removeCommentId(subtaskId, commentId);
       if (!comment) throw new InternalError("Failed to remove comment");
       return comment;
     } catch (err: unknown) {

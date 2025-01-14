@@ -14,9 +14,7 @@ function DetailRow({ label, value, className }: Props) {
       <td className="font-bold capitalize">
         <strong>{label}:</strong>
       </td>
-      <td>
-        <p className="">{value}</p>
-      </td>
+      <td>{value}</td>
     </tr>
   );
 }

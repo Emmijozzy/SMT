@@ -24,6 +24,8 @@ function TeamTaskRow<T extends ITask>({ data }: Props<T>) {
     if (data) {
       const { title, taskId, priority, status, assignedTo, dueDate, del_flg: delFlg } = data;
 
+      console.log(data);
+
       const assignees: string[] = isStringArray(assignedTo) ? assignedTo : [];
       const filteredUsers = users?.filter((user) => assignees.includes(user.userId));
 

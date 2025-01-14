@@ -6,7 +6,7 @@ import { PURGE } from "redux-persist";
 import { resetStore } from "../../app/action";
 import { addAlert } from "../../features/alerts/AlertSlice";
 import { useLazyLogoutQuery } from "../../features/auth/authApiSlice";
-import ResData from "../interface/ResData";
+import ResData from "../interface/resData";
 import log from "../utils/log";
 
 const useLogout = () => {

@@ -1,7 +1,7 @@
 import { TaskService } from "../../features/task/services/taskService";
 import { default as teamService, default as TeamService } from "../../features/team/teamService";
 import { UserService } from "../../features/users/services/userService";
-import { BadRequestError } from "../../utils/ApiError";
+import { BadRequestError, InternalError } from "../../utils/ApiError";
 import { ISubtask } from "./subtask";
 import SubtaskService from "./subtaskService";
 
@@ -38,7 +38,7 @@ export default class SubtaskOrchestrator {
     } catch (err: unknown) {
       const error = err as Error;
       console.error("Error creating subtask", error);
-      throw error;
+      throw new InternalError("Failed to create subtasks.  ERROR: " + error.message + " ", error.stack, __filename);
     }
   }
 
@@ -80,7 +80,7 @@ export default class SubtaskOrchestrator {
     } catch (err: unknown) {
       const error = err as Error;
       console.error("Error updating subtask");
-      throw error;
+      throw new InternalError("Failed to update subtasks.  ERROR: " + error.message + " ", error.stack, __filename);
     }
   }
 
@@ -97,7 +97,7 @@ export default class SubtaskOrchestrator {
     } catch (err: unknown) {
       const error = err as Error;
       console.error("Error deleting subtask", error);
-      throw error;
+      throw new InternalError("Failed to delete subtasks.  ERROR: " + error.message + " ", error.stack, __filename);
     }
   }
 }

@@ -15,7 +15,7 @@ export default class SubtaskRepository {
       if (error.name === "Validation") {
         throw new BadRequestError("Invalid subtask data provided");
       } else {
-        throw new InternalError("Failed to create team.  ERROR: " + error.message + " ", error.stack, __filename);
+        throw new InternalError("Failed to create subtask.  ERROR: " + error.message + " ", error.stack, __filename);
       }
     }
   }
@@ -43,8 +43,9 @@ export default class SubtaskRepository {
   }
   async getSubtaskById(subtaskId: string): Promise<ISubtask> {
     try {
+      console.log(subtaskId);
       const subtask = await Subtask.findOne({ subtaskId }).lean().exec();
-      if (!subtask) throw new Error(`Subtask ${subtaskId} not found`);
+      if (!subtask) throw new InternalError(`Subtask ${subtaskId} not found`);
       // console.log("Subtask found:", subtask);
       return subtask;
     } catch (err: unknown) {
@@ -141,21 +142,27 @@ export default class SubtaskRepository {
 
   async addCollaborator(subtaskId: string, collaboratorId: string): Promise<ISubtask | null> {
     try {
-      const subtask = await Subtask.findOne({ subtaskId });
-      if (!subtask) {
-        throw new Error(`Subtask ${subtaskId} not found`);
+      const updateResult = await Subtask.updateOne(
+        { subtaskId, collaborators: { $ne: collaboratorId } },
+        { $push: { collaborators: collaboratorId } }
+      );
+
+      if (updateResult.modifiedCount === 0) {
+        const subtask = await Subtask.findOne({ subtaskId });
+        if (!subtask) {
+          throw new Error(`Subtask ${subtaskId} not found`);
+        }
+        if (subtask.collaborators.includes(collaboratorId)) {
+          throw new Error(`Collaborator ${collaboratorId} already exists in subtask ${subtaskId}`);
+        }
       }
-      if (subtask.collaborators.includes(collaboratorId)) {
-        throw new Error(`Collaborator ${collaboratorId} already exists in subtask ${subtaskId}`);
-      }
-      subtask.collaborators.push(collaboratorId);
-      await subtask.save();
-      return subtask;
+
+      return await Subtask.findOne({ subtaskId });
     } catch (err: unknown) {
       const error = err as Error;
       console.error("Error adding collaborator to subtask", error);
       throw new InternalError(
-        "Error adding collaborator to subtask.  ERROR: " + error.message + " ",
+        "Error adding collaborator to subtask. ERROR: " + error.message + " ",
         error.stack,
         __filename
       );
@@ -164,22 +171,18 @@ export default class SubtaskRepository {
 
   async removeCollaborator(subtaskId: string, collaboratorId: string): Promise<ISubtask | null> {
     try {
-      const subtask = await Subtask.findOne({ subtaskId });
-      if (!subtask) {
-        throw new Error(`Subtask ${subtaskId} not found`);
-      }
-      const collaboratorIndex = subtask.collaborators.indexOf(collaboratorId);
-      if (collaboratorIndex === -1) {
+      const updateResult = await Subtask.updateOne({ subtaskId }, { $pull: { collaborators: collaboratorId } });
+
+      if (updateResult.modifiedCount === 0) {
         throw new Error(`Collaborator ${collaboratorId} not found in subtask ${subtaskId}`);
       }
-      subtask.collaborators.splice(collaboratorIndex, 1);
-      await subtask.save();
-      return subtask;
+
+      return await Subtask.findOne({ subtaskId });
     } catch (err: unknown) {
       const error = err as Error;
       console.error("Error removing collaborator from subtask", error);
       throw new InternalError(
-        "Error removing collaborator from subtask.  ERROR: " + error.message + " ",
+        "Error removing collaborator from subtask. ERROR: " + error.message + " ",
         error.stack,
         __filename
       );
@@ -188,21 +191,27 @@ export default class SubtaskRepository {
 
   async addCommentId(subtaskId: string, commentId: string): Promise<ISubtask | null> {
     try {
-      const subtask = await Subtask.findOne({ subtaskId });
-      if (!subtask) {
-        throw new Error(`Subtask ${subtaskId} not found`);
+      const updateResult = await Subtask.updateOne(
+        { subtaskId, comments: { $ne: commentId } },
+        { $push: { comments: commentId } }
+      );
+
+      if (updateResult.modifiedCount === 0) {
+        const subtask = await Subtask.findOne({ subtaskId });
+        if (!subtask) {
+          throw new Error(`Subtask ${subtaskId} not found`);
+        }
+        if (subtask.comments.includes(commentId)) {
+          throw new Error(`Comment ${commentId} already exists in subtask ${subtaskId}`);
+        }
       }
-      if (subtask.comments.includes(commentId)) {
-        throw new Error(`Comment ${commentId} already exists in subtask ${subtaskId}`);
-      }
-      subtask.comments.push(commentId);
-      await subtask.save();
-      return subtask;
+
+      return await Subtask.findOne({ subtaskId });
     } catch (err: unknown) {
       const error = err as Error;
       console.error("Error adding comment to subtask", error);
       throw new InternalError(
-        "Error adding comment to subtask.  ERROR: " + error.message + " ",
+        "Error adding comment to subtask. ERROR: " + error.message + " ",
         error.stack,
         __filename
       );
@@ -211,22 +220,18 @@ export default class SubtaskRepository {
 
   async removeCommentId(subtaskId: string, commentId: string): Promise<ISubtask | null> {
     try {
-      const subtask = await Subtask.findOne({ subtaskId });
-      if (!subtask) {
-        throw new Error(`Subtask ${subtaskId} not found`);
-      }
-      const commentIndex = subtask.comments.indexOf(commentId);
-      if (commentIndex === -1) {
+      const updateResult = await Subtask.updateOne({ subtaskId }, { $pull: { comments: commentId } });
+
+      if (updateResult.modifiedCount === 0) {
         throw new Error(`Comment ${commentId} not found in subtask ${subtaskId}`);
       }
-      subtask.comments.splice(commentIndex, 1);
-      await subtask.save();
-      return subtask;
+
+      return await Subtask.findOne({ subtaskId });
     } catch (err: unknown) {
       const error = err as Error;
       console.error("Error removing comment from subtask", error);
       throw new InternalError(
-        "Error removing comment from subtask.  ERROR: " + error.message + " ",
+        "Error removing comment from subtask. ERROR: " + error.message + " ",
         error.stack,
         __filename
       );

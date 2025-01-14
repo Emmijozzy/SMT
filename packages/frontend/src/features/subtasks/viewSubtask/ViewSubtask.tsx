@@ -1,95 +1,72 @@
-import { useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
+import { Loader } from "../../../routes/LazyWrapper2";
 import QuillEditor from "../../../shared/components/Editor/QuilEditor";
 import Comment from "../../Comment/Comment";
+import { CommentData } from "../../Comment/commentInterface";
+import { useGetCommentBySubtaskIdQuery } from "../../Comment/commentsApiSlice";
+import useAddComment from "../../Comment/hooks/useAddComment";
+import useDeleteComment from "../../Comment/hooks/useDeleteComment";
+import useEditComment from "../../Comment/hooks/useEditComment";
+import { addAlert } from "../../alerts/AlertSlice";
 import ViewSubtaskDetails from "../ViewSubtaskDetails";
 import DeleteSubtaskModal from "../deleteSubtask/DeleteSubtaskModal";
 import EditSubtaskDetails from "../editSubtaskDetails/EditSubtaskDetails";
 
-const dummyComments = [
-  {
-    commentId: "c1",
-    userId: "AFOP00027",
-    taskId: "t1",
-    team: "Engineering",
-    comment: `
-      <div class="comment">
-        <h2>Hey everyone!</h2>
-        <p>I just wanted to share my thoughts on this topic. itn jkrhvnkfjvhefkjhsbkjhefbvfhksvj bkj,hbvfkjs,vhbnvkjh,vnbfdksvj,dhbfnv fksdjvhbdnkvj,hbvkjh,bvsdfkvjh,bvkjbhkfdj,bvndbsvjhvbd <strong>I found it really insightful</strong>, especially the part about <em>time management</em>.</p>
-        <ul>
-          <li>Using a planner to organize my tasks.</li>
-          <li>Setting specific goals for each day.</li>
-          <li>Taking short breaks to avoid burnout.</li>
-        </ul>
-        <blockquote>
-          "Time management is the key to productivity."
-        </blockquote>
-      </div>
-    `,
-    createdAt: new Date("2024-01-15T10:30:00"),
-  },
-  {
-    commentId: "c1",
-    userId: "AFOP00027",
-    taskId: "t1",
-    team: "Engineering",
-    comment: `
-      <div class="comment">
-        <h2>Hey everyone!</h2>
-        <p>I just wanted to share my thoughts on this topic. itn jkrhvnkfjvhefkjhsbkjhefbvfhksvj bkj,hbvfkjs,vhbnvkjh,vnbfdksvj,dhbfnv fksdjvhbdnkvj,hbvkjh,bvsdfkvjh,bvkjbhkfdj,bvndbsvjhvbd <strong>I found it really insightful</strong>, especially the part about <em>time management</em>.</p>
-        <ul>
-          <li>Using a planner to organize my tasks.</li>
-          <li>Setting specific goals for each day.</li>
-          <li>Taking short breaks to avoid burnout.</li>
-        </ul>
-        <blockquote>
-          "Time management is the key to productivity."
-        </blockquote>
-      </div>
-    `,
-    createdAt: new Date("2024-01-15T10:30:00"),
-  },
-  {
-    commentId: "c2",
-    userId: "AFOP00027",
-    taskId: "t1",
-    team: "Product",
-    comment: `
-      <div class="comment">
-        <p>Great points! 👍 I'd like to add that <strong>team collaboration</strong> is crucial.</p>
-        <p>Here's what we've implemented:</p>
-        <ul>
-          <li>Daily stand-ups</li>
-          <li>Weekly retrospectives</li>
-          <li>Shared documentation</li>
-        </ul>
-      </div>
-    `,
-    createdAt: new Date("2024-01-15T11:45:00"),
-  },
-  {
-    commentId: "c2",
-    userId: "AFOP00027",
-    taskId: "t1",
-    team: "Product",
-    comment: `
-      <div class="comment">
-        <p>Great points! 👍 I'd like to add that <strong>team collaboration</strong> is crucial.</p>
-        <p>Here's what we've implemented:</p>
-        <ul>
-          <li>Daily stand-ups</li>
-          <li>Weekly retrospectives</li>
-          <li>Shared documentation</li>
-        </ul>
-      </div>
-    `,
-    createdAt: new Date("2024-01-15T11:45:00"),
-  },
-];
-
 function ViewSubtask() {
   const [showEdit, setShowEdit] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const { subtaskId } = useParams();
+  const dispatch = useDispatch();
+  const {
+    data: comments,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useGetCommentBySubtaskIdQuery(subtaskId as string, {
+    refetchOnReconnect: true,
+    refetchOnMountOrArgChange: true,
+    refetchOnFocus: false,
+  });
 
+  const memoizedComments = useMemo(() => comments || [], [comments]);
+  const hasComments = memoizedComments.length > 0;
+
+  useEffect(() => {
+    if (isError && error) {
+      dispatch(addAlert({ message: (error as string) || "Error fetching comments", type: "error" }));
+    }
+  }, [isError, error, dispatch]);
+
+  const { isSubmitting, addComment } = useAddComment();
+  const { editComment, isEditing } = useEditComment();
+  const { isLoading: isDeleting, deleteComment } = useDeleteComment();
+
+  const handleAddComment = useCallback(
+    async (commentData: CommentData) => {
+      await addComment(commentData);
+      await refetch();
+    },
+    [addComment, refetch],
+  );
+
+  const handleEditComment = useCallback(
+    async (commentData: CommentData) => {
+      await editComment(commentData);
+      await refetch();
+    },
+    [editComment, refetch],
+  );
+
+  const handleDeleteComment = useCallback(
+    async (commentId: string) => {
+      await deleteComment(commentId);
+      await refetch();
+    },
+    [deleteComment, refetch],
+  );
   return (
     <>
       {showEdit ? (
@@ -103,16 +80,22 @@ function ViewSubtask() {
           <h6 className="h6 px-2">Comments</h6>
         </div>
         <div>
-          <QuillEditor />
-          <Comment
-            comments={dummyComments}
-            onReply={(id) => console.log("Reply to:", id)}
-            onEdit={(id) => console.log("Edit:", id)}
-            onDelete={(id) => console.log("Delete:", id)}
-          />
+          <QuillEditor handleAddComment={handleAddComment} isAdding={isSubmitting} />
+          {isLoading ? (
+            <Loader transparent />
+          ) : (
+            hasComments && (
+              <Comment
+                comments={memoizedComments}
+                onEdit={handleEditComment}
+                isEditing={isEditing}
+                onDelete={handleDeleteComment}
+                isDeleting={isDeleting}
+              />
+            )
+          )}
         </div>
       </div>
-
       {showDeleteModal && <DeleteSubtaskModal onClose={() => setShowDeleteModal(false)} />}
     </>
   );

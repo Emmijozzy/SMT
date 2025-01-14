@@ -1,8 +1,11 @@
 export interface CommentType {
-  commentId: string;
+  _id?: string;
+  commentId?: string;
   userId: string;
-  taskId: string;
-  team: string;
+  subtaskId: string;
   comment: string;
   createdAt: Date;
+  updatedAt?: Date;
 }
+
+export type CommentData = { comment: string; userId: string; subtaskId: string };
