@@ -9,6 +9,8 @@ type Props = {
 };
 
 function DetailsContainer({ tableRows }: Props) {
+  console.log("tableRows", tableRows);
+
   return (
     <div className="w-full">
       <table className="w-full">

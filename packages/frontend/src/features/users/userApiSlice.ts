@@ -88,6 +88,24 @@ export const userApiSlice = apiSlice.injectEndpoints({
           : [{ type: "Users", id: "LIST" }],
     }),
 
+    getUser: build.query({
+      query: (userId: string) => ({
+        url: `/user/get_by_userId/${userId}`,
+        validateStatus: (response, result) => response.status === 200 || !result.isError,
+      }),
+      providesTags: (_result, _error, id) => [{ type: "User", id }],
+      transformResponse: (responseData: { data: IUser }) => {
+        let user = responseData?.data;
+
+        user = {
+          ...user,
+          _id: user.userId,
+        } as IUser & { _id: string };
+
+        return user;
+      },
+    }),
+
     createUser: build.mutation({
       query: (userData: User) => ({
         url: "/user_admin/create",
@@ -159,6 +177,7 @@ export const {
   useDeleteUserMutation,
   useRestoreUserMutation,
   useGetUsersQuery,
+  useGetUserQuery,
   useGetUserProfileQuery,
   useUpdateUserProfileMutation,
   useChangePasswordMutation,

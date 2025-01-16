@@ -31,7 +31,11 @@ function EditEditor({ content, onChange, handleEditComment, isEditing }: EditEdi
       <ReactQuill theme="snow" value={content} onChange={onChange} modules={modules} className="rounded-b-lg" />
       <div className="flex justify-between p-2 bg-base-300 rounded-b-lg">
         <div className="flex items-center">
-          <span>{fullName && <Avartar imgUrl={profilePicUrl} name={fullName} className="w-8 h-8 rounded-full" />}</span>
+          <span>
+            {fullName && (
+              <Avartar imgUrl={profilePicUrl} name={fullName} className="w-8 h-8 text-sm font-bold rounded-full" />
+            )}
+          </span>
           <span className="ml-2">{fullName}</span>
         </div>
 

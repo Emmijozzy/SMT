@@ -1,5 +1,6 @@
 /* eslint-disable indent */
 import { apiSlice } from "../../app/api/apislice";
+import { ResApiData } from "../../shared/interface/resApiData";
 import { Result } from "../../shared/interface/Result";
 import log from "../../shared/utils/log";
 import { ISubtask } from "./subtaskInterface";
@@ -59,6 +60,21 @@ export const subtaskApiSlice = apiSlice.injectEndpoints({
             ]
           : [{ type: "Tasks", id: "LIST" }],
     }),
+    getSubtask: build.query<ISubtask, string>({
+      query: (subtaskId) => ({
+        url: `/subtask/${subtaskId}`,
+        validateStatus: (response, result: Result<ISubtask>) => response.status === 200 || !result.isError,
+      }),
+      transformResponse: (responseData: ResApiData<ISubtask>) => {
+        const subtask = responseData?.data as ISubtask;
+
+        return {
+          ...subtask,
+          _id: subtask.subtaskId,
+        };
+      },
+      providesTags: (_result, _error, arg) => [{ type: "Subtasks", id: arg }],
+    }),
     addSubtask: build.mutation({
       query: (subtaskData: Partial<ISubtask>) => ({
         url: "/subtask/create",
@@ -98,5 +114,10 @@ export const subtaskApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetSubtasksQuery, useAddSubtaskMutation, useUpdateSubtaskMutation, useDeleteSubtaskMutation } =
-  subtaskApiSlice;
+export const {
+  useGetSubtasksQuery,
+  useGetSubtaskQuery,
+  useAddSubtaskMutation,
+  useUpdateSubtaskMutation,
+  useDeleteSubtaskMutation,
+} = subtaskApiSlice;

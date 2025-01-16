@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../app/store";
 import EditEditor from "../../../shared/components/Editor/EditEditor";
 import { getPresentUser } from "../../profile/userProfileSlice";
-import useUserName from "../../users/hooks/useUserName";
+import { useGetUserQuery } from "../../users/userApiSlice";
 import { CommentData, CommentType } from "../commentInterface";
 import { useCommentState } from "../hooks/useCommentState";
 import { CommentActions } from "./CommentActions";
@@ -23,7 +23,8 @@ const SingleComment = memo(({ comment, onEdit, isEditing, onDelete, isDeleting }
   const { showEdit, setShowEdit, showDeleteModal, setShowDeleteModal, editedComment, setEditedComment } =
     useCommentState(comment.comment);
 
-  const userName = useUserName(comment.userId);
+  const { data: User, isFetching, isSuccess } = useGetUserQuery(comment.userId);
+
   const { userId } = useSelector((state: RootState) => getPresentUser(state));
   const isOwnComment = userId === comment.userId;
 
@@ -50,7 +51,8 @@ const SingleComment = memo(({ comment, onEdit, isEditing, onDelete, isDeleting }
         />
       ) : (
         <CommentContent
-          userName={userName || "Unknown"}
+          commentUser={User || null}
+          userIsLoading={isFetching && !isSuccess}
           comment={comment}
           createdAt={new Date(comment.createdAt).toUTCString()}
         />
@@ -70,6 +72,5 @@ const SingleComment = memo(({ comment, onEdit, isEditing, onDelete, isDeleting }
     </div>
   );
 });
-
 SingleComment.displayName = "SingleComment";
 export default SingleComment;

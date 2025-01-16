@@ -50,7 +50,7 @@ const TasksTable = memo(() => {
               type="radio"
               name="my_tabs_2"
               role="tab"
-              className=" w-36 tab font-bold"
+              className=" w-40 tab font-bold"
               aria-label={`Unassigned (${unAssignedTask.length})`}
             />
             <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box w-full overflow-hidden">

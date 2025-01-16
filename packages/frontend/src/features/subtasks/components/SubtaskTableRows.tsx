@@ -1,6 +1,6 @@
+import User from "../../../shared/components/User";
 import formatDate from "../../../shared/utils/formatDate";
 import { ISubtask } from "../subtaskInterface";
-import { AssigneeCell } from "./cells/AssigneeCell";
 import { PriorityCell } from "./cells/PriorityCell";
 import { StatusCell } from "./cells/StatusCell";
 
@@ -9,7 +9,7 @@ export const useSubtaskTableRows = (subtask: ISubtask) => [
   { label: "Title", value: subtask?.title },
   {
     label: "Assignee",
-    value: <AssigneeCell assignee={subtask?.assignee} />,
+    value: <User userId={subtask?.assignee} index={0} withName />,
   },
   {
     label: "Status",
@@ -17,7 +17,7 @@ export const useSubtaskTableRows = (subtask: ISubtask) => [
   },
   {
     label: "Priority",
-    value: <PriorityCell priority={subtask?.priority} />,
+    value: <PriorityCell priority={subtask?.priority || ""} />,
   },
   { label: "Created At", value: subtask?.createdAt ? formatDate(new Date(subtask.createdAt)) : "" },
   { label: "Due Date", value: subtask?.dueDate ? formatDate(new Date(subtask.dueDate)) : "" },

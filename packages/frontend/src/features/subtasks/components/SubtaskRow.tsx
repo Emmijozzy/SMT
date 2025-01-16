@@ -50,7 +50,11 @@ function SubtaskRow<T extends ISubtask>({ data }: Props<T>) {
             <span>{daysLeft}</span>
           </td>
           <td className="border-t-0 max-w-20 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 py-1 text-right">
-            <Link to={`${subtaskId}`} className="flex view justify-between" aria-label={`View subtask ${title}`}>
+            <Link
+              to={`./subtask/${subtaskId}`}
+              className="flex view justify-between"
+              aria-label={`View subtask ${title}`}
+            >
               <GrView className="h-6 w-6 text-base-content/70 hover:text-secondary cursor-pointer" aria-hidden="true" />
             </Link>
           </td>

@@ -11,6 +11,6 @@ export const subtaskRoutes = {
   children: [
     { index: true, component: SubtasksTable },
     { path: "add_subtask", component: AddSubtask },
-    { path: ":subtaskId", component: ViewSubtask },
+    { path: "subtask/:subtaskId", component: ViewSubtask },
   ],
 };
