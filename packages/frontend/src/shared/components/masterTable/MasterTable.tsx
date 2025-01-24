@@ -61,8 +61,18 @@ function MasterTable<T extends Record<string, unknown>>() {
         );
       }
 
+      // if (toFilter.option) {
+      //   result = result.filter((item) => String(item[toFilter.column]).toLowerCase() === toFilter.option.toLowerCase());
+      // }
       if (toFilter.option) {
-        result = result.filter((item) => String(item[toFilter.column]).toLowerCase() === toFilter.option.toLowerCase());
+        result = result.filter((item) => {
+          if (typeof item[toFilter.column] === "object" && item[toFilter.column] !== null) {
+            return (
+              String((item[toFilter.column] as { name: string }).name).toLowerCase() === toFilter.option.toLowerCase()
+            );
+          }
+          return String(item[toFilter.column]).toLowerCase() === toFilter.option.toLowerCase();
+        });
       }
       // if (toFilter.option) {
       //   result = result.filter((item) => String(item[toFilter.column]).toLowerCase() === toFilter.option.toLowerCase());

@@ -14,7 +14,7 @@ const taskColumnsFactory = (teams: string[]) => {
         label: "responsibleTeam",
         as: "Team",
         searchable: false,
-        sortable: true,
+        sortable: false,
         filterable: true,
         filterOptions: [...teams],
       },

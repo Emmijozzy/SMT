@@ -14,12 +14,7 @@ export interface ITask {
           profilePicUrl: string;
         },
       ];
-  responsibleTeam:
-    | {
-        name: string;
-        teamId: string;
-      }
-    | string;
+  responsibleTeam: string;
   status: "not started" | "in progress" | "completed" | "closed";
   subtasks?:
     | [

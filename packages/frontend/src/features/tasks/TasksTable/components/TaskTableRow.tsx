@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { AvatarGroup } from "@mui/material";
 import { useMemo } from "react";
@@ -16,11 +17,11 @@ type Props<T> = {
 function TaskTableRow<T extends ITask>({ data }: Props<T>) {
   const content = useMemo(() => {
     if (data) {
-      const { title, taskId, priority, status, assignedTo, dueDate, del_flg: delFlg } = data;
+      const { title, taskId, responsibleTeam, priority, status, assignedTo, dueDate, del_flg: delFlg } = data;
       const daysLeft = getDaysLeft(dueDate || new Date().toDateString());
       return (
         <tr className={`relative hover:bg-base-100 ${delFlg ? "opacity-20" : ""}`}>
-          <td className="border-t-0 w-64 px-4align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2 text-left flex items-center">
+          <td className="border-t-0 w-64 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2 text-left flex items-center">
             <Avartar name={title} imgUrl="" />
             <div>
               <span className="ml-3 font-bold truncate ... text-base-content capitalize hover:overflow-visible hover:bg-base-100">
@@ -29,19 +30,30 @@ function TaskTableRow<T extends ITask>({ data }: Props<T>) {
               <p className="ml-3 text-xs leading-tight text-base-content/50">{taskId}</p>
             </div>
           </td>
-          <td className="border-t-0 w-12 px-4align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2 capitalize ">
+          <td className="border-t-0 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2">
+            <span>
+              {typeof responsibleTeam === "string" ? (
+                responsibleTeam
+              ) : (responsibleTeam as { name: string }).name ? (
+                (responsibleTeam as { name: string }).name
+              ) : (
+                <span className="text-base-content/50">No Team</span>
+              )}
+            </span>
+          </td>
+          <td className="border-t-0 w-12 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2 capitalize ">
             <div className="flex items-center gap-1">
               <PriorityIndicator priority={priority} />
               {priority}
             </div>
           </td>
-          <td className="border-t-0 px-4align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2 capitalize">
+          <td className="border-t-0 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2 capitalize">
             <div>
               <div className="w-2 h-2 rounded-full bg-orange-500 mr-2 inline-block" />
               {status}
             </div>
           </td>
-          <td className="border-t-0 px-4align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2">
+          <td className="border-t-0 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2">
             <div className="flex w-28">
               <AvatarGroup max={4} total={assignedTo?.length || 0}>
                 {assignedTo &&
@@ -63,7 +75,7 @@ function TaskTableRow<T extends ITask>({ data }: Props<T>) {
           <td className="border-t-0 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2">
             <Completion completion={60} />
           </td>
-          <td className="max-w-32 border-t-0 px-4align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2">
+          <td className="max-w-32 border-t-0 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2">
             <span>{daysLeft}</span>
           </td>
           <td className="border-t-0 max-w-20 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2 text-right">
