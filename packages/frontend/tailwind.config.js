@@ -183,6 +183,15 @@ export default {
         ".bg-brand-gradient": {
           "background-image": "linear-gradient(#3490dc, #6574cd)",
         },
+        ".border-brand-gradient": {
+          "border-image": "conic-gradient(from 225deg, #FFC876, #79FFF7, #9F53FF, #FF98E2, #FFC876)",
+          "border-image-slice": "1",
+        },
+        ".bg-brand-gradient-hover": {
+          "background-image": "linear-gradient(#3490dc, #6574cd)",
+          "background-size": "100%",
+          "background-repeat": "repeat-x",
+        },
       });
     }),
   ],

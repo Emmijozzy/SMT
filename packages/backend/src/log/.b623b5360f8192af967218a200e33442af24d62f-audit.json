@@ -6,26 +6,6 @@
     "auditLog": "C:\\Users\\Emmijozzy\\Desktop\\Web Project\\SMT\\packages\\backend\\src\\log\\.b623b5360f8192af967218a200e33442af24d62f-audit.json",
     "files": [
         {
-            "date": 1735987452703,
-            "name": "C:\\Users\\Emmijozzy\\Desktop\\Web Project\\SMT\\packages\\backend\\src\\log\\2025-01-04.log",
-            "hash": "8d838be7e0b04bcfd50f7d3c0413176157bc70bd5876d970464fc4d92770b232"
-        },
-        {
-            "date": 1736050434856,
-            "name": "C:\\Users\\Emmijozzy\\Desktop\\Web Project\\SMT\\packages\\backend\\src\\log\\2025-01-05.log",
-            "hash": "689bc775de34a80cb56b98517f34a56b7177d0dbf628b982d5226745db93c49c"
-        },
-        {
-            "date": 1736284347313,
-            "name": "C:\\Users\\Emmijozzy\\Desktop\\Web Project\\SMT\\packages\\backend\\src\\log\\2025-01-07.log",
-            "hash": "35076ba99c0a15a9372aa9c0a98a63f6004118b77a605bc1cd2f1dcc5287c9ff"
-        },
-        {
-            "date": 1736370737271,
-            "name": "C:\\Users\\Emmijozzy\\Desktop\\Web Project\\SMT\\packages\\backend\\src\\log\\2025-01-08.log",
-            "hash": "ddfd958cd2460bf92e2d29ff7f965e69f755de151cbe95a7089eb4ec0e2c89f3"
-        },
-        {
             "date": 1736629299963,
             "name": "C:\\Users\\Emmijozzy\\Desktop\\Web Project\\SMT\\packages\\backend\\src\\log\\2025-01-11.log",
             "hash": "ffb7fea58bfb308d4640c2fe023c9f7b90a831b2db2c2f401a316c1be168c262"
@@ -54,6 +34,26 @@
             "date": 1737022333512,
             "name": "C:\\Users\\Emmijozzy\\Desktop\\Web Project\\SMT\\packages\\backend\\src\\log\\2025-01-16.log",
             "hash": "3e7fe4cc1ae6b571d41f4bec5e8a590952010d7dc3c6f1afbe65a41c2c35d2e7"
+        },
+        {
+            "date": 1737428770887,
+            "name": "C:\\Users\\Emmijozzy\\Desktop\\Web Project\\SMT\\packages\\backend\\src\\log\\2025-01-21.log",
+            "hash": "d53badf086784074d82c854f1cb51afd8dda2480fbd0890fb13867e0c6222159"
+        },
+        {
+            "date": 1737510282160,
+            "name": "C:\\Users\\Emmijozzy\\Desktop\\Web Project\\SMT\\packages\\backend\\src\\log\\2025-01-22.log",
+            "hash": "b7c0a19016c555faf3290194154d6ca9fd7b0449d1238e9d3425a916b8984347"
+        },
+        {
+            "date": 1737588710542,
+            "name": "C:\\Users\\Emmijozzy\\Desktop\\Web Project\\SMT\\packages\\backend\\src\\log\\2025-01-23.log",
+            "hash": "c53b6076c7ec2c3684c4b705f8d0bdc683f2b257cd56819c90b188f0da4a9c75"
+        },
+        {
+            "date": 1737680794356,
+            "name": "C:\\Users\\Emmijozzy\\Desktop\\Web Project\\SMT\\packages\\backend\\src\\log\\2025-01-24.log",
+            "hash": "434aacbf14dfd6b644f6408a9146f9189a7f857a2ac87840068f32b14df4c943"
         }
     ],
     "hashType": "sha256"

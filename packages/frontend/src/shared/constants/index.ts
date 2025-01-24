@@ -62,11 +62,6 @@ export const memberRoutes = [
     icon: HomeIcon,
   },
   {
-    path: "/team_member/dash/tasks",
-    title: "Tasks",
-    icon: TaskIcon,
-  },
-  {
     path: "/team_member/dash/subtasks",
     title: "Subtasks",
     icon: FormatListBulletedIcon,

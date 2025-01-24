@@ -10,6 +10,7 @@ import { MemberRoutes } from "./routes/MemberRoutes";
 const Login = lazy(() => import("./features/auth/Login"));
 const Register = lazy(() => import("./features/auth/Register"));
 const Home = lazy(() => import("./features/General/Home"));
+const Page404 = lazy(() => import("./features/auth/Page404"));
 
 function App() {
   return (
@@ -35,6 +36,14 @@ function App() {
         element={
           <LazyComponent>
             <Login />
+          </LazyComponent>
+        }
+      />
+      <Route
+        path="*"
+        element={
+          <LazyComponent>
+            <Page404 />
           </LazyComponent>
         }
       />
