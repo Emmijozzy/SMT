@@ -1,6 +1,7 @@
 import User from "../../../shared/components/User";
 import formatDate from "../../../shared/utils/formatDate";
 import { ISubtask } from "../subtaskInterface";
+import { SubtaskStatus } from "../SubtaskStatus";
 import { PriorityCell } from "./cells/PriorityCell";
 import { StatusCell } from "./cells/StatusCell";
 
@@ -13,7 +14,7 @@ export const useSubtaskTableRows = (subtask: ISubtask) => [
   },
   {
     label: "Status",
-    value: <StatusCell status={subtask?.status || "not started"} />,
+    value: <StatusCell status={subtask?.status || SubtaskStatus.Open} />,
   },
   {
     label: "Priority",

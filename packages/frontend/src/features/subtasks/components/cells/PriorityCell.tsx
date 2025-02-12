@@ -1,4 +1,4 @@
-import PriorityIndicator from "../../../tasks/TasksTable/components/PriorityIndicator";
+import PriorityIndicator from "../../../../shared/components/PriorityIndicator";
 
 interface PriorityCellProps {
   priority: string;

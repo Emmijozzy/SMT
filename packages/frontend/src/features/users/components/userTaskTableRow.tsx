@@ -2,9 +2,9 @@ import { useMemo } from "react";
 import { GrView } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import Avartar from "../../../shared/components/Avartar";
-import { ISubtask } from "../../subtasks/subtaskInterface";
-import PriorityIndicator from "../../tasks/TasksTable/components/PriorityIndicator";
+import PriorityIndicator from "../../../shared/components/PriorityIndicator";
 import getDaysLeft from "../../../shared/utils/getDaysLeft";
+import { ISubtask } from "../../subtasks/subtaskInterface";
 
 type Props<T> = {
   data: T;

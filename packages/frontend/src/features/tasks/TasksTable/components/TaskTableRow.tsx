@@ -5,10 +5,10 @@ import { useMemo } from "react";
 import { GrView } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import Avartar from "../../../../shared/components/Avartar";
+import PriorityIndicator from "../../../../shared/components/PriorityIndicator";
 import getDaysLeft from "../../../../shared/utils/getDaysLeft";
 import { ITask } from "../../tasksInterface";
 import Completion from "./Completion";
-import PriorityIndicator from "./PriorityIndicator";
 
 type Props<T> = {
   data: T;

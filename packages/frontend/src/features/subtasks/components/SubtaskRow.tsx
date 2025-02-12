@@ -2,8 +2,10 @@ import { useMemo } from "react";
 import { GrView } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import Avartar from "../../../shared/components/Avartar";
+import PriorityIndicator from "../../../shared/components/PriorityIndicator";
+import StatusIndicator from "../../../shared/components/StatusIndicator";
+import { Status } from "../../../shared/interface/status";
 import getDaysLeft from "../../../shared/utils/getDaysLeft";
-import PriorityIndicator from "../../tasks/TasksTable/components/PriorityIndicator";
 import { ISubtask } from "../subtaskInterface";
 import Assignee from "./Assignee";
 
@@ -41,9 +43,9 @@ function SubtaskRow<T extends ISubtask>({ data }: Props<T>) {
             </div>
           </td>
           <td className="border-t-0 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 py-1 capitalize">
-            <div>
-              <div className="w-2 h-2 rounded-full bg-orange-500 mr-2 inline-block" />
-              {status}
+            <div className="flex items-center gap-1">
+              <StatusIndicator status={status as Status} />
+              {status?.replace("_", " ")}
             </div>
           </td>
           <td className="max-w-32 border-t-0 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 py-1">

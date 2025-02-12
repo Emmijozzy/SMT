@@ -16,9 +16,30 @@ const createSchema = Yup.object().shape({
   status: Yup.string()
     .trim()
     .oneOf(
-      ["not started", "completed", "closed"],
-      "Invalid Task Status, status cam either be: Not Started, In Progress, Completed or Closed"
+      ["open", "in_progress", "in_review", "revisit", "completed"],
+      "Invalid Task Status, status cam either be: Open, In Progress, Completed or Closed"
     ),
+  checkLists: Yup.array().of(
+    Yup.object()
+      .shape({
+        id: Yup.string().trim(),
+        checkItem: Yup.string().trim(),
+        isChecked: Yup.boolean(),
+        isApprove: Yup.boolean(),
+        isReject: Yup.boolean()
+      })
+      .test("not-both-approve-reject", "Cannot be both approved and rejected", function (value) {
+        return !(value.isApprove && value.isReject);
+      })
+  ),
+  requiredFields: Yup.array().of(
+    Yup.object().shape({
+      id: Yup.string().trim(),
+      field: Yup.string().trim(),
+      value: Yup.string().trim(),
+      type: Yup.string().trim().oneOf(["text", "link"], "Invalid Task Status, status cam either be: text or link")
+    })
+  ),
   priority: Yup.string().oneOf(["low", "medium", "high"], "priority can either be low, medium or high"),
   dueDate: Yup.date().required(),
   assignee: Yup.string().trim(),
@@ -42,10 +63,31 @@ const updateSchema = Yup.object().shape({
   status: Yup.string()
     .trim()
     .oneOf(
-      ["open", "pending", "completed"],
-      "Invalid Task Status, status cam either be: Not Started, In Progress, Completed or Closed"
+      ["open", "in_progress", "in_review", "revisit", "completed"],
+      "Invalid Task Status, status cam either be: Open, In Progress, Completed or Closed"
     )
     .required("Status is required"),
+  checkLists: Yup.array().of(
+    Yup.object()
+      .shape({
+        id: Yup.string().trim(),
+        checkItem: Yup.string().trim(),
+        isChecked: Yup.boolean(),
+        isApprove: Yup.boolean(),
+        isReject: Yup.boolean()
+      })
+      .test("not-both-approve-reject", "Cannot be both approved and rejected", function (value) {
+        return !(value.isApprove && value.isReject);
+      })
+  ),
+  requiredFields: Yup.array().of(
+    Yup.object().shape({
+      id: Yup.string().trim(),
+      field: Yup.string().trim(),
+      value: Yup.string().trim(),
+      type: Yup.string().trim().oneOf(["text", "link"], "Invalid Task Status, status cam either be: text or link")
+    })
+  ),
   priority: Yup.string()
     .oneOf(["low", "medium", "high"], "priority can either be low, medium or high")
     .required("Priority is required"),
@@ -55,7 +97,69 @@ const updateSchema = Yup.object().shape({
   collaborators: Yup.array().of(Yup.string()).optional()
 });
 
+const InReviewUpdateDataSchema = Yup.object().shape({
+  comment: Yup.string().required("Comment is required"),
+
+  checkLists: Yup.array()
+    .of(
+      Yup.object().shape({
+        id: Yup.string().required("Checklist ID is required"),
+        checkItem: Yup.string().required("Check item is required"),
+        isChecked: Yup.boolean().required("isChecked is required").oneOf([true], "isChecked must be true"),
+        isApprove: Yup.boolean().required("isApprove is required"),
+        isReject: Yup.boolean().required("isReject is required")
+      })
+    )
+    .required("Checklists are required"),
+
+  requiredFields: Yup.array()
+    .of(
+      Yup.object().shape({
+        id: Yup.string().required("Field ID is required"),
+        field: Yup.string().required("Field name is required"),
+        input: Yup.string().required("Input is required"),
+        // eslint-disable-next-line prettier/prettier
+        type: Yup.string().required("Type is required").oneOf(["text", "link"], "Type must be either \"text\" or \"link\"")
+      })
+    )
+    .required("Required fields are required")
+});
+
+const InReviewFeedBackDataSchema = Yup.object().shape({
+  feedback: Yup.string().required("Feedback is required"),
+
+  checkLists: Yup.array()
+    .of(
+      Yup.object()
+        .shape({
+          id: Yup.string().required("Checklist ID is required"),
+          checkItem: Yup.string().required("Check item is required"),
+          isChecked: Yup.boolean().required("isChecked is required").oneOf([true], "isChecked must be true"),
+          isApprove: Yup.boolean().required("isApprove is required"),
+          isReject: Yup.boolean().required("isReject is required")
+        })
+        .test("approve-reject-validation", "isApprove and isReject cannot both be true", function (value) {
+          return !(value.isApprove && value.isReject); // Ensure both are not true
+        })
+    )
+    .required("Checklists are required"),
+
+  requiredFields: Yup.array()
+    .of(
+      Yup.object().shape({
+        id: Yup.string().required("Field ID is required"),
+        field: Yup.string().required("Field name is required"),
+        input: Yup.string().required("Input is required"),
+        // eslint-disable-next-line prettier/prettier
+        type: Yup.string().required("Type is required").oneOf(["text", "link"], "Type must be either \"text\" or \"link\"")
+      })
+    )
+    .required("Required fields are required")
+});
+
 export default {
   createSchema,
-  updateSchema
+  updateSchema,
+  InReviewUpdateDataSchema,
+  InReviewFeedBackDataSchema
 };

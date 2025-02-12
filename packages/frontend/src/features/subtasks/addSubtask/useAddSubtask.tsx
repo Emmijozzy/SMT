@@ -19,8 +19,25 @@ const initialValues: Partial<ISubtask> = {
   dueDate: new Date(),
 };
 
+export type CheckLists = {
+  id: string;
+  checkItem: string;
+  isChecked: boolean;
+  isApprove: boolean;
+  isReject: boolean;
+}[];
+
+export type RequiredFields = {
+  id: string;
+  field: string;
+  input: string;
+  type: "text" | "link";
+}[];
+
 function useAddSubtask() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [checklists, setChecklists] = useState<CheckLists>([]);
+  const [requiredFields, setRequiredFields] = useState<RequiredFields>([]);
 
   const [addSubtask, { isSuccess, isError }] = useAddSubtaskMutation();
 
@@ -36,6 +53,8 @@ function useAddSubtask() {
         const payload: Partial<ISubtask> = {
           ...values,
           dueDate: values.dueDate,
+          checkLists: checklists,
+          requiredFields,
         };
         const resData = (await addSubtask(payload)) as ResData<ISubtask>;
         if (Object.keys(resData)[0] === "error" || isError) {
@@ -56,6 +75,21 @@ function useAddSubtask() {
     },
   });
 
+  const handleAddCheckList = (checklist: CheckLists[number]) => {
+    setChecklists([...checklists, checklist]);
+  };
+
+  const handleRemoveCheckList = (id: string) => {
+    setChecklists(checklists.filter((checklist) => checklist.id !== id));
+  };
+
+  const handleAddRequiredField = (requiredField: RequiredFields[number]) => {
+    setRequiredFields([...requiredFields, requiredField]);
+  };
+
+  const handleRemoveRequiredField = (id: string) =>
+    setRequiredFields(requiredFields.filter((requiredField) => requiredField.id !== id));
+
   const { handleSubmit, handleBlur, handleChange, errors, values } = formik;
 
   return {
@@ -66,6 +100,12 @@ function useAddSubtask() {
     values,
     isSuccess,
     isSubmitting,
+    checklists,
+    requiredFields,
+    handleAddCheckList,
+    handleRemoveCheckList,
+    handleAddRequiredField,
+    handleRemoveRequiredField,
   };
 }
 

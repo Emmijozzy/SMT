@@ -6,11 +6,11 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { RootState } from "../../../../app/store";
 import Avartar from "../../../../shared/components/Avartar";
+import PriorityIndicator from "../../../../shared/components/PriorityIndicator";
 import getDaysLeft from "../../../../shared/utils/getDaysLeft";
 import { isStringArray } from "../../../../shared/utils/isStringArray";
 import { ITask } from "../../../tasks/tasksInterface";
 import Completion from "../../../tasks/TasksTable/components/Completion";
-import PriorityIndicator from "../../../tasks/TasksTable/components/PriorityIndicator";
 import { usersSelectors } from "../../../users/userSlice";
 
 type Props<T> = {

@@ -9,6 +9,7 @@ import asyncHandler from "../../utils/asyncHandler";
 import filtersToMongooseQuery from "../../utils/filtersToMongooseQuery";
 import getPaginationOptions from "../../utils/getPaginationOptions";
 import successResponse from "../../utils/successResponse";
+import { InReviewFeedBackData, InReviewUpdateData } from "./subtaskInterfaces";
 import SubtaskOrchestrator from "./subtaskOrchestrator";
 import subtaskSchema from "./subtaskSchema";
 import SubtaskService from "./subtaskService";
@@ -62,6 +63,34 @@ export default class SubtaskController implements IController {
       "/:subtaskId",
       authMiddleware(ENUM_USER_ROLES.ADMIN, ENUM_USER_ROLES.MANAGER),
       this.deleteSubtask
+    );
+    this.router.put(
+      "/status/:subtaskId",
+      authMiddleware(ENUM_USER_ROLES.ADMIN, ENUM_USER_ROLES.MANAGER, ENUM_USER_ROLES.TEAM_MEMBER),
+      this.updateSubtaskStatus
+    );
+    this.router.put(
+      "/:subtaskId/open-to-in-process",
+      authMiddleware(ENUM_USER_ROLES.TEAM_MEMBER),
+      this.subtaskOpenToInProcess
+    );
+    this.router.put(
+      "/:subtaskId/to-in-review",
+      validationMiddleware(subtaskSchema.InReviewUpdateDataSchema),
+      authMiddleware(ENUM_USER_ROLES.TEAM_MEMBER),
+      this.subtaskToInReview
+    );
+    this.router.put(
+      "/:subtaskId/in-review-to-completed",
+      validationMiddleware(subtaskSchema.InReviewFeedBackDataSchema),
+      authMiddleware(ENUM_USER_ROLES.ADMIN, ENUM_USER_ROLES.MANAGER),
+      this.subtaskInReviewToCompleted
+    );
+    this.router.put(
+      "/:subtaskId/in-review-to-revisit",
+      validationMiddleware(subtaskSchema.InReviewFeedBackDataSchema),
+      authMiddleware(ENUM_USER_ROLES.ADMIN, ENUM_USER_ROLES.MANAGER),
+      this.subtaskInReviewToRevisit
     );
   }
 
@@ -123,5 +152,47 @@ export default class SubtaskController implements IController {
     const subtask = await this.subtaskOrchestrator.deleteSubtask(subtaskId);
     if (!subtask) throw new InternalError("Failed to delete subtask");
     successResponse(res, { message: "Subtask deleted successfully" });
+  });
+
+  private updateSubtaskStatus = asyncHandler(async (req: Request, res: Response) => {
+    const { subtaskId } = req.params;
+    const { status } = req.body;
+    const subtask = await this.subtaskService.updateSubtaskStatus(subtaskId, status);
+    if (!subtask) throw new InternalError("Failed to transition subtask");
+    successResponse(res, { data: subtask, message: "Subtask transitioned successfully" });
+  });
+
+  private subtaskOpenToInProcess = asyncHandler(async (req: Request, res: Response) => {
+    const { subtaskId } = req.params;
+    const subtask = await this.subtaskService.updateSubtaskFromOpenToInProcess(subtaskId);
+    if (!subtask) throw new InternalError("Failed to transition subtask");
+    successResponse(res, { data: subtask, message: "Subtask transitioned successfully" });
+  });
+
+  private subtaskToInReview = asyncHandler(async (req: Request, res: Response) => {
+    const { subtaskId } = req.params;
+    const subtask = await this.subtaskService.updateSubtaskFromToInReview(subtaskId, req.body as InReviewUpdateData);
+    if (!subtask) throw new InternalError("Failed to transition subtask");
+    successResponse(res, { data: subtask, message: "Subtask transitioned successfully" });
+  });
+
+  private subtaskInReviewToRevisit = asyncHandler(async (req: Request, res: Response) => {
+    const { subtaskId } = req.params;
+    const subtask = await this.subtaskService.updateSubtaskFromInReviewToRevisit(
+      subtaskId,
+      req.body as InReviewFeedBackData
+    );
+    if (!subtask) throw new InternalError("Failed to transition subtask");
+    successResponse(res, { data: subtask, message: "Subtask transitioned successfully" });
+  });
+
+  private subtaskInReviewToCompleted = asyncHandler(async (req: Request, res: Response) => {
+    const { subtaskId } = req.params;
+    const subtask = await this.subtaskService.updateSubtaskFromInReviewToCompleted(
+      subtaskId,
+      req.body as InReviewFeedBackData
+    );
+    if (!subtask) throw new InternalError("Failed to transition subtask");
+    successResponse(res, { data: subtask, message: "Subtask transitioned successfully" });
   });
 }

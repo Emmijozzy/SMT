@@ -3,7 +3,7 @@ import { apiSlice } from "../../app/api/apislice";
 import { ResApiData } from "../../shared/interface/resApiData";
 import { Result } from "../../shared/interface/Result";
 import log from "../../shared/utils/log";
-import { ISubtask } from "./subtaskInterface";
+import { InReviewFeedBackData, InReviewUpdateData, ISubtask } from "./subtaskInterface";
 import { setSubtasks } from "./subtaskSlice";
 
 type SubtaskResponse = ISubtask[];
@@ -100,6 +100,65 @@ export const subtaskApiSlice = apiSlice.injectEndpoints({
         { type: "Tasks" as const, id: "LIST" as const },
       ],
     }),
+    updateSubtaskStatus: build.mutation({
+      query: (data: { subtaskId: string; status: string }) => ({
+        url: `/subtask/status/${data.subtaskId || ""}`,
+        method: "PUT",
+        body: { status: data.status },
+      }),
+      invalidatesTags: (_result, _error, arg) => [
+        { type: "Subtask", id: arg?.subtaskId },
+        { type: "Subtasks" as const, id: "LIST" as const },
+        { type: "Tasks" as const, id: "LIST" as const },
+      ],
+    }),
+    updateSubtaskOpenToInProcess: build.mutation({
+      query: (data: { subtaskId: string }) => ({
+        url: `/subtask/${data.subtaskId || ""}/open-to-in-process`,
+        method: "PUT",
+      }),
+      invalidatesTags: (_result, _error, arg) => [
+        { type: "Subtask", id: arg?.subtaskId },
+        { type: "Subtasks" as const, id: "LIST" as const },
+        { type: "Tasks" as const, id: "LIST" as const },
+      ],
+    }),
+    updateSubtaskToInReview: build.mutation({
+      query: (data: { subtaskId: string; body: InReviewUpdateData }) => ({
+        url: `/subtask/${data.subtaskId || ""}/to-in-review`,
+        method: "PUT",
+        body: data.body,
+      }),
+      invalidatesTags: (_result, _error, arg) => [
+        { type: "Subtask", id: arg?.subtaskId },
+        { type: "Subtasks" as const, id: "LIST" as const },
+        { type: "Tasks" as const, id: "LIST" as const },
+      ],
+    }),
+    updateSubtaskInReviewToRevisit: build.mutation({
+      query: (data: { subtaskId: string; body: InReviewFeedBackData }) => ({
+        url: `/subtask/${data.subtaskId || ""}/in-review-to-revisit`,
+        method: "PUT",
+        body: data.body,
+      }),
+      invalidatesTags: (_result, _error, arg) => [
+        { type: "Subtask", id: arg?.subtaskId },
+        { type: "Subtasks" as const, id: "LIST" as const },
+        { type: "Tasks" as const, id: "LIST" as const },
+      ],
+    }),
+    updateSubtaskInReviewToComplete: build.mutation({
+      query: (data: { subtaskId: string; body: InReviewFeedBackData }) => ({
+        url: `/subtask/${data.subtaskId || ""}/in-review-to-completed`,
+        method: "PUT",
+        body: data.body,
+      }),
+      invalidatesTags: (_result, _error, arg) => [
+        { type: "Subtask", id: arg?.subtaskId },
+        { type: "Subtasks" as const, id: "LIST" as const },
+        { type: "Tasks" as const, id: "LIST" as const },
+      ],
+    }),
     deleteSubtask: build.mutation<unknown, string>({
       query: (id: string) => ({
         url: `/subtask/${id}`,
@@ -120,4 +179,9 @@ export const {
   useAddSubtaskMutation,
   useUpdateSubtaskMutation,
   useDeleteSubtaskMutation,
+  useUpdateSubtaskStatusMutation,
+  useUpdateSubtaskOpenToInProcessMutation,
+  useUpdateSubtaskToInReviewMutation,
+  useUpdateSubtaskInReviewToRevisitMutation,
+  useUpdateSubtaskInReviewToCompleteMutation,
 } = subtaskApiSlice;

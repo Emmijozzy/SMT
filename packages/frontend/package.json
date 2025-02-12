@@ -24,6 +24,7 @@
     "@mui/x-data-grid-pro": "^7.7.1",
     "@reduxjs/toolkit": "^2.2.3",
     "@types/dompurify": "^3.2.0",
+    "date-fns": "^4.1.0",
     "dompurify": "^3.2.3",
     "formik": "^2.4.6",
     "jwt-decode": "^4.0.0",

@@ -4,12 +4,12 @@ import React from "react";
 import { FaTrashRestore } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { useDispatch } from "react-redux";
+import PriorityIndicator from "../../../../shared/components/PriorityIndicator";
+import StatusIndicator from "../../../../shared/components/StatusIndicator";
+import useRole from "../../../users/hooks/useRole";
 import { setShowModal, setTaskId } from "../../deleteTask/deleteTaskSlice";
 import { ITask } from "../../tasksInterface";
-import PriorityIndicator from "../../TasksTable/components/PriorityIndicator";
-import StatusIndicator from "../../TasksTable/components/StatusIndicator";
 import TaskDetailRow from "./TaskDetailRow";
-import useRole from "../../../users/hooks/useRole";
 
 type Props = {
   task: ITask;

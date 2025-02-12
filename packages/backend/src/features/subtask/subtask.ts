@@ -1,18 +1,49 @@
 import mongoose, { Document, Schema } from "mongoose";
 import SubtaskCounter from "./subtaskCounter";
 
+const checkListSchema = new Schema({
+  id: { type: String, required: true },
+  checkItem: { type: String, required: true },
+  isChecked: { type: Boolean, required: true },
+  isApprove: { type: Boolean, required: true },
+  isReject: { type: Boolean, required: true }
+});
+
+// Define the schema for the requiredFields array
+const requiredFieldSchema = new Schema({
+  id: { type: String, required: true },
+  field: { type: String, required: true },
+  input: { type: String },
+  type: { type: String, enum: ["text", "link"], required: true }
+});
+
 export interface ISubtask extends Document {
   subtaskId: string;
   taskId: string;
   title: string;
   team: string;
   description?: string;
-  status?: "open" | "pending" | "complete";
+  status?: "open" | "in_process" | "in_review" | "revisit" | "completed";
   priority: "low" | "medium" | "high";
   createdBy: string;
   lastModifiedBy: string;
   assignee: string;
   comments: string[];
+  checkLists: {
+    id: string;
+    checkItem: string;
+    isChecked: boolean;
+    isApprove: boolean;
+    isReject: boolean;
+  }[];
+  requiredFields: {
+    id: string;
+    field: string;
+    input: string;
+    type: "text" | "link";
+  }[];
+  feedback: string;
+  comment: string;
   collaborators: string[];
   dueDate: Date;
   createdAt: Date;
@@ -47,7 +78,7 @@ const subtaskSchema = new Schema<ISubtask>({
   },
   status: {
     type: String,
-    enum: ["open", "pending", "complete"],
+    enum: ["open", "in_process", "in_review", "revisit", "completed"],
     required: true,
     default: "open"
   },
@@ -83,6 +114,12 @@ const subtaskSchema = new Schema<ISubtask>({
     ],
     default: []
   },
+  feedback: {
+    type: String
+  },
+  comment: {
+    type: String
+  },
   collaborators: {
     type: [
       {
@@ -93,6 +130,8 @@ const subtaskSchema = new Schema<ISubtask>({
     ],
     default: []
   },
+  checkLists: { type: [checkListSchema], default: [] },
+  requiredFields: { type: [requiredFieldSchema], default: [] },
   dueDate: {
     type: Date
   },

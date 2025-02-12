@@ -1,6 +1,6 @@
 import { memo } from "react";
 import EditSubtaskDetails from "../../editSubtaskDetails/EditSubtaskDetails";
-import ViewSubtaskDetails from "../../ViewSubtaskDetails";
+import ViewSubtaskDetails from "../../ViewSubtaskDetails/ViewSubtaskDetails";
 
 interface SubtaskViewProps {
   showEdit: boolean;

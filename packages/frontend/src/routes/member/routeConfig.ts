@@ -1,4 +1,5 @@
 import { lazy } from "react";
+import { subtaskRoutes } from "./subtaskRoutes";
 
 const Dashboard = lazy(() => import("../../features/Dashboard/Dashboard"));
 const Profile = lazy(() => import("../../features/profile/Profile"));
@@ -9,6 +10,7 @@ export const memberRouteConfig = [
     path: "dash",
     component: Dashboard,
   },
+  subtaskRoutes,
   {
     path: "profile",
     component: Profile,

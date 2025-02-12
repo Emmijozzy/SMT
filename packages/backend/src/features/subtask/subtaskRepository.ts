@@ -1,6 +1,7 @@
 import { BadRequestError, InternalError } from "../../utils/ApiError";
 import { IPaginationOptions } from "../../utils/getPaginationOptions";
 import Subtask, { ISubtask } from "./subtask";
+import { SubtaskStatus } from "./SubtaskStatus";
 
 export default class SubtaskRepository {
   async create(subtaskData: Partial<ISubtask>): Promise<ISubtask> {
@@ -43,10 +44,8 @@ export default class SubtaskRepository {
   }
   async getSubtaskById(subtaskId: string): Promise<ISubtask> {
     try {
-      console.log(subtaskId);
       const subtask = await Subtask.findOne({ subtaskId }).lean().exec();
       if (!subtask) throw new InternalError(`Subtask ${subtaskId} not found`);
-      // console.log("Subtask found:", subtask);
       return subtask;
     } catch (err: unknown) {
       const error = err as Error;
@@ -85,6 +84,19 @@ export default class SubtaskRepository {
       );
     }
   }
+
+  async updateSubtask(subtaskId: string, subtask: Partial<ISubtask>): Promise<ISubtask | null> {
+    try {
+      const updatedSubtask = await Subtask.findOneAndUpdate({ subtaskId }, subtask, { new: true });
+      if (!updatedSubtask) throw new Error(`Subtask ${subtaskId} not found or can be updated`);
+      return updatedSubtask;
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error("Error updating subtask", error);
+      throw new InternalError("Failed to update subtask.  ERROR: " + error.message + " ", error.stack, __filename);
+    }
+  }
+
   async deleteSubtaskById(subtaskId: string): Promise<ISubtask | null> {
     try {
       const deletedSubtask = await Subtask.findOneAndDelete({ subtaskId });
@@ -235,6 +247,22 @@ export default class SubtaskRepository {
         error.stack,
         __filename
       );
+    }
+  }
+
+  async updateSubtaskStatus(subtaskId: string, status: SubtaskStatus): Promise<ISubtask | null> {
+    try {
+      const updateResult = await Subtask.updateOne({ subtaskId }, { status });
+
+      if (updateResult.modifiedCount === 0) {
+        throw new Error(`Subtask ${subtaskId} not found`);
+      }
+
+      return await Subtask.findOne({ subtaskId });
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error("Error updating subtask status", error);
+      throw new InternalError("Error updating subtask status. ERROR: " + error.message + " ", error.stack, __filename);
     }
   }
 }
