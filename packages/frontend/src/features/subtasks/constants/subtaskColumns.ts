@@ -1,4 +1,5 @@
 import { TableHeaderProps } from "../../../shared/components/masterTable/MasterTable";
+import { SubtaskStatus } from "../SubtaskStatus";
 
 export const subtaskColumns: TableHeaderProps = {
   className: "",
@@ -27,7 +28,7 @@ export const subtaskColumns: TableHeaderProps = {
       searchable: false,
       sortable: true,
       filterable: true,
-      filterOptions: ["open", "pending", "complete"],
+      filterOptions: [SubtaskStatus.Open, SubtaskStatus.InReview, SubtaskStatus.Revisit, SubtaskStatus.Completed],
     },
     {
       label: "due",

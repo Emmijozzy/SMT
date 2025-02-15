@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\packages",
+    "\\packages\\frontend",
+    "\\packages\\frontend\\src",
+    "\\packages\\frontend\\src\\features",
+    "\\packages\\frontend\\src\\features\\subtasks",
+    "\\packages\\frontend\\src\\features\\subtasks\\viewSubtask",
+    "\\packages\\frontend\\src\\features\\subtasks\\viewSubtask\\components"
+  ],
+  "SelectedNode": "\\packages\\frontend\\src\\features\\subtasks\\viewSubtask\\components\\SubtaskAuditLog.tsx",
+  "PreviewInSolutionExplorer": false
+}

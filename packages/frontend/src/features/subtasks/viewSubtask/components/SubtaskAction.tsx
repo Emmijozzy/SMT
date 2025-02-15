@@ -36,14 +36,16 @@ function SubtaskAction({
     }
   };
 
+  const handleInProcessChange = () => {
+    updateSubtaskOpenToInProcess().finally(() => {});
+  };
+
   const renderTeamMemberActions = () => {
     if (role !== UserRole.TeamMember) return null;
 
     return (
       <>
-        {subtask.status === SubtaskStatus.Open && (
-          <StatusButton status="in_process" onClick={() => handleStatusChange(() => updateSubtaskOpenToInProcess())} />
-        )}
+        {subtask.status === SubtaskStatus.Open && <StatusButton status="in_process" onClick={handleInProcessChange} />}
         {(subtask.status === SubtaskStatus.InProcess || subtask.status === SubtaskStatus.Revisit) && (
           <StatusButton
             status="in_review"
@@ -64,7 +66,7 @@ function SubtaskAction({
         <StatusButton
           status="revisit"
           onClick={() => handleStatusChange(() => updateSubtaskInReviewToRevisit(inReviewFeedBackData))}
-          disabled={!!error || allChecklistApproved}
+          disabled={!!error || (subtask.checkLists && subtask.checkLists.length > 0 && allChecklistApproved)}
         />
         <StatusButton
           status="completed"
@@ -74,7 +76,6 @@ function SubtaskAction({
       </>
     );
   };
-
   return (
     <div className="p-2 rounded-lg shadow-sm w-full flex items-center justify-center bg-base-200">
       <div className="space-x-2">

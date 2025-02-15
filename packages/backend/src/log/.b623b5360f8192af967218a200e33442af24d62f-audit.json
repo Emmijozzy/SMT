@@ -6,16 +6,6 @@
     "auditLog": "C:\\Users\\Emmijozzy\\Desktop\\Web Project\\SMT\\packages\\backend\\src\\log\\.b623b5360f8192af967218a200e33442af24d62f-audit.json",
     "files": [
         {
-            "date": 1738272580660,
-            "name": "C:\\Users\\Emmijozzy\\Desktop\\Web Project\\SMT\\packages\\backend\\src\\log\\2025-01-30.log",
-            "hash": "6bed5afe466c17b0323b1dffa73e41a6abd21053c0bf353755ddda812d957d29"
-        },
-        {
-            "date": 1738278032380,
-            "name": "C:\\Users\\Emmijozzy\\Desktop\\Web Project\\SMT\\packages\\backend\\src\\log\\2025-01-31.log",
-            "hash": "0bc7493592134c7bf46444050b77f19ae28bd7cfb5695a45b353fb2a5f303d77"
-        },
-        {
             "date": 1738464711027,
             "name": "C:\\Users\\Emmijozzy\\Desktop\\Web Project\\SMT\\packages\\backend\\src\\log\\2025-02-02.log",
             "hash": "e30e31c366873fda41b0d1a4effbd369fc1ffb22d737d9089837dede0d6c4634"
@@ -64,6 +54,21 @@
             "date": 1739316865572,
             "name": "C:\\Users\\Emmijozzy\\Desktop\\Web Project\\SMT\\packages\\backend\\src\\log\\2025-02-12.log",
             "hash": "643758f4faca46f2049f8add28b330fa1b421e06c76514b3273ff490112edf31"
+        },
+        {
+            "date": 1739403729896,
+            "name": "C:\\Users\\Emmijozzy\\Desktop\\Web Project\\SMT\\packages\\backend\\src\\log\\2025-02-13.log",
+            "hash": "dab15667497743e210766ede97ef7dca07adc80916971b50cbcdb99fe08b85f6"
+        },
+        {
+            "date": 1739492314078,
+            "name": "C:\\Users\\Emmijozzy\\Desktop\\Web Project\\SMT\\packages\\backend\\src\\log\\2025-02-14.log",
+            "hash": "20b9982999615fa8be5f1363b67139f7fc58c3d62bebaf047b5fe8a849b4ef91"
+        },
+        {
+            "date": 1739580999037,
+            "name": "C:\\Users\\Emmijozzy\\Desktop\\Web Project\\SMT\\packages\\backend\\src\\log\\2025-02-15.log",
+            "hash": "8cf7d0d92b14fb3b90bddd3d6e37d8b6c957ffa0acc0cc69101e60b57b2cdec6"
         }
     ],
     "hashType": "sha256"

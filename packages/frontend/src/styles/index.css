@@ -29,6 +29,29 @@ html {
   --font-sora: "Sora", sans-serif;
   box-sizing: border-box;
   position: fixed;
+
+  /* @apply [--b1:theme(colors.base-100)] 
+  [--b3:theme(colors.base-300)]
+  [--primary:theme(colors.primary)]
+  [--success:theme(colors.success)]
+  [--error:theme(colors.error)]
+  [--base-content:theme(colors.base-content)]; */
+
+    /* Base colors */
+    /* --b1: var(--base-100);   */
+    /* --b3: var(--base-300); */
+    
+    /* Primary colors */
+    /* --primary: var(--p); */
+    
+    /* Status colors */
+    /* --success: var(--su); */
+    /* --error: var(--er); */
+    
+    /* Text colors */
+    /* --base-content: var(--bc); */
+
+
 }
 
 .min-h-50-screen {
@@ -328,5 +351,15 @@ hr {
 
 
 
+.vertical-timeline-element--work::before {
+  /* background: hsl(var(--b2)) !important; */
+  /* width: 1px !important; */
+}
 
+.vertical-timeline::before {
+  @apply content-[''] absolute top-0 left-[18px] h-full w-1 bg-base-content;
+}
 
+.vertical-timeline-element-content {
+  @apply relative ml-[60px] bg-base-100 rounded-[0.25em] p-4 shadow-none !important;
+}

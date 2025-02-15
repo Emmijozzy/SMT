@@ -3,13 +3,14 @@ import { apiSlice } from "../../app/api/apislice";
 import { ResApiData } from "../../shared/interface/resApiData";
 import { Result } from "../../shared/interface/Result";
 import log from "../../shared/utils/log";
-import { InReviewFeedBackData, InReviewUpdateData, ISubtask } from "./subtaskInterface";
+import { InReviewFeedBackData, InReviewUpdateData, ISubtask, SubtaskLog } from "./subtaskInterface";
 import { setSubtasks } from "./subtaskSlice";
 
 type SubtaskResponse = ISubtask[];
 
-interface ResData {
-  data: ISubtask[];
+interface ResData<T> {
+  data: T;
+  message: string;
 }
 
 export const subtaskApiSlice = apiSlice.injectEndpoints({
@@ -30,7 +31,7 @@ export const subtaskApiSlice = apiSlice.injectEndpoints({
           validateStatus: (response, result: Result<ISubtask>) => response.status === 200 || !result?.isError,
         };
       },
-      transformResponse: (responseData: ResData) => {
+      transformResponse: (responseData: ResData<SubtaskResponse>) => {
         let subtasks = responseData?.data;
 
         subtasks = subtasks.map((subtask: ISubtask) => ({
@@ -121,6 +122,7 @@ export const subtaskApiSlice = apiSlice.injectEndpoints({
         { type: "Subtask", id: arg?.subtaskId },
         { type: "Subtasks" as const, id: "LIST" as const },
         { type: "Tasks" as const, id: "LIST" as const },
+        { type: "SubtaskLogs" as const, id: "LIST" as const },
       ],
     }),
     updateSubtaskToInReview: build.mutation({
@@ -133,6 +135,7 @@ export const subtaskApiSlice = apiSlice.injectEndpoints({
         { type: "Subtask", id: arg?.subtaskId },
         { type: "Subtasks" as const, id: "LIST" as const },
         { type: "Tasks" as const, id: "LIST" as const },
+        { type: "SubtaskLogs" as const, id: "LIST" as const },
       ],
     }),
     updateSubtaskInReviewToRevisit: build.mutation({
@@ -145,6 +148,7 @@ export const subtaskApiSlice = apiSlice.injectEndpoints({
         { type: "Subtask", id: arg?.subtaskId },
         { type: "Subtasks" as const, id: "LIST" as const },
         { type: "Tasks" as const, id: "LIST" as const },
+        { type: "SubtaskLogs" as const, id: "LIST" as const },
       ],
     }),
     updateSubtaskInReviewToComplete: build.mutation({
@@ -157,6 +161,7 @@ export const subtaskApiSlice = apiSlice.injectEndpoints({
         { type: "Subtask", id: arg?.subtaskId },
         { type: "Subtasks" as const, id: "LIST" as const },
         { type: "Tasks" as const, id: "LIST" as const },
+        { type: "SubtaskLogs" as const, id: "LIST" as const },
       ],
     }),
     deleteSubtask: build.mutation<unknown, string>({
@@ -168,7 +173,15 @@ export const subtaskApiSlice = apiSlice.injectEndpoints({
         { type: "Subtask", id: arg },
         { type: "Subtasks" as const, id: "LIST" as const },
         { type: "Tasks" as const, id: "LIST" as const },
+        { type: "SubtaskLogs" as const, id: "LIST" as const },
       ],
+    }),
+    getSubtaskAuditLogs: build.query<ResData<SubtaskLog>, string>({
+      query: (subtaskId) => ({
+        url: `/subtask/${subtaskId}/audit-logs`,
+        validateStatus: (response, result: Result<ISubtask>) => response.status === 200 || !result.isError,
+      }),
+      providesTags: (_result, _error, arg) => [{ type: "Subtasks", id: arg }],
     }),
   }),
 });
@@ -184,4 +197,5 @@ export const {
   useUpdateSubtaskToInReviewMutation,
   useUpdateSubtaskInReviewToRevisitMutation,
   useUpdateSubtaskInReviewToCompleteMutation,
+  useGetSubtaskAuditLogsQuery,
 } = subtaskApiSlice;

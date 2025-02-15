@@ -8,7 +8,10 @@ type Props = {
 };
 
 function Assignee({ assignee }: Props) {
+  console.log(assignee);
   const user = useSelector((state: RootState) => usersSelectors.selectById(state, assignee));
+
+  console.log(user);
 
   if (!user) return null;
 

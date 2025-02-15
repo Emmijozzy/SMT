@@ -12,6 +12,11 @@ function SubtasksTable() {
 
   const { data: subtasks } = useGetSubtasksQuery(
     userProfile.role !== "admin" ? { team_like: userProfile?.teamId ?? "" } : undefined,
+    {
+      pollingInterval: 15000, // Refresh every 15 seconds
+      refetchOnMountOrArgChange: true, // Force refetch on mount
+      refetchOnFocus: true, // Refetch when window regains focus
+    },
   );
 
   const SubtaskTable = MasterTable<ISubtask & Record<string, unknown>>();

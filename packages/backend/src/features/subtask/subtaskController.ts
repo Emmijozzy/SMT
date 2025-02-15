@@ -92,6 +92,11 @@ export default class SubtaskController implements IController {
       authMiddleware(ENUM_USER_ROLES.ADMIN, ENUM_USER_ROLES.MANAGER),
       this.subtaskInReviewToRevisit
     );
+    this.router.get(
+      "/:subtaskId/audit-logs",
+      authMiddleware(ENUM_USER_ROLES.ADMIN, ENUM_USER_ROLES.MANAGER, ENUM_USER_ROLES.TEAM_MEMBER),
+      this.getSubtaskAuditLogsBySubtaskId
+    );
   }
 
   private createSubtask = asyncHandler(async (req: ExtendedRequest, res: Response) => {
@@ -162,37 +167,63 @@ export default class SubtaskController implements IController {
     successResponse(res, { data: subtask, message: "Subtask transitioned successfully" });
   });
 
-  private subtaskOpenToInProcess = asyncHandler(async (req: Request, res: Response) => {
+  private subtaskOpenToInProcess = asyncHandler(async (req: ExtendedRequest, res: Response) => {
     const { subtaskId } = req.params;
-    const subtask = await this.subtaskService.updateSubtaskFromOpenToInProcess(subtaskId);
+    const userId = req.user?.userId;
+    if (!userId) throw new InternalError("User ID is required");
+
+    const subtask = await this.subtaskOrchestrator.updateSubtaskFromOpenToInProcess(subtaskId, userId);
     if (!subtask) throw new InternalError("Failed to transition subtask");
     successResponse(res, { data: subtask, message: "Subtask transitioned successfully" });
   });
 
-  private subtaskToInReview = asyncHandler(async (req: Request, res: Response) => {
+  private subtaskToInReview = asyncHandler(async (req: ExtendedRequest, res: Response) => {
     const { subtaskId } = req.params;
-    const subtask = await this.subtaskService.updateSubtaskFromToInReview(subtaskId, req.body as InReviewUpdateData);
-    if (!subtask) throw new InternalError("Failed to transition subtask");
-    successResponse(res, { data: subtask, message: "Subtask transitioned successfully" });
-  });
+    const userId = req.user?.userId;
+    if (!userId) throw new InternalError("User ID is required");
 
-  private subtaskInReviewToRevisit = asyncHandler(async (req: Request, res: Response) => {
-    const { subtaskId } = req.params;
-    const subtask = await this.subtaskService.updateSubtaskFromInReviewToRevisit(
+    const subtask = await this.subtaskOrchestrator.updateSubtaskFromToInReview(
       subtaskId,
-      req.body as InReviewFeedBackData
+      req.body as InReviewUpdateData,
+      userId
     );
     if (!subtask) throw new InternalError("Failed to transition subtask");
     successResponse(res, { data: subtask, message: "Subtask transitioned successfully" });
   });
 
-  private subtaskInReviewToCompleted = asyncHandler(async (req: Request, res: Response) => {
+  private subtaskInReviewToRevisit = asyncHandler(async (req: ExtendedRequest, res: Response) => {
     const { subtaskId } = req.params;
-    const subtask = await this.subtaskService.updateSubtaskFromInReviewToCompleted(
+
+    const userId = req.user?.userId;
+    if (!userId) throw new InternalError("User ID is required");
+
+    const subtask = await this.subtaskOrchestrator.updateSubtaskFromInReviewToRevisit(
       subtaskId,
-      req.body as InReviewFeedBackData
+      req.body as InReviewFeedBackData,
+      userId
     );
     if (!subtask) throw new InternalError("Failed to transition subtask");
     successResponse(res, { data: subtask, message: "Subtask transitioned successfully" });
+  });
+
+  private subtaskInReviewToCompleted = asyncHandler(async (req: ExtendedRequest, res: Response) => {
+    const { subtaskId } = req.params;
+    const userId = req.user?.userId;
+    if (!userId) throw new InternalError("User ID is required");
+
+    const subtask = await this.subtaskOrchestrator.updateSubtaskFromInReviewToCompleted(
+      subtaskId,
+      req.body as InReviewFeedBackData,
+      userId
+    );
+    if (!subtask) throw new InternalError("Failed to transition subtask");
+    successResponse(res, { data: subtask, message: "Subtask transitioned successfully" });
+  });
+
+  private getSubtaskAuditLogsBySubtaskId = asyncHandler(async (req: Request, res: Response) => {
+    const { subtaskId } = req.params;
+    const auditLogs = await this.subtaskOrchestrator.getSubtaskAuditLogBySubtaskId(subtaskId);
+    if (!auditLogs) throw new InternalError("Error fetching audit logs");
+    successResponse(res, { data: auditLogs, message: "Audit logs fetched successfully" });
   });
 }

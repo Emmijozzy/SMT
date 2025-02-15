@@ -31,6 +31,21 @@ export interface ISubtask {
   updatedAt: Date;
 }
 
+export type CheckList = {
+  id: string;
+  checkItem: string;
+  isChecked: boolean;
+  isApprove: boolean;
+  isReject: boolean;
+};
+
+export type RequiredField = {
+  id: string;
+  field: string;
+  input: string;
+  type: "text" | "link";
+};
+
 export interface InReviewUpdateData {
   comment: string;
   checkLists: {
@@ -63,4 +78,23 @@ export interface InReviewFeedBackData {
     input: string;
     type: "text" | "link";
   }[];
+}
+
+export interface SubtaskLog {
+  id: string;
+  subtaskId: string;
+  timestamp: Date;
+  action: string;
+  actor: {
+    userId: string;
+    name: string;
+    role: string;
+  };
+  details?: {
+    requiredFields?: RequiredField[];
+    checklist?: CheckList[];
+    feedback?: string;
+    comment?: string;
+    decision?: string;
+  };
 }

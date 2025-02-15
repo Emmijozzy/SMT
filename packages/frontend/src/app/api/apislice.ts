@@ -87,6 +87,18 @@ const baseQueryWithReactAuth = async (args: string | FetchArgs, api: BaseQueryAp
 
 export const apiSlice = createApi({
   baseQuery: baseQueryWithReactAuth,
-  tagTypes: ["User", "Users", "Task", "Tasks", "Team", "Teams", "Subtasks", "Subtask", "Comment", "Comments"],
+  tagTypes: [
+    "User",
+    "Users",
+    "Task",
+    "Tasks",
+    "Team",
+    "Teams",
+    "Subtasks",
+    "Subtask",
+    "Comment",
+    "Comments",
+    "SubtaskLogs",
+  ],
   endpoints: (_builder) => ({}),
 });

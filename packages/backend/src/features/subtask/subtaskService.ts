@@ -219,7 +219,7 @@ export default class SubtaskService {
       if (!subtask) throw new InternalError("Failed to fetch subtask");
 
       const { checkLists } = inReviewUpdateData;
-      const allChecked = checkLists.every((checklist) => checklist.isChecked);
+      const allChecked = checkLists?.every((checklist) => checklist.isChecked) || !checkLists;
       if (!allChecked) {
         throw new BadRequestError("All checklists must be checked before moving to InReview");
       }
@@ -254,8 +254,8 @@ export default class SubtaskService {
       }
 
       const { checkLists } = revisitUpdateData;
-      const allChecked = checkLists.every((checklist) => checklist.isChecked);
-      const atLeastOneRejected = checkLists.some((checklist) => !checklist.isApprove);
+      const allChecked = checkLists?.every((checklist) => checklist.isChecked) || !checkLists;
+      const atLeastOneRejected = checkLists?.some((checklist) => !checklist.isApprove) || !checkLists;
 
       if (!allChecked) {
         throw new BadRequestError("All checklists must checked, cannot revisit");
@@ -294,8 +294,8 @@ export default class SubtaskService {
       const subtask = await this.subtaskRepository.getSubtaskById(subtaskId);
       if (!subtask) throw new InternalError("Failed to fetch subtask");
       const { checkLists } = completedUpdateData;
-      const allChecked = checkLists.every((checklist) => checklist.isChecked);
-      const allApproved = checkLists.every((checklist) => checklist.isApprove);
+      const allChecked = checkLists?.every((checklist) => checklist.isChecked) || !checkLists;
+      const allApproved = checkLists?.every((checklist) => checklist.isApprove) || !checkLists;
 
       if (!allChecked) {
         throw new BadRequestError("All checklists must be checked before completing");

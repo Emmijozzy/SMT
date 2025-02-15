@@ -51,6 +51,8 @@ const useEditTaskDetails = (taskId: string) => {
     // createdDate: task.createdDate,
   };
 
+  const { assignedTo, ...restTask } = getTask;
+
   const formik = useFormik({
     initialValues,
     validationSchema: taskSchema,
@@ -59,7 +61,7 @@ const useEditTaskDetails = (taskId: string) => {
       dispatch(setLoader(true));
       try {
         const payload: ITask = {
-          ...getTask,
+          ...restTask,
           taskId: values.taskId,
           title: values.title,
           description: toSentenceCase(values.description),
@@ -73,10 +75,10 @@ const useEditTaskDetails = (taskId: string) => {
           // createdDate: values.createdDate,
         };
 
-        const resData = (await updateTask({ ...payload })) as ResData;
+        const resData = (await updateTask({ ...payload })) as ResData<ITask>;
         // console.log(resData);
         if (Object.keys(resData)[0] === "error" || isError) {
-          const resError = resData.error as ResData;
+          const resError = resData.error as ResData<ITask>;
           throw new Error(resError.data.message);
         }
         const resMessage = resData.data.message;

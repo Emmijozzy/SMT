@@ -106,7 +106,7 @@ function ActionSections({ subtask }: ActionSectionsProps) {
 
   useEffect(() => {
     if (subtask.status === SubtaskStatus.InReview) {
-      setAllChecklistApproved(state.checklistItems?.every((item) => item.isApprove));
+      setAllChecklistApproved(state.checklistItems?.every((item) => item.isApprove) || !state.checklistItems);
     }
   }, [state.checklistItems, subtask.status]);
 

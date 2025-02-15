@@ -20,7 +20,14 @@ const TASK_STATUS = {
 function SubtaskTable() {
   const [showSection, setShowSection] = useState("all");
   const userId = useSelector((state: RootState) => getPresentUser(state))?.userId ?? "";
-  const { data: subtasks } = useGetSubtasksQuery({ assignee_like: userId });
+  const { data: subtasks } = useGetSubtasksQuery(
+    { assignee_like: userId },
+    {
+      pollingInterval: 15000, // Refresh every 15 seconds
+      refetchOnMountOrArgChange: true, // Force refetch on mount
+      refetchOnFocus: true, // Refetch when window regains focus
+    },
+  );
   const OpenSubtaskTable = MasterTable<ISubtask & Record<string, unknown>>();
 
   const filteredTasks = useMemo(

@@ -4,10 +4,10 @@ import { Link } from "react-router-dom";
 import Avartar from "../../../shared/components/Avartar";
 import PriorityIndicator from "../../../shared/components/PriorityIndicator";
 import StatusIndicator from "../../../shared/components/StatusIndicator";
+import User from "../../../shared/components/User";
 import { Status } from "../../../shared/interface/status";
 import getDaysLeft from "../../../shared/utils/getDaysLeft";
 import { ISubtask } from "../subtaskInterface";
-import Assignee from "./Assignee";
 
 type Props<T> = {
   data: T;
@@ -34,7 +34,12 @@ function SubtaskRow<T extends ISubtask>({ data }: Props<T>) {
             aria-label=" Task assignee"
             className="border-t-0 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 py-1 capitalize"
           >
-            <Assignee assignee={assignee} />
+            <User
+              userId={assignee}
+              withName
+              index={1}
+              avaterClassName="w-[2.8rem] h-[2.8rem] rounded-full text-sm font-bold border-2 border-blueGray-50 shadow"
+            />
           </td>
           <td className="border-t-0 w-12 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 py-1 capitalize ">
             <div className="flex items-center gap-1">

@@ -9,9 +9,10 @@ type Props = {
   userId: string;
   index: number;
   withName?: boolean;
+  avaterClassName?: string;
 };
 
-function User({ userId, index, withName = false }: Props) {
+function User({ userId, index, withName = false, avaterClassName = "" }: Props) {
   const { data: loadedUser, isFetching, isSuccess } = useGetUserQuery(userId);
   let user = useSelector((state: RootState) => usersSelectors.selectById(state, userId)) as IUser;
 
@@ -27,7 +28,7 @@ function User({ userId, index, withName = false }: Props) {
         <Avartar
           name={fullName || ""}
           imgUrl={img}
-          className={`w-[2rem] h-[2rem] rounded-full text-sm font-bold border-2 border-blueGray-50 shadow ${index === 0 ? "" : "-ml-4"}`}
+          className={`w-[2rem] h-[2rem] rounded-full text-sm font-bold border-2 border-blueGray-50 shadow ${index === 0 ? "" : "-ml-4"} ${avaterClassName}`}
         />
         {withName && <span className="ml-2 capitalize">{fullName}</span>}
       </div>
