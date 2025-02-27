@@ -1,7 +1,7 @@
 import { lazy } from "react";
 
-const Subtask = lazy(() => import("../../features/subtasks/member/Subtasks"));
-const SubtasksTable = lazy(() => import("../../features/subtasks/member/subtaskTable/SubtaskTable"));
+const Subtask = lazy(() => import("../../features/subtasks/Subtask"));
+const SubtasksTable = lazy(() => import("../../features/subtasks/subtasksTable/SubtasksTable"));
 const ViewSubtask = lazy(() => import("../../features/subtasks/viewSubtask/ViewSubtask"));
 
 export const subtaskRoutes = {

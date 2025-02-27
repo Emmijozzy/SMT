@@ -42,6 +42,8 @@ export interface ISubtask extends Document {
     input: string;
     type: "text" | "link";
   }[];
+  overdueNotificationSent: boolean;
+  deadlineNotificationSent: boolean;
   feedback: string;
   comment: string;
   collaborators: string[];
@@ -132,6 +134,14 @@ const subtaskSchema = new Schema<ISubtask>({
   },
   checkLists: { type: [checkListSchema], default: [] },
   requiredFields: { type: [requiredFieldSchema], default: [] },
+  overdueNotificationSent: {
+    type: Boolean,
+    default: false
+  },
+  deadlineNotificationSent: {
+    type: Boolean,
+    default: false
+  },
   dueDate: {
     type: Date
   },

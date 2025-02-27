@@ -15,7 +15,7 @@ interface ResData<T> {
 
 export const subtaskApiSlice = apiSlice.injectEndpoints({
   endpoints: (build) => ({
-    getSubtasks: build.query<SubtaskResponse, Record<string, string> | undefined>({
+    getSubtasks: build.query<SubtaskResponse, Record<string, string | undefined> | undefined>({
       query: (query) => {
         const filteredQuery = query as unknown as Record<string, string>;
         if (typeof filteredQuery == "object") {

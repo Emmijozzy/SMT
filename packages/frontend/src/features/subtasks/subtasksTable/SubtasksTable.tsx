@@ -1,28 +1,106 @@
+/* eslint-disable indent */
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import { useCallback, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../app/store";
 import MasterTable from "../../../shared/components/masterTable/MasterTable";
 import { getPresentUser } from "../../profile/userProfileSlice";
+import { UserRole } from "../../users/userRole";
 import SubtaskRow from "../components/SubtaskRow";
 import { subtaskColumns } from "../constants/subtaskColumns";
 import { useGetSubtasksQuery } from "../subtaskApiSlice";
 import { ISubtask } from "../subtaskInterface";
 
-function SubtasksTable() {
-  const userProfile = useSelector((state: RootState) => getPresentUser(state));
+const TASK_STATUS = {
+  OPEN: "open",
+  IN_PROCESS: "in_process",
+  IN_REVIEW: "in_review",
+  REVISIT: "revisit",
+  COMPLETED: "completed",
+} as const;
 
-  const { data: subtasks } = useGetSubtasksQuery(
-    userProfile.role !== "admin" ? { team_like: userProfile?.teamId ?? "" } : undefined,
-    {
-      pollingInterval: 15000, // Refresh every 15 seconds
-      refetchOnMountOrArgChange: true, // Force refetch on mount
-      refetchOnFocus: true, // Refetch when window regains focus
-    },
+function SubtaskTable() {
+  const [showSection, setShowSection] = useState("all");
+  const userProfile = useSelector((state: RootState) => getPresentUser(state));
+  const role = userProfile?.role;
+
+  const query: Record<string, string | undefined> | undefined = (() => {
+    switch (role) {
+      case UserRole.Admin:
+        return undefined;
+      case UserRole.Manager:
+        return userProfile?.teamId ? { team_like: userProfile.teamId } : undefined;
+      case UserRole.TeamMember:
+        return userProfile?.userId ? { assignee_like: userProfile.userId } : undefined;
+      default:
+        return userProfile?.userId ? { assignee_like: userProfile.userId } : undefined;
+    }
+  })();
+
+  const { data: subtasks } = useGetSubtasksQuery(query, {
+    pollingInterval: 30000, // Updates every 30 seconds
+    refetchOnMountOrArgChange: false,
+    refetchOnFocus: true, // Refetch when window regains focus
+  });
+
+  const OpenSubtaskTable = MasterTable<ISubtask & Record<string, unknown>>();
+
+  const filteredTasks = useMemo(
+    () => ({
+      all: subtasks ?? [],
+      open: subtasks?.filter((task) => task.status === TASK_STATUS.OPEN) ?? [],
+      inProgress: subtasks?.filter((task) => task.status === TASK_STATUS.IN_PROCESS) ?? [],
+      inReview: subtasks?.filter((task) => task.status === TASK_STATUS.IN_REVIEW) ?? [],
+      revisit: subtasks?.filter((task) => task.status === TASK_STATUS.REVISIT) ?? [],
+      completed: subtasks?.filter((task) => task.status === TASK_STATUS.COMPLETED) ?? [],
+    }),
+    [subtasks],
   );
 
-  const SubtaskTable = MasterTable<ISubtask & Record<string, unknown>>();
+  const handleShowSection = (section: string) => {
+    setShowSection(section);
+  };
 
-  const tableData = (subtasks || []) as (ISubtask & Record<string, unknown>)[];
+  const renderTaskSection = useCallback(
+    (title: string, section: string, tasks: ISubtask[]) => (
+      <div className="rounded-lg">
+        <div className="h-14 flex items-center justify-between px-4">
+          <div className="flex items-center">
+            <button
+              type="button"
+              aria-label="Open Sidebar"
+              onClick={() => handleShowSection(section)}
+              className="h-full flex items-center mr-3"
+            >
+              <ArrowDropDownIcon className={`h-14 w-14 transition ${showSection === section ? "rotate-180" : ""}`} />
+            </button>
 
-  return <SubtaskTable name="Subtask" tableHead={subtaskColumns} data={tableData} TableBody={SubtaskRow} />;
+            <h2 className="h6">{title}</h2>
+          </div>
+          <span className="badge badge-primary">{tasks.length}</span>
+        </div>
+        <div className={`transition-all ${showSection === section ? "" : "hidden"}`}>
+          <OpenSubtaskTable
+            name="Subtask"
+            tableHead={subtaskColumns}
+            data={tasks as (ISubtask & Record<string, unknown>)[]}
+            TableBody={SubtaskRow}
+          />
+        </div>
+      </div>
+    ),
+    [OpenSubtaskTable, showSection],
+  );
+
+  return (
+    <div className="border-2 border-base-content/20 rounded-lg ">
+      {renderTaskSection("All Subtasks", "all", filteredTasks.all)}
+      {renderTaskSection("Open Tasks", "open", filteredTasks.open)}
+      {renderTaskSection("In Progress Tasks", "inProgress", filteredTasks.inProgress)}
+      {renderTaskSection("In Review Tasks", "inReview", filteredTasks.inReview)}
+      {renderTaskSection("Revisit Tasks", "revisit", filteredTasks.revisit)}
+      {renderTaskSection("Completed Tasks", "completed", filteredTasks.completed)}
+    </div>
+  );
 }
-export default SubtasksTable;
+export default SubtaskTable;

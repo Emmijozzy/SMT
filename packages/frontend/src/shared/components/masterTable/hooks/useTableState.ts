@@ -7,6 +7,7 @@ export function useTableState<T>(defaultColumn: string) {
     key: null,
     direction: null,
   });
+
   const [sortedBy, setSortedBy] = useState<keyof T | "">("");
   const [toFilter, setToFilter] = useState({ option: "", column: defaultColumn });
   const [viewSearch, setViewSearch] = useState(false);

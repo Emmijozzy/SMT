@@ -42,7 +42,7 @@ const baseQueryWithReactAuth = async (args: string | FetchArgs, api: BaseQueryAp
 
   if (result?.error?.status) {
     if (result?.error?.status === 403) {
-      log("error", "requesting new access token with refresh token");
+      log("info", "requesting new access token with refresh token");
 
       const refreshResult = await baseQuery("/auth/refresh", api, extraOptions);
 

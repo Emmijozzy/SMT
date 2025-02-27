@@ -265,4 +265,57 @@ export default class SubtaskRepository {
       throw new InternalError("Error updating subtask status. ERROR: " + error.message + " ", error.stack, __filename);
     }
   }
+
+  async findApproachingDeadlinesSubtasks(): Promise<ISubtask[]> {
+    try {
+      const currentDate = new Date();
+      const twentyFourHoursLater = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000);
+      const approachingDeadlinesSubtasks = await Subtask.find({
+        dueDate: {
+          $gte: currentDate,
+          $lte: twentyFourHoursLater
+        },
+        status: { $ne: "completed" },
+        deadlineNotificationSent: { $ne: true }
+      });
+
+      // if (!approachingDeadlinesSubtasks) {
+      // }
+
+      if (approachingDeadlinesSubtasks.length === 0) {
+        // throw new Error("No approaching deadlines subtasks found");
+        return [];
+      }
+
+      return approachingDeadlinesSubtasks;
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error("Error finding approaching deadlines subtasks", error);
+      throw new InternalError(
+        "Error finding approaching deadlines subtasks. ERROR: " + error.message + " ",
+        error.stack,
+        __filename
+      );
+    }
+  }
+
+  async findOverdueSubtasks(): Promise<ISubtask[]> {
+    try {
+      const currentDate = new Date();
+      const overdueSubtasks = await Subtask.find({
+        dueDate: { $lt: currentDate },
+        status: { $ne: "completed" },
+        overdueNotificationSent: { $ne: true }
+      });
+      if (overdueSubtasks.length === 0) {
+        // throw new Error("No overdue subtasks found");
+        return [];
+      }
+      return overdueSubtasks;
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error("Error finding overdue subtasks", error);
+      throw new InternalError("Error finding overdue subtasks. ERROR: " + error.message + " ", error.stack, __filename);
+    }
+  }
 }

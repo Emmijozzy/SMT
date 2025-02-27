@@ -4,12 +4,14 @@ import { port } from "./config";
 import AuthController from "./features/auth/authController";
 import BackRunController from "./features/backRun/backRunController";
 import CommentController from "./features/comment/commentController";
+import { initializeDeadlineNotificationCron } from "./features/notification/initializeDeadlineNotificationCron";
 import SubtaskController from "./features/subtask/subtaskController";
 import TaskController from "./features/task/controllers/taskController";
 import TasksAdminController from "./features/task/controllers/tasksAdminController";
 import TeamController from "./features/team/teamController";
 import UserAdminController from "./features/users/controllers/userAdminController";
 import UserController from "./features/users/controllers/userController";
+import NotificationController from "./features/notification/notificationController";
 
 const app = new App(
   [
@@ -21,9 +23,11 @@ const app = new App(
     new SubtaskController(),
     new TeamController(),
     new BackRunController(),
-    new CommentController()
+    new CommentController(),
+    new NotificationController()
   ],
   port
 );
 
 app.init();
+initializeDeadlineNotificationCron();

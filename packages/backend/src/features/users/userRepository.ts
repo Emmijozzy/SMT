@@ -6,7 +6,7 @@ export class UserRepository {
     return await User.create(userData);
   }
 
-  public async findById(userId: string) {
+  public async findById(userId: string): Promise<IUser | null> {
     return await User.findOne({ userId }).select("-password").lean().exec();
   }
 
