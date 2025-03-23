@@ -1,3 +1,5 @@
+import { NotificationType } from "../../../features/notification/notification";
+import NotificationService from "../../../features/notification/notificationService";
 import TeamService from "../../../features/team/teamService";
 import { BadRequestError, InternalError, NotFoundError } from "../../../utils/ApiError";
 import { ITask } from "../model/task";
@@ -7,16 +9,19 @@ import { TaskService } from "./taskService";
 export class TaskOrchestrator {
   private taskService: TaskService;
   private TeamService: TeamService;
+  private notificationService: NotificationService;
 
   constructor() {
     this.taskService = new TaskService();
     this.TeamService = new TeamService();
+    this.notificationService = new NotificationService();
   }
 
   public async createTask(payload: TaskPayload): Promise<ITask> {
     try {
       const task = await this.taskService.createTask(payload);
       await this.TeamService.addTaskToTeam(task.responsibleTeam, task.taskId);
+      await this.notificationService.createTaskNotification(task.taskId, NotificationType.TaskCreated);
       return task;
     } catch (err: unknown) {
       const error = err as Error;
@@ -51,9 +56,13 @@ export class TaskOrchestrator {
         title: title || task.title,
         description: description || task.description,
         priority: priority || task.priority,
-        dueDate: dueDate ? new Date(dueDate) : task.dueDate,
         startDate: startDate ? new Date(startDate) : task.startDate
       };
+
+      if (dueDate && new Date(dueDate).getTime() != new Date(task.dueDate).getTime()) {
+        taskPayload.dueDate = dueDate ? new Date(dueDate) : task.dueDate;
+        await this.notificationService.createTaskNotification(task.taskId, NotificationType.TaskDueDateUpdated);
+      }
 
       // Use enum for task statuses
       if (status === "not started" || status === "in progress" || status === "completed" || status === "closed") {
@@ -67,6 +76,7 @@ export class TaskOrchestrator {
       if (responsibleTeam && responsibleTeam !== task.responsibleTeam) {
         await this.TeamService.removeTaskFromTeam(task.responsibleTeam, task.taskId);
         await this.TeamService.addTaskToTeam(responsibleTeam, task.taskId);
+        await this.notificationService.createTaskNotification(task.taskId, NotificationType.TaskReassignedToTeam);
         taskPayload.responsibleTeam = responsibleTeam;
       }
 
@@ -81,6 +91,7 @@ export class TaskOrchestrator {
         taskPayload.managerTask = managerTask;
       }
       const UpdatedTask = await this.taskService.updateTaskById(taskId, taskPayload);
+      await this.notificationService.createTaskNotification(task.taskId, NotificationType.TaskUpdated);
       if (!UpdatedTask) throw new InternalError("Error updating task");
       return UpdatedTask;
     } catch (err: unknown) {
@@ -96,6 +107,7 @@ export class TaskOrchestrator {
       if (!task) throw new NotFoundError("Task not found");
       const deletedTask = await this.taskService.outrightDeleteById(taskId);
       const taskRemoved = await this.TeamService.removeTaskFromTeam(task.responsibleTeam, task.taskId);
+      await this.notificationService.createTaskNotification(task.taskId, NotificationType.TaskDeleted);
       if (!deletedTask || !taskRemoved) throw new InternalError("Error deleting task");
       console.log("Task deleted successfully");
       return deletedTask;

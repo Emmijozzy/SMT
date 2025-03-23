@@ -8,6 +8,7 @@ import { userApiSlice } from "../users/userApiSlice";
 import { IUser } from "../users/userInterface";
 // import { useSelector } from "react-redux";
 // import { getPresentUser } from "../users/userProfileSlice";
+import socketService from "../socketEvents/SocketService";
 
 function Prefetch() {
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -35,6 +36,12 @@ function Prefetch() {
 
   if (!dataLoaded || isLoading) {
     return <Loader isLoading transparent={false} />;
+  }
+
+  const socket = socketService.getSocket();
+
+  if (!socket) {
+    socketService.connect(ResponseData.data?.userId || "");
   }
 
   return <Outlet />;

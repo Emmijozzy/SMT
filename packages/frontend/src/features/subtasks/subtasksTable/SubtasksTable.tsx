@@ -1,6 +1,8 @@
+/* eslint-disable default-case */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable indent */
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../app/store";
 import MasterTable from "../../../shared/components/masterTable/MasterTable";
@@ -8,23 +10,43 @@ import { getPresentUser } from "../../profile/userProfileSlice";
 import { UserRole } from "../../users/userRole";
 import SubtaskRow from "../components/SubtaskRow";
 import { subtaskColumns } from "../constants/subtaskColumns";
+import { useSubtaskChangeStatusEvent } from "../hooks/useSubtaskChangeStatusEvent";
+import { useSubtaskCreatedEvent } from "../hooks/useSubtaskCreadtedEvent";
+import { useSubtaskDeletedEvent } from "../hooks/useSubtaskDeletedEvent";
+import { useSubtaskReassignEvent } from "../hooks/useSubtaskReassignEvent";
+import { useSubtaskUpdatedEvent } from "../hooks/useSubtaskUpdatedEvent";
 import { useGetSubtasksQuery } from "../subtaskApiSlice";
 import { ISubtask } from "../subtaskInterface";
 
-const TASK_STATUS = {
-  OPEN: "open",
-  IN_PROCESS: "in_process",
-  IN_REVIEW: "in_review",
-  REVISIT: "revisit",
-  COMPLETED: "completed",
-} as const;
+// Memoize SubtaskRow component
+const MemoizedSubtaskRow = React.memo(SubtaskRow);
 
 function SubtaskTable() {
+  const [updatedSubtasks, setUpdatedSubtasks] = useState<ISubtask[]>([]);
   const [showSection, setShowSection] = useState("all");
   const userProfile = useSelector((state: RootState) => getPresentUser(state));
+  const { subtaskCreated, clearSubtaskCreated } = useSubtaskCreatedEvent();
+  const { subtaskUpdated, clearSubtaskUpdated } = useSubtaskUpdatedEvent();
+  const { subtaskReassigned, clearSubtaskReassigned } = useSubtaskReassignEvent();
+  const { subtaskDeleted, clearSubtaskDeleted } = useSubtaskDeletedEvent();
+  const { subtaskChangeStatus, clearSubtaskChangeStatus } = useSubtaskChangeStatusEvent();
   const role = userProfile?.role;
 
-  const query: Record<string, string | undefined> | undefined = (() => {
+  // Memoize the TASK_STATUS object
+  const TASK_STATUS = useMemo(
+    () =>
+      ({
+        OPEN: "open",
+        IN_PROCESS: "in_process",
+        IN_REVIEW: "in_review",
+        REVISIT: "revisit",
+        COMPLETED: "completed",
+      }) as const,
+    [],
+  );
+
+  // Memoize the query object
+  const query = useMemo(() => {
     switch (role) {
       case UserRole.Admin:
         return undefined;
@@ -35,32 +57,152 @@ function SubtaskTable() {
       default:
         return userProfile?.userId ? { assignee_like: userProfile.userId } : undefined;
     }
-  })();
+  }, [role, userProfile?.teamId, userProfile?.userId]);
 
   const { data: subtasks } = useGetSubtasksQuery(query, {
-    pollingInterval: 30000, // Updates every 30 seconds
-    refetchOnMountOrArgChange: false,
-    refetchOnFocus: true, // Refetch when window regains focus
+    refetchOnMountOrArgChange: true,
+    refetchOnFocus: true,
+    pollingInterval: 30000,
+    refetchOnReconnect: true,
   });
+
+  // Consolidated effect for handling all subtask events
+  useEffect(() => {
+    // Initialize with fetched subtasks if we don't have any yet
+    if (subtasks && updatedSubtasks.length === 0) {
+      setUpdatedSubtasks(subtasks);
+      return;
+    }
+
+    let newSubtasks = [...updatedSubtasks];
+    let hasChanges = false;
+
+    // Handle created subtasks
+    if (subtaskCreated.length > 0) {
+      newSubtasks = [...newSubtasks, ...subtaskCreated];
+      clearSubtaskCreated();
+      hasChanges = true;
+    }
+
+    // Handle updated subtasks
+    if (subtaskUpdated.length > 0) {
+      subtaskUpdated.forEach((updatedTask) => {
+        const existingTaskIndex = newSubtasks.findIndex((subtask) => subtask.subtaskId === updatedTask.subtaskId);
+        if (existingTaskIndex !== -1) {
+          newSubtasks[existingTaskIndex] = updatedTask;
+        } else {
+          newSubtasks.push(updatedTask);
+        }
+      });
+      clearSubtaskUpdated();
+      hasChanges = true;
+    }
+
+    // Handle reassigned subtasks
+    if (subtaskReassigned.length > 0) {
+      newSubtasks = newSubtasks.filter(
+        (subtask) => !subtaskReassigned.some((reassigned) => reassigned.subtaskId === subtask.subtaskId),
+      );
+      clearSubtaskReassigned();
+      hasChanges = true;
+    }
+
+    // Handle deleted subtasks
+    if (subtaskDeleted.length > 0) {
+      newSubtasks = newSubtasks.filter((subtask) =>
+        subtaskDeleted.every((deletedSubtask) => subtask.subtaskId !== deletedSubtask.subtaskId),
+      );
+      clearSubtaskDeleted();
+      hasChanges = true;
+    }
+
+    // Handle status changed subtasks
+    if (subtaskChangeStatus.length > 0) {
+      subtaskChangeStatus.forEach((updatedTask) => {
+        const existingTaskIndex = newSubtasks.findIndex((subtask) => subtask.subtaskId === updatedTask.subtaskId);
+        if (existingTaskIndex !== -1) {
+          newSubtasks[existingTaskIndex] = updatedTask;
+        }
+      });
+      clearSubtaskChangeStatus();
+      hasChanges = true;
+    }
+
+    // Only update state if there are changes
+    if (hasChanges) {
+      setUpdatedSubtasks(newSubtasks);
+    }
+  }, [
+    subtasks,
+    updatedSubtasks,
+    subtaskCreated,
+    subtaskUpdated,
+    subtaskReassigned,
+    subtaskDeleted,
+    clearSubtaskCreated,
+    clearSubtaskUpdated,
+    clearSubtaskReassigned,
+    clearSubtaskDeleted,
+  ]);
 
   const OpenSubtaskTable = MasterTable<ISubtask & Record<string, unknown>>();
 
-  const filteredTasks = useMemo(
-    () => ({
-      all: subtasks ?? [],
-      open: subtasks?.filter((task) => task.status === TASK_STATUS.OPEN) ?? [],
-      inProgress: subtasks?.filter((task) => task.status === TASK_STATUS.IN_PROCESS) ?? [],
-      inReview: subtasks?.filter((task) => task.status === TASK_STATUS.IN_REVIEW) ?? [],
-      revisit: subtasks?.filter((task) => task.status === TASK_STATUS.REVISIT) ?? [],
-      completed: subtasks?.filter((task) => task.status === TASK_STATUS.COMPLETED) ?? [],
-    }),
-    [subtasks],
-  );
+  // Optimize filtering logic
+  const filteredTasks = useMemo(() => {
+    if (!updatedSubtasks.length) {
+      return {
+        all: [],
+        open: [],
+        inProgress: [],
+        inReview: [],
+        revisit: [],
+        completed: [],
+      };
+    }
 
-  const handleShowSection = (section: string) => {
+    // Create filtered arrays in a single pass
+    const open: ISubtask[] = [];
+    const inProgress: ISubtask[] = [];
+    const inReview: ISubtask[] = [];
+    const revisit: ISubtask[] = [];
+    const completed: ISubtask[] = [];
+
+    updatedSubtasks.forEach((task) => {
+      switch (task.status) {
+        case TASK_STATUS.OPEN:
+          open.push(task);
+          break;
+        case TASK_STATUS.IN_PROCESS:
+          inProgress.push(task);
+          break;
+        case TASK_STATUS.IN_REVIEW:
+          inReview.push(task);
+          break;
+        case TASK_STATUS.REVISIT:
+          revisit.push(task);
+          break;
+        case TASK_STATUS.COMPLETED:
+          completed.push(task);
+          break;
+      }
+    });
+
+    return {
+      all: updatedSubtasks,
+      open,
+      inProgress,
+      inReview,
+      revisit,
+      completed,
+    };
+  }, [updatedSubtasks, TASK_STATUS]);
+
+  // Memoize the section handler
+  const handleShowSection = useCallback((section: string) => {
     setShowSection(section);
-  };
+  }, []);
 
+  // Memoize the section renderer
   const renderTaskSection = useCallback(
     (title: string, section: string, tasks: ISubtask[]) => (
       <div className="rounded-lg">
@@ -84,12 +226,12 @@ function SubtaskTable() {
             name="Subtask"
             tableHead={subtaskColumns}
             data={tasks as (ISubtask & Record<string, unknown>)[]}
-            TableBody={SubtaskRow}
+            TableBody={MemoizedSubtaskRow}
           />
         </div>
       </div>
     ),
-    [OpenSubtaskTable, showSection],
+    [OpenSubtaskTable, showSection, handleShowSection],
   );
 
   return (
@@ -103,4 +245,5 @@ function SubtaskTable() {
     </div>
   );
 }
+
 export default SubtaskTable;

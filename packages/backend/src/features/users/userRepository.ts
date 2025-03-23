@@ -35,7 +35,7 @@ export class UserRepository {
       .exec();
   }
 
-  public async updateById(userId: string, data: IUser | Record<string, string | object>) {
+  public async updateById(userId: string, data: Partial<IUser> | Record<string, string | object>) {
     return await User.findOneAndUpdate({ userId }, data, { new: true })
       .select("-password")
       .populate({

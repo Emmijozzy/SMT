@@ -99,6 +99,7 @@ export const apiSlice = createApi({
     "Comment",
     "Comments",
     "SubtaskLogs",
+    "Notification",
   ],
   endpoints: (_builder) => ({}),
 });

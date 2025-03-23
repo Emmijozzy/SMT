@@ -250,9 +250,9 @@ export default class SubtaskRepository {
     }
   }
 
-  async updateSubtaskStatus(subtaskId: string, status: SubtaskStatus): Promise<ISubtask | null> {
+  async updateSubtaskStatus(subtaskId: string, status: SubtaskStatus, modifiedBy: string): Promise<ISubtask | null> {
     try {
-      const updateResult = await Subtask.updateOne({ subtaskId }, { status });
+      const updateResult = await Subtask.updateOne({ subtaskId }, { status, lastModifiedBy: modifiedBy });
 
       if (updateResult.modifiedCount === 0) {
         throw new Error(`Subtask ${subtaskId} not found`);

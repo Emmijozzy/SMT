@@ -1,4 +1,5 @@
 import { Request, Response, Router } from "express";
+import successResponse from "../../utils/successResponse";
 import { ENUM_USER_ROLES } from "../../features/users/enumUserRoles";
 import IController from "../../Interface/controller";
 import authMiddleware from "../../middleware/authMiddleware";
@@ -23,17 +24,17 @@ export default class NotificationController implements IController {
     );
     this.router.put(
       "/:notificationId/read",
-      authMiddleware(ENUM_USER_ROLES.ADMIN, ENUM_USER_ROLES.MANAGER),
+      authMiddleware(ENUM_USER_ROLES.ADMIN, ENUM_USER_ROLES.MANAGER, ENUM_USER_ROLES.TEAM_MEMBER),
       this.markNotificationAsRead
     );
     this.router.put(
       "/:notificationId/unread",
-      authMiddleware(ENUM_USER_ROLES.ADMIN, ENUM_USER_ROLES.MANAGER),
+      authMiddleware(ENUM_USER_ROLES.ADMIN, ENUM_USER_ROLES.MANAGER, ENUM_USER_ROLES.TEAM_MEMBER),
       this.markNotificationAsUnread
     );
-    this.router.put(
+    this.router.delete(
       "/:notificationId/delete",
-      authMiddleware(ENUM_USER_ROLES.ADMIN, ENUM_USER_ROLES.MANAGER),
+      authMiddleware(ENUM_USER_ROLES.ADMIN, ENUM_USER_ROLES.MANAGER, ENUM_USER_ROLES.TEAM_MEMBER),
       this.deleteNotification
     );
   }
@@ -41,25 +42,37 @@ export default class NotificationController implements IController {
   private getNotificationsByRecipientId = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     const recipientId = req.params.recipientId;
     const notifications = await this.notificationService.getNotificationsByRecipientId(recipientId);
-    res.status(200).json(notifications);
+    successResponse(res, {
+      message: "Notifications retrieved successfully",
+      data: notifications
+    });
   });
 
   private markNotificationAsRead = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     const notificationId = req.params.notificationId;
     await this.notificationService.markNotificationAsRead(notificationId);
-    res.status(200).json({ message: "Notification marked as read" });
+    successResponse(res, {
+      message: "Notification marked as read",
+      data: null
+    });
   });
 
   private markNotificationAsUnread = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     const notificationId = req.params.notificationId;
     await this.notificationService.markNotificationAsUnread(notificationId);
-    res.status(200).json({ message: "Notification marked as unread" });
+    successResponse(res, {
+      message: "Notification marked as unread",
+      data: null
+    });
   });
 
   private deleteNotification = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     const notificationId = req.params.notificationId;
     await this.notificationService.deleteNotificationById(notificationId);
-    res.status(200).json({ message: "Notification deleted" });
+    successResponse(res, {
+      message: "Notification deleted successfully",
+      data: null
+    });
   });
 
   // private getNotificationById = asyncHandler(async (req: Request, res: Response): Promise<void> => {

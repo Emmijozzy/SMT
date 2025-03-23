@@ -17,7 +17,7 @@ type Props<T> = {
 function TaskTableRow<T extends ITask>({ data }: Props<T>) {
   const content = useMemo(() => {
     if (data) {
-      const { title, taskId, responsibleTeam, priority, status, assignedTo, dueDate, del_flg: delFlg } = data;
+      const { title, taskId, responsibleTeam, priority, status, assignedTo, dueDate, del_flg: delFlg, progress } = data;
       const daysLeft = getDaysLeft(dueDate || new Date().toDateString());
       return (
         <tr className={`relative hover:bg-base-100 ${delFlg ? "opacity-20" : ""}`}>
@@ -73,7 +73,7 @@ function TaskTableRow<T extends ITask>({ data }: Props<T>) {
             </div>
           </td>
           <td className="border-t-0 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2">
-            <Completion completion={60} />
+            <Completion completion={progress || 0} />
           </td>
           <td className="max-w-32 border-t-0 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2">
             <span>{daysLeft}</span>

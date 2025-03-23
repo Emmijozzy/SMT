@@ -35,7 +35,12 @@ export const userApiSlice = apiSlice.injectEndpoints({
         } catch (e) {
           const { error } = e as ReqError;
           dispatch(addAlert({ message: error?.data?.message || "Profile access denial", type: "error" }));
-          log("error", "Error getting user profile", error?.data?.message || "Profile access denial", error.data.stack);
+          log(
+            "error",
+            "Error getting user profile",
+            error?.data?.message || "Profile access denial",
+            error?.data?.stack,
+          );
           dispatch(changeStatus("error"));
         }
       },

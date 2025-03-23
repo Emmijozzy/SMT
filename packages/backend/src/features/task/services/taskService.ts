@@ -14,7 +14,8 @@ export class TaskService {
   }
 
   public async createTask(payload: TaskPayload): Promise<ITask> {
-    const { title, description, responsibleTeam, priority, dueDate, startDate, managerTask, managerId } = payload;
+    const { title, description, responsibleTeam, priority, dueDate, startDate, managerTask, managerId, createdBy } =
+      payload;
     if (!title?.trim() || !description?.trim() || !responsibleTeam || !dueDate)
       throw new BadRequestError("Incomplete data provided");
 
@@ -39,7 +40,8 @@ export class TaskService {
         dueDate: dueDate ? new Date(dueDate) : undefined,
         startDate: new Date(startDate),
         managerTask,
-        managerId: manager.userId
+        managerId: manager.userId,
+        createdBy: createdBy
       };
     } else {
       taskPayload = {
@@ -49,7 +51,8 @@ export class TaskService {
         responsibleTeam,
         priority,
         dueDate: dueDate ? new Date(dueDate) : undefined,
-        startDate: new Date(startDate)
+        startDate: new Date(startDate),
+        createdBy: createdBy
       };
     }
 

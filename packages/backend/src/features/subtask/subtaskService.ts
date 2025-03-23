@@ -4,6 +4,7 @@ import { ISubtask } from "./subtask";
 import { InReviewFeedBackData, InReviewUpdateData } from "./subtaskInterfaces";
 import SubtaskRepository from "./subtaskRepository";
 import { SubtaskStatus } from "./SubtaskStatus";
+import cacheService from "../../service/cacheService";
 
 export default class SubtaskService {
   private subtaskRepository: SubtaskRepository;
@@ -85,6 +86,7 @@ export default class SubtaskService {
     try {
       const subtask = await this.subtaskRepository.getSubtaskById(subtaskId);
       if (!subtask) throw new InternalError("Failed to fetch subtask");
+      cacheService.set<ISubtask>(subtask._id.toString(), subtask);
       const deletedSubtask = await this.subtaskRepository.deleteSubtaskById(subtaskId);
       if (!deletedSubtask) throw new InternalError("Failed to delete subtask");
       return true;
@@ -173,14 +175,14 @@ export default class SubtaskService {
     }
   }
 
-  async updateSubtaskStatus(subtaskId: string, newStatus: SubtaskStatus): Promise<ISubtask | null> {
+  async updateSubtaskStatus(subtaskId: string, newStatus: SubtaskStatus, modifiedBy: string): Promise<ISubtask | null> {
     try {
       const subtask = await this.subtaskRepository.getSubtaskById(subtaskId);
       if (!subtask) throw new InternalError("Failed to fetch subtask");
       if (!this.isValidTransition(subtask.status as SubtaskStatus, newStatus)) {
         throw new InternalError("Invalid status transition");
       }
-      const updatedSubtask = await this.subtaskRepository.updateSubtaskStatus(subtaskId, newStatus);
+      const updatedSubtask = await this.subtaskRepository.updateSubtaskStatus(subtaskId, newStatus, modifiedBy);
       if (!updatedSubtask) throw new InternalError("Failed to update subtask status");
       return updatedSubtask;
     } catch (err: unknown) {
@@ -190,7 +192,7 @@ export default class SubtaskService {
     }
   }
 
-  async updateSubtaskFromOpenToInProcess(subtaskId: string): Promise<ISubtask | null> {
+  async updateSubtaskFromOpenToInProcess(subtaskId: string, modifiedBy: string): Promise<ISubtask | null> {
     try {
       const subtask = await this.subtaskRepository.getSubtaskById(subtaskId);
       if (!subtask) throw new InternalError("Failed to fetch subtask");
@@ -200,7 +202,11 @@ export default class SubtaskService {
       if (!this.isValidTransition(subtask.status as SubtaskStatus, SubtaskStatus.InProcess)) {
         throw new InternalError("Invalid status transition");
       }
-      const updatedSubtask = await this.subtaskRepository.updateSubtaskStatus(subtaskId, SubtaskStatus.InProcess);
+      const updatedSubtask = await this.subtaskRepository.updateSubtaskStatus(
+        subtaskId,
+        SubtaskStatus.InProcess,
+        modifiedBy
+      );
       if (!updatedSubtask) throw new InternalError("Failed to update subtask status");
       return updatedSubtask;
     } catch (err: unknown) {
@@ -212,7 +218,8 @@ export default class SubtaskService {
 
   async updateSubtaskFromToInReview(
     subtaskId: string,
-    inReviewUpdateData: InReviewUpdateData
+    inReviewUpdateData: InReviewUpdateData,
+    modifiedBy: string
   ): Promise<ISubtask | null> {
     try {
       const subtask = await this.subtaskRepository.getSubtaskById(subtaskId);
@@ -233,7 +240,8 @@ export default class SubtaskService {
 
       const updatedSubtask = await this.subtaskRepository.updateSubtask(subtaskId, {
         ...inReviewUpdateData,
-        status: SubtaskStatus.InReview
+        status: SubtaskStatus.InReview,
+        lastModifiedBy: modifiedBy
       });
       if (!updatedSubtask) throw new InternalError("Failed to update subtask status");
       return updatedSubtask;
@@ -245,7 +253,8 @@ export default class SubtaskService {
   }
   async updateSubtaskFromInReviewToRevisit(
     subtaskId: string,
-    revisitUpdateData: InReviewFeedBackData
+    revisitUpdateData: InReviewFeedBackData,
+    modifiedBy: string
   ): Promise<ISubtask | null> {
     try {
       const subtask = await this.subtaskRepository.getSubtaskById(subtaskId);
@@ -261,7 +270,7 @@ export default class SubtaskService {
         throw new BadRequestError("All checklists must checked, cannot revisit");
       }
 
-      if (!atLeastOneRejected) {
+      if (subtask.checkLists.length > 0 && !atLeastOneRejected) {
         throw new BadRequestError("Cannot revisit when all checklists are approved");
       }
 
@@ -275,7 +284,8 @@ export default class SubtaskService {
       const updatedSubtask = await this.subtaskRepository.updateSubtask(subtaskId, {
         ...revisitUpdateData,
         feedback: revisitUpdateData.feedback,
-        status: SubtaskStatus.Revisit
+        status: SubtaskStatus.Revisit,
+        lastModifiedBy: modifiedBy
       });
 
       return updatedSubtask ?? null;
@@ -288,7 +298,8 @@ export default class SubtaskService {
 
   async updateSubtaskFromInReviewToCompleted(
     subtaskId: string,
-    completedUpdateData: InReviewFeedBackData
+    completedUpdateData: InReviewFeedBackData,
+    modifiedBy: string
   ): Promise<ISubtask | null> {
     try {
       const subtask = await this.subtaskRepository.getSubtaskById(subtaskId);
@@ -315,7 +326,8 @@ export default class SubtaskService {
 
       const updatedSubtask = await this.subtaskRepository.updateSubtask(subtaskId, {
         ...completedUpdateData,
-        status: SubtaskStatus.Completed
+        status: SubtaskStatus.Completed,
+        lastModifiedBy: modifiedBy
       });
 
       if (!updatedSubtask) throw new InternalError("Failed to update subtask status");

@@ -4,7 +4,15 @@ import { useGetSubtaskQuery } from "../subtaskApiSlice";
 import { subtasksSelectors } from "../subtaskSlice";
 
 export const useSubtaskData = (subtaskId: string) => {
-  const { data: loadedSubtask, isFetching, isError } = useGetSubtaskQuery(subtaskId);
+  const {
+    data: loadedSubtask,
+    isFetching,
+    isError,
+  } = useGetSubtaskQuery(subtaskId, {
+    refetchOnMountOrArgChange: true,
+    refetchOnFocus: false,
+    pollingInterval: 30000,
+  });
   const subtask = useSelector((state: RootState) => subtasksSelectors.selectById(state, subtaskId)) || loadedSubtask;
 
   return { subtask, isFetching, isError };

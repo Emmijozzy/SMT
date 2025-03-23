@@ -10,9 +10,10 @@ type Props = {
   index: number;
   withName?: boolean;
   avaterClassName?: string;
+  className?: string;
 };
 
-function User({ userId, index, withName = false, avaterClassName = "" }: Props) {
+function User({ userId, index, withName = false, avaterClassName = "", className = "" }: Props) {
   const { data: loadedUser, isFetching, isSuccess } = useGetUserQuery(userId);
   let user = useSelector((state: RootState) => usersSelectors.selectById(state, userId)) as IUser;
 
@@ -24,7 +25,7 @@ function User({ userId, index, withName = false, avaterClassName = "" }: Props) 
   if (user) {
     const { fullName, profilePicUrl: img } = user;
     content = (
-      <div className="flex items-center">
+      <div className={`flex items-center ${className}`}>
         <Avartar
           name={fullName || ""}
           imgUrl={img}

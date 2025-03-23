@@ -6,4 +6,6 @@ export type ResApiData<T> = {
   };
   message: string;
   data: T | T[];
+  isSuccess: boolean;
+  isError: boolean;
 };

@@ -8,9 +8,10 @@ export enum NotificationType {
   TaskDeleted = "TaskDeleted",
   TaskCreated = "TaskCreated",
   TaskDelineApproaching = "TaskDelineApproaching",
+  TaskDeadlineOverdue = "TaskDeadlineOverdue",
   TaskStatusUpdated = "TaskStatusUpdated",
   TaskDueDateUpdated = "TaskDueDateUpdated",
-  TaskAssignedToTeam = "TaskAssignedToTeam",
+  TaskReassignedToTeam = "TaskReassignedToTeam",
   TaskAssignedToUser = "TaskAssignedToUser",
   subtaskCreated = "subtaskCreated",
   SubtaskUpdated = "SubtaskUpdated",
@@ -19,7 +20,7 @@ export enum NotificationType {
   subtaskDeadlineOverdue = "SubtaskDeadlineOverdue",
   SubtaskDeleted = "SubtaskDeleted",
   SubtaskStatusUpdated = "SubtaskStatusUpdated",
-  SubtaskAssignedToTeamMember = "SubtaskAssignedToTeamMember"
+  SubtaskReAssignedToTeamMember = "SubtaskAssignedToTeamMember"
 }
 
 export enum NotificationStatus {
@@ -34,8 +35,19 @@ export enum NotificationResourceType {
 }
 
 export enum NotificationChannel {
-  InApp = "InApp"
+  InApp = "InApp",
+  Email = "Email",
+  SMS = "SMS"
 }
+
+export type NotificationMetadata = {
+  subtaskId?: string;
+  taskId?: string;
+  hoursRemaining?: string;
+  status?: string;
+  assignee?: string;
+  remainingDays?: string;
+};
 
 export interface INotification extends Document {
   notificationId?: string;
@@ -46,9 +58,9 @@ export interface INotification extends Document {
   message: string;
   resourceType: NotificationResourceType;
   resourceId: string;
-  status: NotificationStatus;
+  status?: NotificationStatus;
   channel?: NotificationChannel;
-  metaData?: Record<string, unknown>;
+  metadata?: Record<string, unknown> | NotificationMetadata;
   createdAt: Date;
   readAt?: Date;
 }
@@ -63,27 +75,17 @@ const notificationSchema = new Schema<INotification>(
     message: { type: String, required: true },
     resourceType: { type: String, enum: Object.values(NotificationResourceType), required: true },
     resourceId: { type: String, required: true },
-    status: { type: String, enum: Object.values(NotificationStatus), required: true },
-    channel: { type: String, enum: Object.values(NotificationChannel) },
-    metaData: { type: Object, required: false },
+    status: {
+      type: String,
+      enum: Object.values(NotificationStatus),
+      default: NotificationStatus.Unread
+    },
+    channel: { type: String, enum: Object.values(NotificationChannel), default: NotificationChannel.InApp },
+    metadata: { type: Object, required: false },
     createdAt: { type: Date, default: Date.now },
     readAt: { type: Date, required: false }
   },
   { timestamps: true }
 );
-
-// notificationSchema.pre<INotification>("save", async function (next) {
-//   // console.log("Inside pre('save') hook!");
-
-//   try {
-//     if (!this.notificationId) {
-//       this.notificationId = uuidv4();
-//     }
-//     next();
-//   } catch (err: unknown) {
-//     const error = err as Error;
-//     next(new Error("Error generating team ID: " + error.message));
-//   }
-// });
 
 export default model<INotification>("Notification", notificationSchema);

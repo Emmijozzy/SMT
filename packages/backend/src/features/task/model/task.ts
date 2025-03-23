@@ -10,6 +10,9 @@ export interface ITask extends Document {
   managerTask: boolean;
   managerId: string;
   priority: "low" | "medium" | "high";
+  progress?: number;
+  createdBy: string;
+  modifiedBy?: string;
   dueDate: Date;
   startDate: Date;
   createdAt: Date;
@@ -71,6 +74,21 @@ const taskSchema = new Schema<ITask>({
     type: String,
     enum: ["low", "medium", "high"],
     default: "medium"
+  },
+  progress: {
+    type: Number,
+    default: 0
+  },
+  createdBy: {
+    type: String,
+    ref: "User",
+    path: "userId",
+    required: true
+  },
+  modifiedBy: {
+    type: String,
+    ref: "User",
+    path: "userId"
   },
   dueDate: {
     type: Date

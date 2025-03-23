@@ -1,4 +1,7 @@
 import { ISubtaskAuditLog } from "features/subtaskAuditLog/subtaskAuditLog";
+import generateSubtaskNotification from "../../features/notification/generateSubtaskNotification";
+import NotificationService from "../../features/notification/notificationService";
+import socketService from "../../features/socket/socketService";
 import SubtaskAuditLogService from "../../features/subtaskAuditLog/subtaskAuditLogService";
 import { TaskService } from "../../features/task/services/taskService";
 import { default as teamService, default as TeamService } from "../../features/team/teamService";
@@ -7,6 +10,7 @@ import { BadRequestError, InternalError } from "../../utils/ApiError";
 import { ISubtask } from "./subtask";
 import { InReviewFeedBackData, InReviewUpdateData } from "./subtaskInterfaces";
 import SubtaskService from "./subtaskService";
+import { SubtaskStatus } from "./SubtaskStatus";
 
 export default class SubtaskOrchestrator {
   private subtaskService: SubtaskService;
@@ -14,6 +18,7 @@ export default class SubtaskOrchestrator {
   private teamService: teamService;
   private taskService: TaskService;
   private subtaskAuditLogService: SubtaskAuditLogService;
+  private notificationService: NotificationService;
 
   constructor() {
     this.subtaskService = new SubtaskService();
@@ -21,6 +26,7 @@ export default class SubtaskOrchestrator {
     this.teamService = new TeamService();
     this.taskService = new TaskService();
     this.subtaskAuditLogService = new SubtaskAuditLogService();
+    this.notificationService = new NotificationService();
   }
 
   async createSubtask(subtaskData: Partial<ISubtask>, requesterUserId: string): Promise<ISubtask> {
@@ -39,11 +45,15 @@ export default class SubtaskOrchestrator {
 
       const subtask = await this.subtaskService.create(subtaskData, requesterUserId);
 
-      await this.userService.addSubtaskId(user.userId, subtask.subtaskId);
+      // await this.userService.addSubtaskId(user.userId, subtask.subtaskId);
       await this.teamService.addSubtaskToTeam(subtask.team, subtask.subtaskId);
       await this.taskService.addUserIdToAssignedTo(task.taskId, user.userId);
       await this.taskService.addSubtaskId(task.taskId, subtask.subtaskId);
       await this.subtaskAuditLogService.LogOnSubtaskCreation(subtask, reqUser);
+      const notification = generateSubtaskNotification.generateCreateSubtaskNotification(subtask);
+      const savedNotification = await this.notificationService.saveNotification(notification);
+      socketService.subtaskEventHandler.emitSubtaskCreatedEvent(subtask, assignee);
+      socketService.notificationEventHandler.emitNewNotification(savedNotification, assignee);
       return subtask;
     } catch (err: unknown) {
       const error = err as Error;
@@ -54,6 +64,7 @@ export default class SubtaskOrchestrator {
 
   async updateSubtask(subtaskData: Partial<ISubtask>, requesterUserId: string): Promise<ISubtask> {
     try {
+      let hasUpdatedAssignee = false;
       if (!requesterUserId) throw new BadRequestError("User ID is required");
 
       const { subtaskId } = subtaskData;
@@ -74,6 +85,7 @@ export default class SubtaskOrchestrator {
         await this.userService.addSubtaskId(subtaskData.assignee, subtask.subtaskId);
         await this.taskService.removeUserIdFromAssignedTo(subtask.taskId, subtask.assignee);
         await this.taskService.addUserIdToAssignedTo(subtaskData.taskId, subtaskData.assignee);
+        hasUpdatedAssignee = true;
       }
 
       //check for change of task and perform update logic
@@ -86,6 +98,23 @@ export default class SubtaskOrchestrator {
       const updatedSubtask = await this.subtaskService.updateSubtaskById(subtaskId, subtaskData, requesterUserId);
       if (!updatedSubtask) throw new BadRequestError("Error updating subtask");
 
+      if (hasUpdatedAssignee) {
+        const notification = generateSubtaskNotification.generateSubtaskReAssignedToTeamMemberNotification(
+          updatedSubtask,
+          requesterUserId
+        );
+        const savedNotification = await this.notificationService.saveNotification(notification);
+        socketService.notificationEventHandler.emitNewNotification(savedNotification, updatedSubtask.assignee);
+        socketService.subtaskEventHandler.emitSubtaskReassignEvent(updatedSubtask, subtask.assignee);
+      } else {
+        const notification = generateSubtaskNotification.generateSubtaskUpdatedNotification(
+          updatedSubtask,
+          requesterUserId
+        );
+        const savedNotification = await this.notificationService.saveNotification(notification);
+        socketService.subtaskEventHandler.emitSubtaskUpdatedEvent(subtask, subtask.assignee);
+        socketService.notificationEventHandler.emitNewNotification(savedNotification, updatedSubtask.assignee);
+      }
       return updatedSubtask;
     } catch (err: unknown) {
       const error = err as Error;
@@ -94,7 +123,7 @@ export default class SubtaskOrchestrator {
     }
   }
 
-  async deleteSubtask(subtaskId: string): Promise<ISubtask> {
+  async deleteSubtask(subtaskId: string, requesterUserId: string): Promise<ISubtask> {
     try {
       const subtask = await this.subtaskService.getSubtaskById(subtaskId);
       if (!subtask) throw new BadRequestError("Error deleting subtask");
@@ -103,6 +132,10 @@ export default class SubtaskOrchestrator {
       await this.taskService.removeSubtaskId(subtask.taskId, subtask.subtaskId);
       await this.taskService.removeUserIdFromAssignedTo(subtask.taskId, subtask.assignee);
       await this.subtaskService.deleteSubtaskById(subtaskId);
+      const notification = generateSubtaskNotification.generateSubtaskDeletedNotification(subtask, requesterUserId);
+      const savedNotification = await this.notificationService.saveNotification(notification);
+      socketService.notificationEventHandler.emitNewNotification(savedNotification, subtask.assignee);
+      socketService.subtaskEventHandler.emitSubtaskDeletedEvent(subtask);
       return subtask;
     } catch (err: unknown) {
       const error = err as Error;
@@ -116,11 +149,21 @@ export default class SubtaskOrchestrator {
       const user = await this.userService.getUserById(userId);
       if (!user) throw new BadRequestError("User not found");
 
-      const updatedSubtask = await this.subtaskService.updateSubtaskFromOpenToInProcess(subtaskId);
+      const updatedSubtask = await this.subtaskService.updateSubtaskFromOpenToInProcess(subtaskId, userId);
       if (!updatedSubtask) throw new InternalError("Error in transition to In Process");
 
       await this.subtaskAuditLogService.LogOnSubtaskStart(updatedSubtask, user);
 
+      const notificationq = generateSubtaskNotification.generateSubtaskStatusUpdatedNotification(
+        updatedSubtask,
+        updatedSubtask.assignee,
+        SubtaskStatus.InProcess,
+        updatedSubtask.createdBy
+      );
+
+      const savedNotification = await this.notificationService.saveNotification(notificationq);
+      socketService.notificationEventHandler.emitNewNotification(savedNotification, updatedSubtask.createdBy);
+      socketService.subtaskEventHandler.emitSubtaskStatusUpdatedEvent(updatedSubtask, updatedSubtask.createdBy);
       return updatedSubtask;
     } catch (err: unknown) {
       const error = err as Error;
@@ -138,10 +181,24 @@ export default class SubtaskOrchestrator {
       const user = await this.userService.getUserById(userId);
       if (!user) throw new BadRequestError("Assignee not found");
 
-      const updatedSubtask = await this.subtaskService.updateSubtaskFromToInReview(subtaskId, inReviewUpdateData);
+      const updatedSubtask = await this.subtaskService.updateSubtaskFromToInReview(
+        subtaskId,
+        inReviewUpdateData,
+        userId
+      );
       if (!updatedSubtask) throw new InternalError("Error in transition to In Review");
 
       await this.subtaskAuditLogService.LogOnSubtaskReview(updatedSubtask, user);
+
+      const notification = generateSubtaskNotification.generateSubtaskStatusUpdatedNotification(
+        updatedSubtask,
+        updatedSubtask.assignee,
+        SubtaskStatus.InReview,
+        updatedSubtask.createdBy
+      );
+      const savedNotification = await this.notificationService.saveNotification(notification);
+      socketService.notificationEventHandler.emitNewNotification(savedNotification, updatedSubtask.createdBy);
+      socketService.subtaskEventHandler.emitSubtaskStatusUpdatedEvent(updatedSubtask, updatedSubtask.createdBy);
 
       return updatedSubtask;
     } catch (err: unknown) {
@@ -159,10 +216,23 @@ export default class SubtaskOrchestrator {
       const user = await this.userService.getUserById(userId);
       if (!user) throw new BadRequestError("Assignee not found");
 
-      const updatedSubtask = await this.subtaskService.updateSubtaskFromInReviewToRevisit(subtaskId, revisitUpdateData);
+      const updatedSubtask = await this.subtaskService.updateSubtaskFromInReviewToRevisit(
+        subtaskId,
+        revisitUpdateData,
+        userId
+      );
       if (!updatedSubtask) throw new InternalError("Error in transition to Revisit");
 
       await this.subtaskAuditLogService.LogOnSubtaskRevisit(updatedSubtask, user);
+      const notification = generateSubtaskNotification.generateSubtaskStatusUpdatedNotification(
+        updatedSubtask,
+        updatedSubtask.createdBy,
+        SubtaskStatus.Revisit,
+        updatedSubtask.assignee
+      );
+      const savedNotification = await this.notificationService.saveNotification(notification);
+      socketService.notificationEventHandler.emitNewNotification(savedNotification, updatedSubtask.assignee);
+      socketService.subtaskEventHandler.emitSubtaskStatusUpdatedEvent(updatedSubtask, updatedSubtask.assignee);
 
       return updatedSubtask;
     } catch (err) {
@@ -183,11 +253,22 @@ export default class SubtaskOrchestrator {
 
       const updatedSubtask = await this.subtaskService.updateSubtaskFromInReviewToCompleted(
         subtaskId,
-        completedUpdateData
+        completedUpdateData,
+        userId
       );
       if (!updatedSubtask) throw new InternalError("Error in transition to Complete");
 
       await await this.subtaskAuditLogService.LogOnSubtaskApprove(updatedSubtask, user);
+
+      const notification = generateSubtaskNotification.generateSubtaskStatusUpdatedNotification(
+        updatedSubtask,
+        updatedSubtask.createdBy,
+        SubtaskStatus.Completed,
+        updatedSubtask.assignee
+      );
+      const savedNotification = await this.notificationService.saveNotification(notification);
+      socketService.notificationEventHandler.emitNewNotification(savedNotification, updatedSubtask.assignee);
+      socketService.subtaskEventHandler.emitSubtaskStatusUpdatedEvent(updatedSubtask, updatedSubtask.assignee);
 
       return updatedSubtask;
     } catch (err: unknown) {

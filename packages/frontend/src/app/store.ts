@@ -22,6 +22,7 @@ import subtaskReducer from "../features/subtasks/subtaskSlice";
 import { apiSlice } from "./api/apislice";
 import localStorageMiddleware from "./api/middleware";
 import persistConfig from "./persistConfig";
+import notificationReducer from "../layout/components/headNavbar/Slice/NotificationSlice";
 
 export interface RootState {
   auth: ReturnType<typeof authReducer>; // Type for auth state
@@ -38,6 +39,7 @@ export interface RootState {
   teams: ReturnType<typeof teamReducer>;
   teamTable: ReturnType<typeof teamTableReducer>;
   subtasks: ReturnType<typeof subtaskReducer>;
+  notification: ReturnType<typeof notificationReducer>;
 }
 
 const rootReducer = (state: RootState | undefined, action: PayloadAction) => {
@@ -61,6 +63,7 @@ const rootReducer = (state: RootState | undefined, action: PayloadAction) => {
     teams: teamReducer,
     teamTable: teamTableReducer,
     subtasks: subtaskReducer,
+    notification: notificationReducer,
   })(state, action);
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer as Reducer<RootState, PayloadAction>);
@@ -77,6 +80,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
+      immutableCheck: false,
     })
       .concat(apiSlice.middleware as unknown as Middleware<object, RootState & PersistPartial>) // Add the API middleware
       .concat(localStorageMiddleware), // Add your custom middleware

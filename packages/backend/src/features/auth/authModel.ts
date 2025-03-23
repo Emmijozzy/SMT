@@ -29,6 +29,7 @@ export interface IUser extends Document {
     facebookLink: string;
     linkedInLink: string;
   };
+  status: "online" | "offline";
   del_flg: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -134,6 +135,12 @@ const userSchema = new Schema<IUser>(
       ],
       default: [],
       description: "The subtasks assigned to the user."
+    },
+    status: {
+      type: String,
+      enum: ["online", "offline"],
+      default: "offline",
+      description: "The status of the user."
     },
     del_flg: {
       type: Boolean,

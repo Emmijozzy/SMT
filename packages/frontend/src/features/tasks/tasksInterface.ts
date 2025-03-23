@@ -26,6 +26,9 @@ export interface ITask {
       ]
     | string;
   managerTask: boolean;
+  progress: number;
+  createdBy: string;
+  modifiedBy?: string;
   managerId: string;
   priority: "low" | "medium" | "high";
   startDate: string;

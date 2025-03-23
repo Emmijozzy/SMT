@@ -27,17 +27,31 @@ export default class TasksAdminController implements IController {
   }
 
   private initializeRouter = () => {
-    this.router.post("/create", validationMiddleware(taskSchema), this.createTask);
+    this.router.post(
+      "/create",
+      validationMiddleware(taskSchema),
+      authMiddleware(ENUM_USER_ROLES.ADMIN),
+      this.createTask
+    );
     this.router.get("/tasks", this.getTasks);
     this.router.get("/task", this.getTaskById);
-    this.router.put("/update", validationMiddleware(taskSchema), this.updateTask);
+    this.router.put(
+      "/update",
+      validationMiddleware(taskSchema),
+      authMiddleware(ENUM_USER_ROLES.ADMIN),
+      this.updateTask
+    );
 
     this.router.patch("/delete", authMiddleware(ENUM_USER_ROLES.ADMIN), this.deleteTask);
     this.router.patch("/restore", authMiddleware(ENUM_USER_ROLES.ADMIN), this.restoreTask);
     this.router.delete("/outright_delete/", authMiddleware(ENUM_USER_ROLES.ADMIN), this.outrightDeleteTask);
   };
 
-  private createTask = asyncHandler(async (req: Request, res: Response) => {
+  private createTask = asyncHandler(async (req: ExtendedRequest, res: Response) => {
+    const createdBy = req.user?.userId;
+
+    if (!createdBy) throw new InternalError("Unauthorized");
+
     const { title, description, responsibleTeam, priority, dueDate, managerTask, managerId, startDate } = req.body;
 
     const task = await this.taskOrchestrator.createTask({
@@ -48,7 +62,8 @@ export default class TasksAdminController implements IController {
       dueDate,
       startDate,
       managerTask,
-      managerId
+      managerId,
+      createdBy
     });
 
     successResponse(res, {
@@ -107,8 +122,12 @@ export default class TasksAdminController implements IController {
     });
   });
 
-  private updateTask = asyncHandler(async (req: Request, res: Response) => {
+  private updateTask = asyncHandler(async (req: ExtendedRequest, res: Response) => {
+    const modifiedBy = req.user?.userId;
+    if (!modifiedBy) throw new InternalError("Unauthorized");
+
     const RequestTaskData = req.body as Partial<ITask>;
+    RequestTaskData.modifiedBy = modifiedBy;
     const result = await this.taskOrchestrator.updateTask(RequestTaskData);
 
     successResponse(res, {

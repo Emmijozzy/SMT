@@ -1,7 +1,7 @@
 // cron/deadlineNotificationJob.ts
 import cron from "node-cron";
 import logger from "../../utils/logger";
-import NotificationService from "./notificationService";
+import NotificationService from "../notification/notificationService";
 
 export function initializeDeadlineNotificationCron(): void {
   const notificationService = new NotificationService();
@@ -12,6 +12,7 @@ export function initializeDeadlineNotificationCron(): void {
     console.log("Running deadline notification job at", new Date().toISOString());
     try {
       await notificationService.scheduleDeadlineNotifications();
+      // await notificationService
       console.log("Deadline notification job completed successfully");
       logger.info("Deadline notification job completed successfully");
     } catch (error) {

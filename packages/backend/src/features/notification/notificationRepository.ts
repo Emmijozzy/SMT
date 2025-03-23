@@ -1,3 +1,4 @@
+import logger from "../../utils/logger";
 import Notification, { INotification } from "./notification";
 
 export default class NotificationRepository {
@@ -8,7 +9,7 @@ export default class NotificationRepository {
       return notification;
     } catch (err: unknown) {
       const error = err as Error;
-      console.error("Error creating notification", error);
+      logger.error("Error creating notification", error);
       throw new Error("Failed to create notification.  ERROR: " + error.message + " ");
     }
   }
@@ -18,7 +19,7 @@ export default class NotificationRepository {
       return notifications;
     } catch (err: unknown) {
       const error = err as Error;
-      console.error("Error fetching notifications", error);
+      logger.error("Error fetching notifications", error);
       throw new Error("Failed to fetch notifications.  ERROR: " + error.message + " ");
     }
   }
@@ -30,7 +31,7 @@ export default class NotificationRepository {
       return notifications;
     } catch (err: unknown) {
       const error = err as Error;
-      console.error("Error fetching notifications", error);
+      logger.error("Error fetching notifications", error);
       throw new Error("Failed to fetch notifications.  ERROR: " + error.message + " ");
     }
   }
@@ -41,7 +42,7 @@ export default class NotificationRepository {
       return notification;
     } catch (err: unknown) {
       const error = err as Error;
-      console.error("Error fetching notification", error);
+      logger.error("Error fetching notification", error);
       throw new Error("Failed to fetch notification.  ERROR: " + error.message + " ");
     }
   }
@@ -52,7 +53,7 @@ export default class NotificationRepository {
       if (!deletedNotification) throw new Error(`Notification ${notificationId} not found or can't be deleted`);
     } catch (err: unknown) {
       const error = err as Error;
-      console.error("Error deleting notification", error);
+      logger.error("Error deleting notification", error);
       throw new Error("Failed to delete notification.  ERROR: " + error.message + " ");
     }
   }

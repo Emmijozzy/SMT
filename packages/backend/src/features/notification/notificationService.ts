@@ -1,23 +1,37 @@
+/* eslint-disable indent */
+import socketService from "../../features/socket/socketService";
 import SubtaskRepository from "../../features/subtask/subtaskRepository";
+import { TaskRepository } from "../../features/task/taskRepository";
+import TeamRepository from "../../features/team/teamRepository";
 import { UserRepository } from "../../features/users/userRepository";
 import { InternalError } from "../../utils/ApiError";
-import { INotification, NotificationResourceType, NotificationStatus, NotificationType } from "./notification";
+import { generateTitleandMessage } from "../../utils/generateTitleandMessage";
+import generateSubtaskNotification from "./generateSubtaskNotification";
+import {
+  INotification,
+  NotificationMetadata,
+  NotificationResourceType,
+  NotificationStatus,
+  NotificationType
+} from "./notification";
 import NotificationRepository from "./notificationRepository";
 
 export default class NotificationService {
   private notificationRepository: NotificationRepository;
   private readonly subtaskRepository: SubtaskRepository;
   private readonly userRepository: UserRepository;
+  private readonly taskRepository: TaskRepository;
+  private readonly teamRepository: TeamRepository;
 
   constructor() {
     this.notificationRepository = new NotificationRepository();
     this.subtaskRepository = new SubtaskRepository();
     this.userRepository = new UserRepository();
+    this.taskRepository = new TaskRepository();
+    this.teamRepository = new TeamRepository();
   }
 
-  async createNotification(
-    notificationData: Omit<INotification, "recipientId"> & { recipientId: string[] }
-  ): Promise<INotification> {
+  async saveNotification(notificationData: Partial<INotification>): Promise<INotification> {
     try {
       const notification = await this.notificationRepository.create(notificationData);
       return notification;
@@ -89,56 +103,69 @@ export default class NotificationService {
     }
   }
 
+  async createTaskNotification(taskId: string, notificationType: NotificationType): Promise<INotification> {
+    try {
+      const task = await this.taskRepository.findById(taskId);
+
+      if (!task) {
+        throw new Error(`Task ${taskId} not found`);
+      }
+      const hoursRemaining = task.dueDate
+        ? Math.ceil((task.dueDate.getTime() - Date.now()) / (1000 * 60 * 60)).toString()
+        : undefined;
+
+      const dayRemaining = task.dueDate
+        ? Math.ceil((task.dueDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))?.toString()
+        : undefined;
+
+      const metadata: NotificationMetadata = {
+        taskId: taskId,
+        hoursRemaining: hoursRemaining,
+        remainingDays: dayRemaining,
+        status: task.status
+      };
+
+      const teamManager = (await this.teamRepository.findTeamById(task.responsibleTeam)).managerId;
+
+      if (!teamManager) {
+        throw new Error(`Team manager not found for team ${task.responsibleTeam}`);
+      }
+
+      const { title, message } = generateTitleandMessage(notificationType, metadata);
+
+      const notification = await this.saveNotification({
+        recipientId: [teamManager],
+        senderId: [task.modifiedBy ? task.modifiedBy : task.createdBy ? task.createdBy : "SYSTEM"],
+        title,
+        message,
+        resourceId: taskId,
+        resourceType: NotificationResourceType.Task,
+        status: NotificationStatus.Unread,
+        type: notificationType,
+        metadata: metadata
+      });
+      return notification;
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error("Error creating task notification", error);
+      throw new InternalError(
+        "Failed to create task notification.  ERROR: " + error.message + " ",
+        error.stack,
+        __filename
+      );
+    }
+  }
+
   async scheduleDeadlineNotifications(): Promise<void> {
     try {
-      const now = new Date();
       const approachingDeadlinesSubtasks = await this.subtaskRepository.findApproachingDeadlinesSubtasks();
 
       if (approachingDeadlinesSubtasks.length > 0) {
         for (const subtask of approachingDeadlinesSubtasks) {
-          const assignedUser = await this.userRepository.findById(subtask.assignee);
-          if (!assignedUser) {
-            throw new Error(`User ${subtask.assignee} not found as assigned to subtask ${subtask.subtaskId}`);
-          }
-
-          const creatorUser = await this.userRepository.findById(subtask.createdBy);
-          if (!creatorUser) {
-            throw new Error(`User ${subtask.createdBy} not found as creator of subtask ${subtask.subtaskId}`);
-          }
-
-          // Format the due date for display
-          // const formattedDueDate = subtask.dueDate
-          // ? subtask.dueDate.toLocaleString('en-US', {
-          //     month: 'short',
-          //     day: 'numeric',
-          //     hour: '2-digit',
-          //     minute: '2-digit'
-          //   })
-          // : 'Unknown';
-
-          // Determine time remaining until deadline
-          const hoursRemaining = subtask.dueDate
-            ? Math.round((subtask.dueDate.getTime() - now.getTime()) / (1000 * 60 * 60))
-            : 24;
-
-          const notificationData: Partial<INotification> = {
-            recipientId: [assignedUser?.userId, creatorUser?.userId],
-            senderId: ["system"],
-            title: "Subtask Deadline Reminder",
-            type: NotificationType.subtaskDeadlineApproaching,
-            message: `Subtask with ID:"${subtask.title}" is due in ${hoursRemaining} hours.`,
-            createdAt: now,
-            status: NotificationStatus.Unread,
-            resourceId: subtask.subtaskId,
-            resourceType: NotificationResourceType.Subtask,
-            metaData: {
-              subtaskId: subtask.subtaskId,
-              subtaskTitle: subtask.title,
-              dueDate: subtask.dueDate
-            }
-          };
-
-          await this.notificationRepository.create(notificationData);
+          const notification = generateSubtaskNotification.generateSubtaskDeadlineApproachingNotification(subtask);
+          const savedNotification = await this.saveNotification(notification);
+          socketService.notificationEventHandler.emitNewNotification(savedNotification, subtask.assignee);
+          socketService.notificationEventHandler.emitNewNotification(savedNotification, subtask.createdBy);
 
           await this.subtaskRepository.updateSubtask(subtask.subtaskId, {
             deadlineNotificationSent: true
@@ -149,32 +176,11 @@ export default class NotificationService {
       const overdueSubtasks = await this.subtaskRepository.findOverdueSubtasks();
       if (overdueSubtasks.length > 0) {
         for (const subtask of overdueSubtasks) {
-          const assignedUser = await this.userRepository.findById(subtask.assignee);
-          if (!assignedUser) {
-            throw new Error(`User ${subtask.assignee} not found as assigned to subtask ${subtask.subtaskId}`);
-          }
+          const notification = generateSubtaskNotification.generateSubtaskOverdueNotification(subtask);
+          const savedNotification = await this.saveNotification(notification);
+          socketService.notificationEventHandler.emitNewNotification(savedNotification, subtask.assignee);
+          socketService.notificationEventHandler.emitNewNotification(savedNotification, subtask.createdBy);
 
-          const creatorUser = await this.userRepository.findById(subtask.createdBy);
-          if (!creatorUser) {
-            throw new Error(`User ${subtask.createdBy} not found as creator of subtask ${subtask.subtaskId}`);
-          }
-          const notificationData: Partial<INotification> = {
-            recipientId: [assignedUser?.userId, creatorUser?.userId],
-            senderId: ["system"],
-            title: "Subtask Deadline Reminder",
-            type: NotificationType.subtaskDeadlineOverdue,
-            message: `Subtask with ID:"${subtask.title}" is overdue.`,
-            createdAt: now,
-            status: NotificationStatus.Unread,
-            resourceId: subtask.subtaskId,
-            resourceType: NotificationResourceType.Subtask,
-            metaData: {
-              subtaskId: subtask.subtaskId,
-              subtaskTitle: subtask.title,
-              dueDate: subtask.dueDate
-            }
-          };
-          await this.notificationRepository.create(notificationData);
           await this.subtaskRepository.updateSubtask(subtask.subtaskId, {
             overdueNotificationSent: true
           });

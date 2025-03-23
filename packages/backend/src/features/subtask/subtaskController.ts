@@ -152,17 +152,22 @@ export default class SubtaskController implements IController {
     successResponse(res, { data: updatedSubtask, message: "Subtask updated successfully" });
   });
 
-  private deleteSubtask = asyncHandler(async (req: Request, res: Response) => {
+  private deleteSubtask = asyncHandler(async (req: ExtendedRequest, res: Response) => {
     const { subtaskId } = req.params;
-    const subtask = await this.subtaskOrchestrator.deleteSubtask(subtaskId);
+    const userId = req.user?.userId;
+    const subtask = await this.subtaskOrchestrator.deleteSubtask(subtaskId, userId as string);
     if (!subtask) throw new InternalError("Failed to delete subtask");
     successResponse(res, { message: "Subtask deleted successfully" });
   });
 
-  private updateSubtaskStatus = asyncHandler(async (req: Request, res: Response) => {
+  private updateSubtaskStatus = asyncHandler(async (req: ExtendedRequest, res: Response) => {
     const { subtaskId } = req.params;
     const { status } = req.body;
-    const subtask = await this.subtaskService.updateSubtaskStatus(subtaskId, status);
+
+    const userId = req.user?.userId;
+    if (!userId) throw new InternalError("User ID is required");
+
+    const subtask = await this.subtaskService.updateSubtaskStatus(subtaskId, status, userId);
     if (!subtask) throw new InternalError("Failed to transition subtask");
     successResponse(res, { data: subtask, message: "Subtask transitioned successfully" });
   });

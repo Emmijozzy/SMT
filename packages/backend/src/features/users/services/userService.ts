@@ -45,7 +45,7 @@ export class UserService {
     return await this.userRepository.findAll(filter, paginationOption);
   }
 
-  public async updateUserById(userId: string, data: IUser) {
+  public async updateUserById(userId: string, data: Partial<IUser>) {
     const user = await this.userRepository.findById(userId);
     if (!user) throw new NotFoundError("User does not exist");
 
