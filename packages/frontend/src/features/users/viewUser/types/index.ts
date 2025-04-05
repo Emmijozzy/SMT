@@ -1,5 +1,3 @@
-import { ComponentType } from "react";
-import { TableBodyProps, TableHeaderProps } from "../../../../shared/components/masterTable/MasterTable";
 import { ISubtask } from "../../../subtasks/subtaskInterface";
 import { IUser } from "../../userInterface";
 
@@ -16,6 +14,5 @@ export interface UserHeaderProps {
 
 export interface UserTasksTableProps {
   data: (ISubtask & Record<string, unknown>)[];
-  columns: TableHeaderProps;
-  TableBody: ComponentType<TableBodyProps<ISubtask & Record<string, unknown>>>;
+  isLoading: boolean;
 }

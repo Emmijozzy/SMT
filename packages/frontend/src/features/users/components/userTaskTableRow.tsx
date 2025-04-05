@@ -30,19 +30,19 @@ function UserTaskTableRow<T extends ISubtask>({ data }: Props<T>) {
               </div>
             </div>
           </td>
-          <td className="border-t-0 w-12 px-4align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2 capitalize ">
-            <div className="flex items-center gap-1">
-              <PriorityIndicator priority={priority} />
-              {priority}
-            </div>
-          </td>
-          <td className="border-t-0 px-4align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2 capitalize">
+          <td className="border-t-0 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2 capitalize">
             <div>
               <div className="w-2 h-2 rounded-full bg-orange-500 mr-2 inline-block" />
               {status}
             </div>
           </td>
-          <td className="max-w-32 border-t-0 px-4align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2">
+          <td className="border-t-0 w-12 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2 capitalize ">
+            <div className="flex items-center gap-1">
+              <PriorityIndicator priority={priority} />
+              {priority}
+            </div>
+          </td>
+          <td className="max-w-32 border-t-0 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2">
             <span>{daysLeft}</span>
           </td>
           <td aria-label="Action" className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
@@ -64,7 +64,6 @@ function UserTaskTableRow<T extends ISubtask>({ data }: Props<T>) {
       </tr>
     );
   }, [data]);
-
   return content;
 }
 

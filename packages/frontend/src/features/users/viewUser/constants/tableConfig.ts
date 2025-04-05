@@ -13,13 +13,15 @@ export const USER_TASK_COLUMNS: TableHeaderProps = {
       label: "Status",
       searchable: true,
       sortable: true,
-      filterable: false,
+      filterable: true,
+      filterOptions: ["open", "in review", "revisit", "completed"],
     },
     {
       label: "Priority",
       searchable: true,
       sortable: true,
-      filterable: false,
+      filterable: true,
+      filterOptions: ["low", "medium", "high"],
     },
     {
       label: "Due Date",

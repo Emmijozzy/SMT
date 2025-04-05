@@ -59,7 +59,7 @@ function SubtaskTable() {
     }
   }, [role, userProfile?.teamId, userProfile?.userId]);
 
-  const { data: subtasks } = useGetSubtasksQuery(query, {
+  const { data: subtasks, isLoading } = useGetSubtasksQuery(query, {
     refetchOnMountOrArgChange: true,
     refetchOnFocus: true,
     pollingInterval: 30000,
@@ -227,6 +227,7 @@ function SubtaskTable() {
             tableHead={subtaskColumns}
             data={tasks as (ISubtask & Record<string, unknown>)[]}
             TableBody={MemoizedSubtaskRow}
+            isLoading={isLoading}
           />
         </div>
       </div>

@@ -4,21 +4,19 @@ import { useParams } from "react-router-dom";
 import { RootState } from "../../../app/store";
 import DetailsContainer from "../../../shared/components/DetailsContainer";
 import { useGetSubtasksQuery } from "../../subtasks/subtaskApiSlice";
-import UserTaskTableRow from "../components/userTaskTableRow";
+import { ISubtask } from "../../subtasks/subtaskInterface";
 import useRole from "../hooks/useRole";
 import { usersSelectors } from "../userSlice";
 import SocialLinks from "./components/SocialLinks";
 import { UserHeader } from "./components/UserHeader";
 import UserTasksTable from "./components/UserTasksTable";
-import { USER_TASK_COLUMNS } from "./constants/tableConfig";
 import { generateTableRows } from "./utils/tableRowsGenerator";
-import { ISubtask } from "../../subtasks/subtaskInterface";
 
 function ViewUser() {
   const { userId = "" } = useParams<{ userId: string }>();
   const userRole = useRole();
   const user = useSelector((state: RootState) => usersSelectors.selectById(state, userId));
-  const { data: subtasks } = useGetSubtasksQuery({ assignee_like: userId });
+  const { data: subtasks, isLoading } = useGetSubtasksQuery({ assignee_like: userId });
 
   const memoizedSubtasks = useMemo(() => subtasks || [], [subtasks]) as (ISubtask & Record<string, unknown>)[];
   const tableRows = useMemo(() => generateTableRows(user), [user]);
@@ -44,7 +42,7 @@ function ViewUser() {
         </div>
       </div>
 
-      <UserTasksTable data={memoizedSubtasks} columns={USER_TASK_COLUMNS} TableBody={UserTaskTableRow} />
+      <UserTasksTable data={memoizedSubtasks} isLoading={isLoading} />
     </>
   );
 }

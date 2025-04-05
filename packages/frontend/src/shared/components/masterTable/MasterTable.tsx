@@ -3,6 +3,7 @@
 /* eslint-disable react/require-default-props */
 import { ComponentType, useMemo } from "react";
 import { v4 as uuidv4 } from "uuid";
+import LoadingSpinner from "../LoadingSpinner";
 import Pagination from "./components/Pagination";
 import { SearchBar } from "./components/SearchBar";
 import TableHeader from "./components/TableHeader";
@@ -25,6 +26,7 @@ export interface TableBodyProps<T> {
 }
 
 export interface TableProps<T> {
+  isLoading?: boolean;
   className?: string;
   name: string;
   data: T[];
@@ -34,7 +36,7 @@ export interface TableProps<T> {
 
 function MasterTable<T extends Record<string, unknown>>() {
   return function TableWrapper(props: TableProps<T>) {
-    const { className, name, data, tableHead, TableBody } = props;
+    const { className, name, data, tableHead, TableBody, isLoading } = props;
 
     const {
       currentPage,
@@ -61,9 +63,6 @@ function MasterTable<T extends Record<string, unknown>>() {
         );
       }
 
-      // if (toFilter.option) {
-      //   result = result.filter((item) => String(item[toFilter.column]).toLowerCase() === toFilter.option.toLowerCase());
-      // }
       if (toFilter.option) {
         result = result.filter((item) => {
           if (typeof item[toFilter.column] === "object" && item[toFilter.column] !== null) {
@@ -74,9 +73,6 @@ function MasterTable<T extends Record<string, unknown>>() {
           return String(item[toFilter.column]).toLowerCase() === toFilter.option.toLowerCase();
         });
       }
-      // if (toFilter.option) {
-      //   result = result.filter((item) => String(item[toFilter.column]).toLowerCase() === toFilter.option.toLowerCase());
-      // }
 
       if (sortConfig.key) {
         result.sort((a, b) => {
@@ -93,6 +89,16 @@ function MasterTable<T extends Record<string, unknown>>() {
       const start = (currentPage - 1) * rowsPerPage;
       return processedData.slice(start, start + rowsPerPage);
     }, [processedData, currentPage, rowsPerPage]);
+
+    // if (isLoading) {
+    //   return (
+    //     <div className="container min-h-80">
+    //       <div className="flex h-80 justify-center items-center bg-base-200 rounded-lg">
+    //         <LoadingSpinner />
+    //       </div>
+    //     </div>
+    //   );
+    // }
 
     return (
       <div className="container mx-auto px-4 transition-all">
@@ -118,6 +124,15 @@ function MasterTable<T extends Record<string, unknown>>() {
                     sortedBy={sortedBy as string}
                   />
                   <tbody className="mb-10 mt-2">
+                    {isLoading && (
+                      <tr>
+                        <td aria-label="loading" colSpan={tableHead.columns.length}>
+                          <div className="flex justify-center items-center h-80">
+                            <LoadingSpinner />
+                          </div>
+                        </td>
+                      </tr>
+                    )}
                     {currentRows.map((item) => (
                       <TableBody key={uuidv4()} data={item} />
                     ))}
