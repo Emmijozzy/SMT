@@ -50,7 +50,7 @@ function MasterTable<T extends Record<string, unknown>>() {
       handleSearch,
       setCurrentPage,
       setRowsPerPage,
-    } = useTableState<T>(tableHead.columns[0].label);
+    } = useTableState<T>(tableHead.columns[0].label, name);
 
     const processedData = useMemo(() => {
       let result = [...data];

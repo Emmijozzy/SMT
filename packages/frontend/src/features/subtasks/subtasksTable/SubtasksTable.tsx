@@ -223,7 +223,7 @@ function SubtaskTable() {
         </div>
         <div className={`transition-all ${showSection === section ? "" : "hidden"}`}>
           <OpenSubtaskTable
-            name="Subtask"
+            name={title}
             tableHead={subtaskColumns}
             data={tasks as (ISubtask & Record<string, unknown>)[]}
             TableBody={MemoizedSubtaskRow}

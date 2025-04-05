@@ -1,20 +1,63 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-export function useTableState<T>(defaultColumn: string) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [sortConfig, setSortConfig] = useState<{ key: keyof T | null; direction: "asc" | "desc" | null }>({
-    key: null,
-    direction: null,
-  });
+type InitialState<T> = {
+  currentPage: number;
+  rowsPerPage: number;
+  sortConfig: { key: keyof T | null; direction: "asc" | "desc" | null };
+  sortedBy: string;
+  toFilter: { option: string; column: string };
+  viewSearch: boolean;
+  searchQuery: string;
+};
 
-  const [sortedBy, setSortedBy] = useState<keyof T | "">("");
-  const [toFilter, setToFilter] = useState({ option: "", column: defaultColumn });
-  const [viewSearch, setViewSearch] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+export function useTableState<T>(defaultColumn: string, tableId: string) {
+  // Use tableId to create unique storage keys for different tables
+  const storageKey = `table_state_${tableId}`;
+
+  // Load initial state from localStorage or use defaults
+  const loadInitialState = (): InitialState<T> => {
+    const savedState = localStorage.getItem(storageKey);
+    if (savedState) {
+      return JSON.parse(savedState) as InitialState<T>;
+    }
+    return {
+      currentPage: 1,
+      rowsPerPage: 5,
+      sortConfig: { key: null, direction: null },
+      sortedBy: "",
+      toFilter: { option: "", column: defaultColumn },
+      viewSearch: false,
+      searchQuery: "",
+    };
+  };
+
+  const initialState = loadInitialState();
+
+  const [currentPage, setCurrentPage] = useState(initialState.currentPage);
+  const [rowsPerPage, setRowsPerPage] = useState(initialState.rowsPerPage);
+  const [sortConfig, setSortConfig] = useState<{ key: keyof T | null; direction: "asc" | "desc" | null }>(
+    initialState.sortConfig,
+  );
+  const [sortedBy, setSortedBy] = useState<keyof T | "">(initialState.sortedBy as keyof T | "");
+  const [toFilter, setToFilter] = useState(initialState.toFilter);
+  const [viewSearch, setViewSearch] = useState(initialState.viewSearch);
+  const [searchQuery, setSearchQuery] = useState(initialState.searchQuery);
+
+  // Save state to localStorage whenever it changes
+  useEffect(() => {
+    const stateToSave = {
+      currentPage,
+      rowsPerPage,
+      sortConfig,
+      sortedBy,
+      toFilter,
+      viewSearch,
+      searchQuery,
+    };
+    localStorage.setItem(storageKey, JSON.stringify(stateToSave));
+  }, [currentPage, rowsPerPage, sortConfig, sortedBy, toFilter, viewSearch, searchQuery, storageKey]);
 
   const handleFilter = useCallback((option: string, column: string) => {
-    // console.log(option, "option", column, "column");
     setToFilter({ option, column });
   }, []);
 
@@ -35,6 +78,18 @@ export function useTableState<T>(defaultColumn: string) {
     setCurrentPage(1);
   }, []);
 
+  // Add a reset function to clear saved state if needed
+  const resetTableState = useCallback(() => {
+    setCurrentPage(1);
+    setRowsPerPage(5);
+    setSortConfig({ key: null, direction: null });
+    setSortedBy("" as keyof T | "");
+    setToFilter({ option: "", column: defaultColumn });
+    setViewSearch(false);
+    setSearchQuery("");
+    localStorage.removeItem(storageKey);
+  }, [defaultColumn, storageKey]);
+
   return {
     currentPage,
     rowsPerPage,
@@ -49,5 +104,6 @@ export function useTableState<T>(defaultColumn: string) {
     handleSearch,
     setCurrentPage,
     setRowsPerPage,
+    resetTableState,
   };
 }
