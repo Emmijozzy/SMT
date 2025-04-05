@@ -58,8 +58,8 @@ const baseQueryWithReactAuth = async (args: string | FetchArgs, api: BaseQueryAp
         api.dispatch(changeStatus("error"));
         api.dispatch(addAlert({ message: "Timeout Error", type: "error" }));
       } else if (refreshResult?.error?.status === "PARSING_ERROR") {
-        api.dispatch(changeStatus("error"));
-        api.dispatch(addAlert({ message: "parsing Error", type: "error" }));
+        console.error("Parsing error details:", result.error);
+        api.dispatch(addAlert({ message: "Parsing Error: Could not process server response", type: "error" }));
       } else {
         const refreshError = { ...refreshResult } as ErrorData;
         if (refreshError?.error?.status === 403) {
@@ -77,8 +77,8 @@ const baseQueryWithReactAuth = async (args: string | FetchArgs, api: BaseQueryAp
       // api.dispatch(changeStatus("error"));
       api.dispatch(addAlert({ message: "Timeout Error", type: "error" }));
     } else if (result?.error.status === "PARSING_ERROR") {
-      // api.dispatch(changeStatus("error"));
-      api.dispatch(addAlert({ message: "parsing Error", type: "error" }));
+      console.error("Parsing error details:", result.error);
+      api.dispatch(addAlert({ message: "Parsing Error: Could not process server response", type: "error" }));
     }
   }
 

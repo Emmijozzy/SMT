@@ -21,12 +21,12 @@ function TaskTableRow<T extends ITask>({ data }: Props<T>) {
       const daysLeft = getDaysLeft(dueDate || new Date().toDateString());
       return (
         <tr className={`relative hover:bg-base-100 ${delFlg ? "opacity-20" : ""}`}>
-          <td className="border-t-0 w-64 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2 text-left flex items-center">
+          <td className="border-t-0 max-w-72 align-middle border-l-0 border-r-0 text-xs whitespace-normal px-2 pt-2 text-left flex items-center">
             <Avartar name={title} imgUrl="" />
-            <div>
-              <span className="ml-3 font-bold truncate ... text-base-content capitalize hover:overflow-visible hover:bg-base-100">
+            <div className="max-w-[250px]">
+              <p className="ml-3 font-bold text-base-content capitalize break-words truncate hover:text-clip hover:whitespace-normal active:text-clip active:whitespace-normal">
                 {title}
-              </span>
+              </p>
               <p className="ml-3 text-xs leading-tight text-base-content/50">{taskId}</p>
             </div>
           </td>
@@ -88,7 +88,7 @@ function TaskTableRow<T extends ITask>({ data }: Props<T>) {
     }
     return (
       <tr>
-        <td className="text-center">
+        <td colSpan={8} className="text-center">
           <span>...Loading</span>
         </td>
       </tr>

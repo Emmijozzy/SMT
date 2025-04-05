@@ -62,7 +62,7 @@ function EditTaskDetails({ handleEditTaskDetails, taskId }: Props) {
       value={(taskValues[name] || "") as string}
       handleChange={handleChange}
       options={options}
-      labelClass="w-14"
+      labelClass="md:w-20"
       teamsOptions={teamsOptions}
       className="border-b-[1px] border-base-content/40 h-13 text-sm gap-9 "
     />
@@ -97,13 +97,14 @@ function EditTaskDetails({ handleEditTaskDetails, taskId }: Props) {
         {renderInputField("Title", "title")}
         {renderInputField("Description", "description", "text", "textarea")}
         {/* {renderSelect("Team", "responsibleTeam", ["developer", "UI/UX", "Analyst"])} */}
-        {renderSelect("team", "responsibleTeam", [], [...teams.map((team) => [team.teamId, team.name])] as string[][])}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="md:grid md:grid-cols-2 gap-4">
           {renderInputField("Start Date", "startDate", "date")}
           {renderInputField("Due Date", "dueDate", "date")}
         </div>
-        <div className="grid grid-cols-2 gap-4">
-          {renderSelect("Status", "status", ["not started", "in progress", "completed", "closed"])}
+        <div className="md:grid md:grid-cols-2 gap-4">
+          {renderSelect("team", "responsibleTeam", [], [
+            ...teams.map((team) => [team.teamId, team.name]),
+          ] as string[][])}
           {renderSelect("Priority", "priority", ["low", "medium", "high"])}
         </div>
       </div>

@@ -66,4 +66,30 @@ export class TaskRepository {
   public async outrightDeleteById(taskId: string) {
     return await Task.findOneAndDelete({ taskId }).exec();
   }
+
+  public async findApproachingDeadlinesTasks() {
+    const currentDate = new Date();
+    const twentyFourHoursLater = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000);
+    const approachingDeadlinesTasks = await Task.find({
+      dueDate: {
+        $gte: currentDate,
+        $lte: twentyFourHoursLater
+      },
+      status: { $ne: "completed" },
+      deadlineNotificationSent: { $ne: true }
+    });
+
+    return approachingDeadlinesTasks;
+  }
+
+  public async findOverdueTasks() {
+    const currentDate = new Date();
+    const overdueTasks = await Task.find({
+      dueDate: { $lt: currentDate },
+      status: { $ne: "completed" },
+      overdueNotificationSent: { $ne: true }
+    });
+
+    return overdueTasks;
+  }
 }

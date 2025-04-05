@@ -6,6 +6,7 @@ import { ApiError, InternalError } from "../../utils/ApiError";
 import logger from "../../utils/logger";
 import { getUserIdBySocketId } from "./getUserIdBySocketId";
 import { SocketUserDataType } from "./manageUserDataType";
+import { TaskEventHandler } from "../../features/task/taskEventHandler";
 
 class SocketService {
   private io!: Server;
@@ -14,6 +15,7 @@ class SocketService {
   private readonly userService: UserService;
   public subtaskEventHandler!: SubtaskEventHandler;
   public notificationEventHandler!: NotificationEventHandler;
+  public taskEventHandler!: TaskEventHandler;
 
   private constructor() {
     this.userService = new UserService();
@@ -32,6 +34,7 @@ class SocketService {
     //initialize event handler
     this.subtaskEventHandler = new SubtaskEventHandler(this.io, this.connectedUsers);
     this.notificationEventHandler = new NotificationEventHandler(this.io, this.connectedUsers);
+    this.taskEventHandler = new TaskEventHandler(this.io, this.connectedUsers);
 
     this.setUpListers();
   }

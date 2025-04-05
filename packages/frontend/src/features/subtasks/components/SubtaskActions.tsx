@@ -1,6 +1,7 @@
 import ArrowBackSharpIcon from "@mui/icons-material/ArrowBackSharp";
 import EditIcon from "@mui/icons-material/Edit";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { UserRole } from "../../users/userRole";
 
 interface SubtaskActionsProps {
   role: string;
@@ -11,7 +12,7 @@ interface SubtaskActionsProps {
 export function SubtaskActions({ role, showEdit, showDeleteModal }: SubtaskActionsProps) {
   return (
     <div className="flex items-center gap-2">
-      {role === "admin" && (
+      {role !== UserRole.TeamMember && (
         <>
           <button
             type="button"

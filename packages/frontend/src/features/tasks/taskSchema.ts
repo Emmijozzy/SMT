@@ -7,7 +7,7 @@ const taskSchema = Yup.object().shape({
     .trim()
     .required("Title is required")
     .min(5, "Title must be at least 5 charater")
-    .max(20, "Title must be at most 20 charater"),
+    .max(35, "Title must be at most 35 charater"),
   description: Yup.string()
     .trim()
     .required("Description is required")
@@ -20,13 +20,6 @@ const taskSchema = Yup.object().shape({
       const manTask = managerTask as unknown as boolean;
       return manTask !== true ? schema.required("Team is required") : schema.notRequired();
     }),
-  status: Yup.string()
-    .trim()
-    .required("Status is required")
-    .oneOf(
-      ["not started", "in progress", "completed", "closed"],
-      "Invalid Task Status, status cam either be: Not Started, In Progress, Completed or Closed",
-    ),
   managerTask: Yup.boolean(),
   managerId: Yup.string().when("managerTask", (managerTask, schema) => {
     const manTask = managerTask as unknown as boolean;

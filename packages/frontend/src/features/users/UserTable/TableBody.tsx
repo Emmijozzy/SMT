@@ -1,14 +1,14 @@
+/* eslint-disable no-nested-ternary */
 import { FaRegEdit, FaTrashRestore } from "react-icons/fa";
 import { GrView } from "react-icons/gr";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-
 import { RootState } from "../../../app/store";
-import Avartar from "../../../shared/components/Avartar";
 import getRelativeTimeString from "../../../shared/utils/getRelativeTimeString";
 import { setShowModal, setUserId } from "../DeleteUser/DeleteUserSlice";
 import { usersSelectors } from "../userSlice";
+import User from "../../../shared/components/User";
 
 type Props = {
   userId: string;
@@ -32,7 +32,7 @@ function TableBody({ userId }: Props) {
   let content;
 
   if (user) {
-    const { fullName, profilePicUrl: profilePic, email, role, team, createdAt: joined, del_flg: delFlg } = user;
+    const { fullName, email, role, team, createdAt: joined, del_flg: delFlg, status } = user;
 
     const dateJoined: string | Date = new Date(joined);
 
@@ -44,15 +44,7 @@ function TableBody({ userId }: Props) {
         <td className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
           <div className="flex px-2 py-1">
             <div className="mr-2">
-              {profilePic ? (
-                <img
-                  src={profilePic}
-                  className="inline-flex items-center justify-center mr-4 text-sm text-white transition-all duration-200 ease-soft-in-out h-9 w-9 rounded-xl"
-                  alt="user1"
-                />
-              ) : (
-                <Avartar name={fullName || ""} className="w-[2.5rem] h-[2.5rem]" />
-              )}
+              <User userId={userId} index={0} avaterClassName="w-[3rem] h-[3rem] text-xl" />
             </div>
             <div className="flex flex-col justify-center">
               <h6 className="mb-0 text-sm leading-normal text-base-content/80 capitalize">{fullName}</h6>
@@ -71,8 +63,16 @@ function TableBody({ userId }: Props) {
           <p className="mb-0 text-xs leading-tight text-base-content/50 capitalize">{team}</p>
         </td>
         <td className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
-          <p className="mb-0 text-xs font-semibold leading-tight text-base-content/80 capitalize">active</p>{" "}
-          {/* *TODO - Add to status to the table */}
+          <div className="flex items-center">
+            <div
+              className={`h-2.5 w-2.5 rounded-full mr-2 ${status === "online" ? "bg-success" : status === "offline" ? "bg-error" : "bg-warning"}`}
+            />
+            <p
+              className={`mb-0 text-xs font-semibold leading-tight capitalize ${status === "online" ? "text-success" : status === "offline" ? "text-error" : "text-warning"}`}
+            >
+              {status || "unknown"}
+            </p>
+          </div>
         </td>
         <td className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
           <span className="text-xs font-semibold leading-tight text-base-content/80 normal-case">

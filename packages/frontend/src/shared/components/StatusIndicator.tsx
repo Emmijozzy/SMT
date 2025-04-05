@@ -10,12 +10,12 @@ const statusMap: Record<Status, { color: string }> = {
   open: { color: "#FFA500" },
   "not started": { color: "#FFA500" },
   in_process: { color: "#007BFF" },
+  "in progress": { color: "#007BFF" },
   completed: { color: "#28A745" },
   closed: { color: "#DC3545" },
   in_review: { color: "#17A2B8" },
   revisit: { color: "#6C757D" },
 };
-
 function StatusIndicator({ status }: Props) {
   const { color } = statusMap[status] || { color: "#000000" };
 

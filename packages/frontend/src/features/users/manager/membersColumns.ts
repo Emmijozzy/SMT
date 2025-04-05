@@ -28,10 +28,11 @@ export const membersColumns: TableHeaderProps = {
       filterable: false,
     },
     {
-      label: "Status",
+      label: "status",
       searchable: false,
       sortable: true,
       filterable: true,
+      filterOptions: ["online", "offline"],
     },
     {
       label: "Joined",

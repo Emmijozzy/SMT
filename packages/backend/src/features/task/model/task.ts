@@ -13,6 +13,8 @@ export interface ITask extends Document {
   progress?: number;
   createdBy: string;
   modifiedBy?: string;
+  deadlineNotificationSent?: boolean;
+  overdueNotificationSent?: boolean;
   dueDate: Date;
   startDate: Date;
   createdAt: Date;
@@ -99,6 +101,14 @@ const taskSchema = new Schema<ITask>({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  deadlineNotificationSent: {
+    type: Boolean,
+    default: false
+  },
+  overdueNotificationSent: {
+    type: Boolean,
+    default: false
   },
   updatedAt: {
     type: Date,

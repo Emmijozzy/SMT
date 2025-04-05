@@ -7,6 +7,7 @@ import { FaTasks } from "react-icons/fa";
 import { GiCancel } from "react-icons/gi";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import * as uuid from "uuid";
 import { RootState } from "../../app/store";
 import {
   selectShowNotifications,
@@ -73,11 +74,10 @@ function Notifications({ notifications, onDeleteNotification }: Props) {
           <GiCancel className="text-xl" />
         </button>
       </div>
-
       {/* Improved notification item styling */}
       <ul className="w-full max-h-[calc(100vh-155px)]  overflow-y-auto">
-        {notifications.map((notification) => (
-          <li key={notification.notificationId} className="w-full hover:bg-base-300 transition-colors duration-200">
+        {notifications.map((notification: INotification) => (
+          <li key={uuid.v4()} className="w-full hover:bg-base-300 transition-colors duration-200">
             <div className="w-full flex justify-between bg-base-100 rounded-lg p-4 mt-1 hover:shadow-md transition-all duration-200">
               {/* Enhanced icon container */}
               <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0 shadow-sm">
@@ -99,12 +99,13 @@ function Notifications({ notifications, onDeleteNotification }: Props) {
                       <User
                         className="text-xs text-base-content/70"
                         avaterClassName="w-[23px] h-[23px] text-xs"
-                        // eslint-disable-next-line no-nested-ternary
-                        userId={`${notification.senderId?.[0] ? notification.senderId?.[0]?.toUpperCase() : notification.senderId?.[1] ? notification.senderId?.[1]?.toUpperCase() : ""}`}
+                        userId={
+                          notification.senderId?.[0]?.toUpperCase() || notification.senderId?.[1]?.toUpperCase() || ""
+                        }
                         index={0}
                         withName
                       />
-                      <p className="text-xs text-base-content/60 mt-1 line-clamp-2">{`${notification.message}`}</p>
+                      <p className="text-xs text-base-content/60 mt-1 line-clamp-2">{notification.message}</p>
                     </div>
                     <span className="text-xs text-base-content/40 ml-2 mt-1">
                       {formatNotificationTime(notification.createdAt)}
@@ -127,8 +128,8 @@ function Notifications({ notifications, onDeleteNotification }: Props) {
               </button>
             </div>
           </li>
-        ))}
-      </ul>
+        ))}{" "}
+      </ul>{" "}
     </div>
   );
 }

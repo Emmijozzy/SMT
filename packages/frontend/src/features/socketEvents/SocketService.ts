@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/lines-between-class-members */
 /* eslint-disable lines-between-class-members */
 import { io, Socket } from "socket.io-client";
+import log from "../../shared/utils/log";
 
 export class SocketService {
   private socket: Socket | null = null;
@@ -24,26 +25,22 @@ export class SocketService {
     });
 
     this.socket.on("connect", () => {
-      console.log("Connected to socket server");
+      log("info", "Connected to socket server");
       // Emit the authentication event to the server
       this.socket?.emit("authenticated", { userId });
     });
 
     this.socket.on("connect_error", (error) => {
-      console.error("Socket connection error:", error);
+      log("error", "Socket connection error:", "SocketService", error.message);
     });
 
     this.socket.on("disconneting", () => {
-      console.log("Disconnected from socket server");
+      log("info", "Disconnected from socket server", "SocketService");
     });
 
     this.socket.on("reconnect", () => {
-      console.log("Reconnected to socket server");
+      log("info", "Reconnected to socket server", "SocketService");
     });
-
-    // this.socket.on("user:status", (data: { userId: string; status: string }) => {
-    //   console.log("User status updated:", data);
-    // });
   }
 
   public getSocket() {

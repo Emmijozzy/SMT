@@ -16,16 +16,16 @@ type Props<T> = {
 function ManagerTaskRow<T extends ITask>({ data }: Props<T>) {
   const content = useMemo(() => {
     if (data) {
-      const { title, taskId, priority, status, assignedTo, dueDate, del_flg: delFlg } = data;
+      const { title, taskId, priority, status, assignedTo, dueDate, del_flg: delFlg, progress } = data;
       const daysLeft = getDaysLeft(dueDate || new Date().toDateString());
       return (
         <tr className={`relative hover:bg-base-100 ${delFlg ? "opacity-20" : ""}`}>
-          <td className="border-t-0 w-64 px-4align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2 text-left flex items-center">
+          <td className="border-t-0 max-w-72 align-middle border-l-0 border-r-0 text-xs whitespace-normal px-2 pt-2 text-left flex items-center">
             <Avartar name={title} imgUrl="" />
-            <div>
-              <span className="ml-3 font-bold truncate ... text-base-content capitalize hover:overflow-visible hover:bg-base-100">
+            <div className="max-w-[250px]">
+              <p className="ml-3 font-bold text-base-content capitalize break-words truncate hover:text-clip hover:whitespace-normal active:text-clip active:whitespace-normal">
                 {title}
-              </span>
+              </p>
               <p className="ml-3 text-xs leading-tight text-base-content/50">{taskId}</p>
             </div>
           </td>
@@ -61,7 +61,7 @@ function ManagerTaskRow<T extends ITask>({ data }: Props<T>) {
             </div>
           </td>
           <td className="border-t-0 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2">
-            <Completion completion={60} />
+            <Completion completion={progress} />
           </td>
           <td className="max-w-32 border-t-0 px-4align-middle border-l-0 border-r-0 text-xs whitespace-nowrap px-2 pt-2">
             <span>{daysLeft}</span>

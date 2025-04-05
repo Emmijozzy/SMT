@@ -14,7 +14,14 @@ type Props = {
 };
 
 function User({ userId, index, withName = false, avaterClassName = "", className = "" }: Props) {
-  const { data: loadedUser, isFetching, isSuccess } = useGetUserQuery(userId);
+  const {
+    data: loadedUser,
+    isFetching,
+    isSuccess,
+  } = useGetUserQuery(userId, {
+    skip: !userId,
+  });
+
   let user = useSelector((state: RootState) => usersSelectors.selectById(state, userId)) as IUser;
 
   if (!user && isSuccess) {

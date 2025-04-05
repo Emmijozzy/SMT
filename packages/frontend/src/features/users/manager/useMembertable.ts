@@ -8,12 +8,17 @@ import { setUsers } from "../userSlice";
 const useMemberTable = () => {
   const managerTeam = useSelector((state: RootState) => getPresentUser(state)).team;
 
-  const { data } = useGetUsersQuery({ team_like: managerTeam });
+  const { data } = useGetUsersQuery(
+    { team_like: managerTeam },
+    {
+      refetchOnMountOrArgChange: true,
+      refetchOnFocus: false,
+      pollingInterval: 30000,
+    },
+  );
 
   const dispatch = useDispatch();
   const memoizedData = useMemo(() => data, [data]);
-
-  console.log(data);
 
   useEffect(() => {
     if (memoizedData) {

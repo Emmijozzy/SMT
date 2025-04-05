@@ -24,6 +24,8 @@ function Prefetch() {
     isLoading: boolean;
   };
 
+  userApiSlice.endpoints.getUsers.useQuery("");
+
   useEffect(() => {
     if (!isLoading && ResponseData?.data) {
       setDataLoaded(true);

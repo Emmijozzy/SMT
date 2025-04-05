@@ -99,7 +99,7 @@ const ViewTaskDetail = React.memo(({ task, handleEditTaskDetails }: Props) => {
             <p className="capitalize">{priority}</p>
           </div>
         </TaskDetailRow>
-        <TaskDetailRow label="Completion" value="60%" />
+        <TaskDetailRow label="Completion" value={`${task.progress}%`} />
         <TaskDetailRow label="Start Date" value={formattedStartDate} />
         <TaskDetailRow label="Due Date" value={formattedDueDate} />
       </>

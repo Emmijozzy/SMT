@@ -49,6 +49,7 @@ export default class SubtaskOrchestrator {
       await this.teamService.addSubtaskToTeam(subtask.team, subtask.subtaskId);
       await this.taskService.addUserIdToAssignedTo(task.taskId, user.userId);
       await this.taskService.addSubtaskId(task.taskId, subtask.subtaskId);
+      await this.userService.addSubtaskId(assignee, subtask.subtaskId);
       await this.subtaskAuditLogService.LogOnSubtaskCreation(subtask, reqUser);
       const notification = generateSubtaskNotification.generateCreateSubtaskNotification(subtask);
       const savedNotification = await this.notificationService.saveNotification(notification);

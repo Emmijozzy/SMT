@@ -1,7 +1,8 @@
+/* eslint-disable no-nested-ternary */
 import { useMemo } from "react";
 import { GrView } from "react-icons/gr";
 import { Link } from "react-router-dom";
-import Avartar from "../../../shared/components/Avartar";
+import User from "../../../shared/components/User";
 import getRelativeTimeString from "../../../shared/utils/getRelativeTimeString";
 import { IUser } from "../userInterface";
 
@@ -11,7 +12,7 @@ type Props<T> = {
 function MemberRow<T extends IUser>({ data }: Props<T>) {
   const content = useMemo(() => {
     if (data) {
-      const { fullName, userId, profilePicUrl: profilePic, email, createdAt: joined, del_flg: delFlg, subtasks } = data;
+      const { fullName, userId, email, createdAt: joined, del_flg: delFlg, subtasks, status } = data;
 
       const dateJoined: string | Date = new Date(joined);
 
@@ -31,15 +32,7 @@ function MemberRow<T extends IUser>({ data }: Props<T>) {
           <td className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
             <div className="flex px-2 py-1">
               <div className="mr-2">
-                {profilePic ? (
-                  <img
-                    src={profilePic}
-                    className="inline-flex items-center justify-center mr-4 text-sm text-white transition-all duration-200 ease-soft-in-out h-9 w-9 rounded-xl"
-                    alt="user1"
-                  />
-                ) : (
-                  <Avartar name={fullName || ""} className="w-[2.5rem] h-[2.5rem]" />
-                )}
+                <User userId={userId} index={0} avaterClassName="w-[3rem] h-[3rem] text-xl" />
               </div>
               <div className="flex flex-col justify-center">
                 <h6 className="mb-0 text-sm leading-normal text-base-content/80 capitalize">{fullName}</h6>
@@ -48,9 +41,8 @@ function MemberRow<T extends IUser>({ data }: Props<T>) {
             </div>
           </td>
           <td className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
-            <p className="mb-0 text-xs font-semibold leading-tight text-base-content/80 capitalize">{email}</p>{" "}
+            <p className="mb-0 text-xs font-semibold leading-tight text-base-content/80 capitalize">{email}</p>
           </td>
-
           <td className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
             <p className="mb-0 text-xs font-semibold text-center leading-tight text-base-content/80 capitalize">
               {notStartedSubtasks}
@@ -62,8 +54,16 @@ function MemberRow<T extends IUser>({ data }: Props<T>) {
             </p>
           </td>
           <td className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
-            <p className="mb-0 text-xs font-semibold leading-tight text-base-content/80 capitalize">active</p>{" "}
-            {/* *TODO - Add to status to the table */}
+            <div className="flex items-center">
+              <div
+                className={`h-2.5 w-2.5 rounded-full mr-2 ${status === "online" ? "bg-success" : status === "offline" ? "bg-error" : "bg-warning"}`}
+              />
+              <p
+                className={`mb-0 text-xs font-semibold leading-tight capitalize ${status === "online" ? "text-success" : status === "offline" ? "text-error" : "text-warning"}`}
+              >
+                {status || "unknown"}
+              </p>
+            </div>
           </td>
           <td className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
             <span className="text-xs font-semibold leading-tight text-base-content/80 normal-case">

@@ -76,6 +76,7 @@ export interface IUser {
       ]
     | string;
   del_flg: boolean;
+  status: "online" | "offline";
   createdAt: string;
   updatedAt: string;
   updated_by: string;

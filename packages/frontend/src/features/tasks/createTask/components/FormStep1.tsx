@@ -42,16 +42,6 @@ function FormStep1({ onNext, handleChange, errors, values }: Props) {
           value={values.priority}
           labelClass="mr-5"
         />
-        <Select
-          name="status"
-          label="stutus"
-          placeholder="Select Status"
-          options={["not started", "in progress", "completed", "closed"]}
-          className="gap-[1.6rem] pt-2"
-          handleChange={handleChange}
-          value={values.status}
-          labelClass="mr-7"
-        />
       </div>
       <div className="w-full h-full flex mt-3 justify-end bg-base-100 pt-4">
         <button

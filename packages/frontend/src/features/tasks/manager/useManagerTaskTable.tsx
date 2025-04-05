@@ -8,9 +8,15 @@ import { setTasks } from "../tasksSlice";
 export default function useManagerTaskTable() {
   const managerTeamId = useSelector((state: RootState) => getPresentUser(state))?.teamId;
 
-  const { data, isLoading, isSuccess, isError, error } = useGetTasksQuery({
-    responsibleTeam_like: managerTeamId,
-  } as unknown as void);
+  const { data, isLoading, isSuccess, isError, error } = useGetTasksQuery(
+    {
+      responsibleTeam_like: managerTeamId,
+    } as unknown as void,
+    {
+      refetchOnMountOrArgChange: true,
+      refetchOnFocus: true,
+    },
+  );
 
   const dispatch = useDispatch();
 

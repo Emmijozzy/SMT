@@ -8,7 +8,9 @@ function UseTasksTable() {
   const dispatch = useDispatch();
   const { data, isLoading, isSuccess, isError, error } = useGetTasksQuery(undefined, {
     refetchOnMountOrArgChange: true,
-    refetchOnFocus: false,
+    refetchOnFocus: true,
+    refetchOnReconnect: true,
+    pollingInterval: 2.628e6, // 1 month in milliseconds
   });
 
   useEffect(() => {

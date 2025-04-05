@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable indent */
 import socketService from "../../features/socket/socketService";
 import SubtaskRepository from "../../features/subtask/subtaskRepository";
@@ -7,6 +8,7 @@ import { UserRepository } from "../../features/users/userRepository";
 import { InternalError } from "../../utils/ApiError";
 import { generateTitleandMessage } from "../../utils/generateTitleandMessage";
 import generateSubtaskNotification from "./generateSubtaskNotification";
+import generateTaskNotification from "./generateTaskNotification";
 import {
   INotification,
   NotificationMetadata,
@@ -158,34 +160,91 @@ export default class NotificationService {
 
   async scheduleDeadlineNotifications(): Promise<void> {
     try {
-      const approachingDeadlinesSubtasks = await this.subtaskRepository.findApproachingDeadlinesSubtasks();
+      const [approachingDeadlinesSubtasks, overdueSubtasks, approachingDeadlinesTasks, overdueTasks] =
+        await Promise.all([
+          this.subtaskRepository.findApproachingDeadlinesSubtasks(),
+          this.subtaskRepository.findOverdueSubtasks(),
+          this.taskRepository.findApproachingDeadlinesTasks(),
+          this.taskRepository.findOverdueTasks()
+        ]);
 
-      if (approachingDeadlinesSubtasks.length > 0) {
-        for (const subtask of approachingDeadlinesSubtasks) {
+      await Promise.all([
+        ...approachingDeadlinesSubtasks.map(async (subtask) => {
           const notification = generateSubtaskNotification.generateSubtaskDeadlineApproachingNotification(subtask);
           const savedNotification = await this.saveNotification(notification);
-          socketService.notificationEventHandler.emitNewNotification(savedNotification, subtask.assignee);
-          socketService.notificationEventHandler.emitNewNotification(savedNotification, subtask.createdBy);
+          return Promise.all([
+            socketService.notificationEventHandler.emitNewNotification(savedNotification, subtask.assignee),
+            socketService.notificationEventHandler.emitNewNotification(savedNotification, subtask.createdBy),
+            this.subtaskRepository.updateSubtask(subtask.subtaskId, { deadlineNotificationSent: true })
+          ]);
+        }),
 
-          await this.subtaskRepository.updateSubtask(subtask.subtaskId, {
-            deadlineNotificationSent: true
-          });
-        }
-      }
-
-      const overdueSubtasks = await this.subtaskRepository.findOverdueSubtasks();
-      if (overdueSubtasks.length > 0) {
-        for (const subtask of overdueSubtasks) {
+        ...overdueSubtasks.map(async (subtask) => {
           const notification = generateSubtaskNotification.generateSubtaskOverdueNotification(subtask);
           const savedNotification = await this.saveNotification(notification);
-          socketService.notificationEventHandler.emitNewNotification(savedNotification, subtask.assignee);
-          socketService.notificationEventHandler.emitNewNotification(savedNotification, subtask.createdBy);
+          return Promise.all([
+            socketService.notificationEventHandler.emitNewNotification(savedNotification, subtask.assignee),
+            socketService.notificationEventHandler.emitNewNotification(savedNotification, subtask.createdBy),
+            this.subtaskRepository.updateSubtask(subtask.subtaskId, { overdueNotificationSent: true })
+          ]);
+        }),
 
-          await this.subtaskRepository.updateSubtask(subtask.subtaskId, {
-            overdueNotificationSent: true
-          });
-        }
-      }
+        ...approachingDeadlinesTasks.map(async (task) => {
+          const [managerNotification, adminNotification] = await Promise.all([
+            generateTaskNotification.generateTaskDeadlineApproachingNotification(task),
+            generateTaskNotification.generateTaskDeadlineApproachingNotification(task, task.createdBy)
+          ]);
+
+          const [savedManagerNotification, savedAdminNotification] = await Promise.all([
+            this.saveNotification(managerNotification),
+            this.saveNotification(adminNotification)
+          ]);
+
+          const notifications = [
+            socketService.notificationEventHandler.emitNewNotification(savedAdminNotification, task.createdBy),
+            this.taskRepository.updateById(task.taskId, { deadlineNotificationSent: true })
+          ];
+
+          if (savedManagerNotification.recipientId?.length > 0) {
+            notifications.push(
+              socketService.notificationEventHandler.emitNewNotification(
+                savedManagerNotification,
+                savedManagerNotification.recipientId[0]
+              )
+            );
+          }
+
+          return Promise.all(notifications);
+        }),
+
+        ...overdueTasks.map(async (task) => {
+          const [managerNotification, adminNotification] = await Promise.all([
+            generateTaskNotification.generateTaskDeadlineOverdueNotification(task),
+            generateTaskNotification.generateTaskDeadlineOverdueNotification(task, task.createdBy)
+          ]);
+
+          const [savedManagerNotification, savedAdminNotification] = await Promise.all([
+            this.saveNotification(managerNotification),
+            this.saveNotification(adminNotification)
+          ]);
+
+          const notifications = [
+            socketService.notificationEventHandler.emitNewNotification(savedAdminNotification, task.createdBy),
+            this.taskRepository.updateById(task.taskId, { overdueNotificationSent: true })
+          ];
+
+          if (savedManagerNotification.recipientId?.length > 0) {
+            notifications.push(
+              socketService.notificationEventHandler.emitNewNotification(
+                savedManagerNotification,
+                savedManagerNotification.recipientId[0]
+              )
+            );
+          }
+
+          return Promise.all(notifications);
+        })
+      ]);
     } catch (error) {
       console.error("Error scheduling deadline notifications:", error);
       throw new Error("Failed to schedule deadline notifications");
