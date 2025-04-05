@@ -14,6 +14,7 @@ const useMemberTable = () => {
       refetchOnMountOrArgChange: true,
       refetchOnFocus: false,
       pollingInterval: 30000,
+      refetchOnReconnect: true,
     },
   );
 

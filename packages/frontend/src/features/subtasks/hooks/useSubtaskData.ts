@@ -11,6 +11,7 @@ export const useSubtaskData = (subtaskId: string) => {
   } = useGetSubtaskQuery(subtaskId, {
     refetchOnMountOrArgChange: true,
     refetchOnFocus: false,
+    refetchOnReconnect: true,
     pollingInterval: 30000,
   });
   const subtask = useSelector((state: RootState) => subtasksSelectors.selectById(state, subtaskId)) || loadedSubtask;

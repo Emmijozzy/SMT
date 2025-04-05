@@ -2,9 +2,7 @@
 import { apiSlice } from "../../app/api/apislice";
 import { ResApiData } from "../../shared/interface/resApiData";
 import { Result } from "../../shared/interface/Result";
-import log from "../../shared/utils/log";
 import { InReviewFeedBackData, InReviewUpdateData, ISubtask, SubtaskLog } from "./subtaskInterface";
-import { setSubtasks } from "./subtaskSlice";
 
 type SubtaskResponse = ISubtask[];
 
@@ -41,15 +39,15 @@ export const subtaskApiSlice = apiSlice.injectEndpoints({
 
         return subtasks;
       },
-      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          dispatch(setSubtasks(data));
-        } catch (e: unknown) {
-          const error = e as Error;
-          log("error", "Subtask Api Error", error.message, error.stack as string);
-        }
-      },
+      // async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+      //   try {
+      //     const { data } = await queryFulfilled;
+      //     // dispatch(setSubtasks(data));
+      //   } catch (e: unknown) {
+      //     const error = e as Error;
+      //     log("error", "Subtask Api Error", error.message, error.stack as string);
+      //   }
+      // },
       providesTags: (result) =>
         result
           ? [

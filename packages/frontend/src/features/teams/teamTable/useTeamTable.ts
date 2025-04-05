@@ -10,6 +10,7 @@ const useTeamTable = () => {
     pollingInterval: 60000,
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
+    refetchOnReconnect: true,
   });
   const [totalTeam, setTotalTeam] = useState<string[]>();
   // const [searchTeam, setSearchTeam] = useState<string>();

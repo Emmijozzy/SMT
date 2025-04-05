@@ -20,7 +20,8 @@ export function useNotification() {
   const userProfile = useSelector((state: RootState) => getPresentUser(state)) as IUser;
   const { data, refetch } = useGetNotificationsByRecipientIdQuery(userProfile.userId, {
     refetchOnMountOrArgChange: true,
-    refetchOnFocus: false,
+    refetchOnFocus: true,
+    refetchOnReconnect: true,
   });
   const [deleteNotification] = useDeleteNotificationMutation();
   const { newNotification, clearNewNotification } = useNotificationEvent();

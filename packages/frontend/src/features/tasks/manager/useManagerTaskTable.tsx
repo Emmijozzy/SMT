@@ -15,6 +15,7 @@ export default function useManagerTaskTable() {
     {
       refetchOnMountOrArgChange: true,
       refetchOnFocus: true,
+      refetchOnReconnect: true,
     },
   );
 

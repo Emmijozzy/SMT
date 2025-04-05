@@ -26,6 +26,7 @@ const useUserTable = () => {
     pollingInterval: 60000,
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
+    refetchOnReconnect: true,
   });
 
   const { handleSubmit, handleBlur, handleChange, errors, values, isSubmitting, searchedUserId } = useFilteredQuery();

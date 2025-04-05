@@ -1,24 +1,30 @@
 import { useMemo } from "react";
 import { GrView } from "react-icons/gr";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { RootState } from "../../../../app/store";
+import { Link, useParams } from "react-router-dom";
 import Avartar from "../../../../shared/components/Avartar";
 import getRelativeTimeString from "../../../../shared/utils/getRelativeTimeString";
-import { subtasksSelectors } from "../../../subtasks/subtaskSlice";
+import { useGetSubtasksQuery } from "../../../subtasks/subtaskApiSlice";
 import { IUser } from "../../../users/userInterface";
 
 type Props<T> = {
   data: T;
 };
 function TeamUserRow<T extends IUser>({ data }: Props<T>) {
-  const allSubtasks = useSelector((state: RootState) => subtasksSelectors.selectAll(state));
+  const { data: allSubtasks } = useGetSubtasksQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+    refetchOnFocus: true,
+    pollingInterval: 30000,
+    refetchOnReconnect: true,
+  });
+  // const allSubtasks = useSelector((state: RootState) => subtasksSelectors.selectAll(state));
+
+  const { teamId } = useParams();
 
   const content = useMemo(() => {
     if (data) {
       const { fullName, userId, profilePicUrl: profilePic, email, createdAt: joined, del_flg: delFlg } = data;
 
-      const userSubtasks = allSubtasks.filter((subtask) => subtask.assignee === userId);
+      const userSubtasks = allSubtasks?.filter((subtask) => subtask.assignee === userId);
 
       const dateJoined: string | Date = new Date(joined);
 
@@ -79,7 +85,7 @@ function TeamUserRow<T extends IUser>({ data }: Props<T>) {
           </td>
           <td aria-label="Action" className="p-2 align-middle bg-transparent whitespace-nowrap shadow-transparent">
             <div className="flex justify-center items-center gap-5">
-              <Link to={`../users/${userId}/view`}>
+              <Link to={`../${teamId as string}/users/${userId}/view`}>
                 <GrView className="h-6 w-6 text-base-content/70 hover:text-info cursor-pointer" />
               </Link>
             </div>
@@ -95,7 +101,7 @@ function TeamUserRow<T extends IUser>({ data }: Props<T>) {
         </td>
       </tr>
     );
-  }, [allSubtasks, data]);
+  }, [allSubtasks, data, teamId]);
 
   return content;
 }

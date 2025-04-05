@@ -15,6 +15,7 @@ function useSubtaskAuditLog() {
     pollingInterval: 15000, // Refresh every 15 seconds
     refetchOnMountOrArgChange: true, // Force refetch on mount
     refetchOnFocus: true, // Refetch when window regains focus
+    refetchOnReconnect: true, // Refetch when network reconnects
   });
 
   const resData = data;
