@@ -14,6 +14,7 @@ import ViewTeamDetails from "./components/ViewTeamDetails";
 import teamTaskColumn from "./constant/teamTaskColumn";
 import userColumnFactory from "./constant/userColumnFactory";
 // import TaskTableRow from "./TeamTaskTable/components/TaskTableRow";
+import { useGetUsersQuery } from "../../users/userApiSlice";
 import TeamTaskRow from "./components/TeamTaskRow";
 
 function ViewTeam() {
@@ -24,7 +25,21 @@ function ViewTeam() {
   if (!teamId) navigate("../");
 
   const getTeam = useSelector((state: RootState) => teamSelectors.selectById(state, teamId || "")) as ITeam;
-
+  const {
+    data: ResUsers,
+    // isLoading,
+    // isSuccess,
+    // isError,
+    // error,
+  } = useGetUsersQuery(
+    { team_like: teamId },
+    {
+      pollingInterval: 60000,
+      refetchOnFocus: true,
+      refetchOnMountOrArgChange: true,
+      refetchOnReconnect: true,
+    },
+  );
   const teamUserColumns = userColumnFactory();
 
   const TeamTaskTable = MasterTable<ITask & Record<string, unknown>>();
@@ -47,7 +62,7 @@ function ViewTeam() {
         {/* Add additional components for managing team users */}
         <TeamUserTable
           name="Members"
-          data={getTeam.members as (IUser & Record<string, unknown>)[]}
+          data={(getTeam.members || ResUsers) as (IUser & Record<string, unknown>)[]}
           tableHead={teamUserColumns}
           TableBody={TeamUserRow}
         />

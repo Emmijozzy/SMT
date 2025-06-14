@@ -3,9 +3,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../app/store";
 import DetailsContainer from "../../../../shared/components/DetailsContainer";
+import { handleBack } from "../../../../shared/utils/handleBack";
+import { useGetUserQuery } from "../../../users/userApiSlice";
 import { usersSelectors } from "../../../users/userSlice";
 import { ITeam } from "../../teamInterface";
-import { handleBack } from "../../../../shared/utils/handleBack";
 
 type Props = {
   team: ITeam;
@@ -16,11 +17,15 @@ function ViewTeamDetails({ team, handleEditTeamDetails }: Props) {
   const managerName =
     useSelector((state: RootState) => usersSelectors.selectById(state, team.managerId as string))?.fullName ?? "";
 
+  const resManagerName = useGetUserQuery(team.managerId as string, {
+    skip: !team,
+  })?.data?.fullName;
+
   const tableRows = [
     { label: "Team ID", value: team.teamId as string },
     { label: "Name", value: team.name, className: "" },
     { label: "Description", value: team.description },
-    { label: "Manager", value: managerName, className: "capitalize" },
+    { label: "Manager", value: managerName || resManagerName, className: "capitalize" },
   ];
 
   return (

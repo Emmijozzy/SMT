@@ -9,13 +9,12 @@ function Main() {
   // const notifications = [];
 
   return (
-    <main className="relative py-4 xl:ml-[17rem] transition w-full ">
+    <main className="relative py-4 xl:pl-[15rem] transition w-full">
       <HeadNavbar notifications={notifications} />
-      <div className="w-full min-w-[350px] max-w-[90rem] mx-auto h-calc-half-vh overflow-auto rounded-lg px-4 bg-base-200  scrollbar-thin scrollbar-thumb-base-content/30 scrollbar-track-base-300 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
+      <div className="w-full min-w-[350px] max-w-[92rem] mx-auto h-calc-half-vh overflow-auto rounded-lg bg-base-200 px-2 scrollbar-thin scrollbar-thumb-base-content/30 scrollbar-track-base-300 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
         <Notifications notifications={notifications} onDeleteNotification={handleDeleteNotification} />
         <Outlet />
       </div>
-    </main>
-  );
+    </main>  );
 }
 export default Main;

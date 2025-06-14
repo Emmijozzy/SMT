@@ -29,7 +29,7 @@ function Sidebar() {
   return (
     <aside
       ref={ref}
-      className={`${openSidenav ? "-translate-x-0.25" : "-translate-x-80"} fixed inset-0 z-50 my-4 ml-4 h-[calc(100vh-30px)] w-60 rounded-r-xl transition-transform duration-300 xl:translate-x-0 border border-base-100 bg-base-200`}
+      className={`${openSidenav ? "-translate-x-0.25" : "-translate-x-80"} fixed inset-0 z-50 my-4 ml-4 h-[calc(100vh-30px)] w-56 rounded-r-xl transition-transform duration-300 xl:translate-x-0 border border-base-100 bg-base-200`}
     >
       <div className="relative flex items-center justify-center py-4 mb-2 overflow-hidden">
         <button

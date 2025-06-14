@@ -14,6 +14,13 @@ export function Loader({ transparent }: { transparent: boolean }) {
   );
 }
 
-export function LazyComponent2({ children }: { children: ReactNode }) {
+export function LazyComponent2({ children, isLoading }: { children: ReactNode; isLoading?: boolean }) {
+  if (isLoading) {
+    return <Loader transparent={false} />;
+  }
   return <Suspense fallback={<Loader transparent={false} />}>{children}</Suspense>;
 }
+
+LazyComponent2.defaultProps = {
+  isLoading: false,
+};
