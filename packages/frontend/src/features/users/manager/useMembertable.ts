@@ -8,7 +8,7 @@ import { setUsers } from "../userSlice";
 const useMemberTable = () => {
   const managerTeam = useSelector((state: RootState) => getPresentUser(state)).team;
 
-  const { data } = useGetUsersQuery(
+  const { data, isLoading } = useGetUsersQuery(
     { team_like: managerTeam },
     {
       refetchOnMountOrArgChange: true,
@@ -19,7 +19,7 @@ const useMemberTable = () => {
   );
 
   const dispatch = useDispatch();
-  const memoizedData = useMemo(() => data, [data]);
+  const memoizedData = useMemo(() => data || [], [data]);
 
   useEffect(() => {
     if (memoizedData) {
@@ -27,7 +27,7 @@ const useMemberTable = () => {
     }
   }, [memoizedData, dispatch]);
 
-  return { memoizedData };
+  return { memoizedData, isLoading };
 };
 
 export default useMemberTable;
