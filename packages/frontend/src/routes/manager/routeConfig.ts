@@ -3,7 +3,7 @@ import { userRoutes } from "./userRoutes";
 import { taskRoutes } from "./taskRoutes";
 import { subtaskRoutes } from "./subtaskRoutes";
 
-const Dashboard = lazy(() => import("../../features/Dashboard/Dashboard"));
+const Dashboard = lazy(() => import("../../features/Dashboard/ManagerDashboard/ManagerDashboard"));
 const Profile = lazy(() => import("../../features/profile/Profile"));
 const Page404 = lazy(() => import("../../features/Page404"));
 
